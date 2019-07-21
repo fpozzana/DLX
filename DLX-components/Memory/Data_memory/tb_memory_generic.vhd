@@ -36,7 +36,7 @@ architecture TEST of TB_MEMORY_GENERIC is
     tb_data_in <= "00001111000011110000111100001111", "11111111111111111111111111111111" after 4 ns, "11110000111100001111000011110000" after 8 ns;
     tb_address <= "00000000", "00000001" after 4 ns, "00000010" after 8 ns, "00000011" after 12 ns, "00000100" after 16 ns, "00000101" after 20 ns, "00000000" after 24 ns, "00000001" after 28 ns;
     tb_write_enable <= '1','0' after 22 ns;
-    tb_read_enable <= '0','1' after 22 ns;
+    tb_read_enable <= '0','1' after 4 ns, '0' after 12 ns, '1' after 22 ns;
 
     PCLOCK : process(tb_clock)
     begin

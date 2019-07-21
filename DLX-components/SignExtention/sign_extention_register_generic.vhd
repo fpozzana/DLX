@@ -4,6 +4,7 @@
 --with the input stuck to '0'. The clock signal and reset signal is common
 --to every D Flip-Flop. The output Q is made of NumBitSignExtentionRegister bits.
 --The configuration used for the D Flip-Flops is the synchronous one
+--test : tested OK, the component works as expected
 
 library IEEE;
 use IEEE.std_logic_1164.all;

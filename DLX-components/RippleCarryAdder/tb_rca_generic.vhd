@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all; -- we need a conversion to unsigned
+use ieee.std_logic_unsigned.all;
 use WORK.constants.all;
 
 entity TB_RCA_GENERIC is
@@ -8,8 +9,8 @@ end TB_RCA_GENERIC;
 
 architecture TEST of TB_RCA_GENERIC is
 
-  --constant num_bit: integer := NumBitRCA;
-  constant num_bit: integer := 4;
+  --constant NumBit : integer := NumBitRCA;
+  constant NumBit : integer := 4;
 
   component RCA_GENERIC
   generic (NBIT : integer := NumBitRCA);
@@ -20,32 +21,25 @@ architecture TEST of TB_RCA_GENERIC is
         Co:	OUT	std_logic);
   end component;
 
+  --  input
+  signal A : std_logic_vector(NumBit-1 downto 0) := (others => '0');
+  signal B : std_logic_vector(NumBit-1 downto 0) := (others => '0');
+  signal Ci : std_logic := '0';
 
-  constant Period: time := 1 ns;
-  signal A, B, S : std_logic_vector(num_bit-1 downto 0);
-  signal Ci, Co : std_logic;
+  -- output
+  signal S : std_logic_vector(NumBit-1 downto 0);
+  signal Co : std_logic;
 
 begin
 
+  A <= "0011", "1110" after 2 ns, "0110" after 4 ns, "0111" after 6 ns, "1110" after 8 ns, "1111" after 10 ns, "0011" after 12 ns, "1110" after 14 ns, "0110" after 16 ns, "0111" after 18 ns, "1110" after 20 ns, "1111" after 22 ns;
+  B <= "1001", "1101" after 2 ns, "1010" after 4 ns, "1000" after 6 ns, "0001" after 8 ns, "0110" after 10 ns, "1001" after 12 ns, "1101" after 14 ns, "1010" after 16 ns, "1000" after 18 ns, "0001" after 20 ns, "0110" after 22 ns;
+  Ci <= '0', '1' after 10 ns;
+
   UADDER: RCA_GENERIC
-	   generic map (num_bit)
-	   port map (A, B, Ci, S, Co);
+     generic map (NumBit)
+     port map (A, B, Ci, S, Co);
 
-  --STIMULUS1: process
-  --begin
-    --A <= "00001000000101010000100000010101";
-    --B <= "00000011001000010000001100100001";
-    --Ci <= '0';
-    --wait for 2 * PERIOD;
-    --Ci <= '1';
-    --A <= "10001000000101011000100000010101";
-    --B <= "11000011001000011100001100100001";
-    --wait for (65 * PERIOD);
-  --end process STIMULUS1;
-
-  A <= "0111";
-  B <= "0100";
-  Ci <= '0', '1' after 5 ns;
 
 end TEST;
 

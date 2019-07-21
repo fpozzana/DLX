@@ -1,5 +1,6 @@
 --The RCA has two architectures : a normal RCA capable only of ADD and an ADDSUB architecture, capable of making ADD/SUB.
 --For the second architecture the driving signal for the ADD/SUB is the Ci : for an ADD Ci <= '0' and for a SUB Ci <= '1'
+--test : tested OK, the component works as expected for the values for which has been tested
 
 library ieee;
 use ieee.std_logic_1164.all;

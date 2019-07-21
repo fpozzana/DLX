@@ -1,4 +1,5 @@
 -- if SEL == '0' => Y == A else Y == B
+--test : tested OK, the component works as expected
 
 library IEEE;
 use IEEE.std_logic_1164.all;

@@ -1,4 +1,8 @@
 --This is the memory used for the memory stage of the DLX.
+--If you try to write and read the same address at the same time
+--the ouput will give the previous value stored in memory, not the value
+--that you are trying to write
+--test : tested OK, the component works as expected 
 
 library IEEE;
 use IEEE.std_logic_1164.all;

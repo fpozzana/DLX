@@ -1,4 +1,5 @@
 -- RESET is active high, so if RESET is 1 the register has '0' at the output
+--test : tested OK, the component works as expected 
 
 library IEEE;
 use IEEE.std_logic_1164.all;
