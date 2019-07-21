@@ -1,0 +1,64 @@
+--npc_in and branch_condition have to be added after the design and insertion of the zero condition
+
+library ieee;
+use ieee.std_logic_1164.all;
+use WORK.constants.all;
+
+entity MEMORY_STAGE is
+  generic(numbit : integer := RISC_BIT);
+  port(execution_stage_in : IN std_logic_vector(numbit-1 downto 0);
+       b_reg_in : IN std_logic_vector(numbit-1 downto 0);
+       write_control : IN std_logic;
+       read_control : IN std_logic;
+       reset : IN std_logic;
+       --npc_in : IN std_logic_vector(numbit-1 downto 0);
+       --branch_condition : IN std_logic;
+       clk : IN std_logic;
+       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0));
+end MEMORY_STAGE;
+
+architecture STRUCTURAL of MEMORY_STAGE is
+  signal data_memory_out : std_logic_vector(numbit-1 downto 0);
+
+  component MEMORY_GENERIC
+  generic(MBIT : integer := NumBitMemoryWord;
+          NBIT : integer := NumBitMemoryAddress);
+  port(address : IN std_logic_vector(NBIT-1 downto 0);
+       data_in : IN std_logic_vector(MBIT-1 downto 0);
+       clock : IN std_logic;
+       write_enable : IN std_logic;
+       read_enable : IN std_logic;
+       data_out : OUT std_logic_vector(MBIT-1 downto 0));
+  end component;
+
+  component REGISTER_GENERIC
+  generic (NBIT : integer := NumBitRegister);
+  port(
+    D : IN std_logic_vector(NBIT-1 downto 0);
+    CK : IN std_logic;
+    RESET : IN std_logic;
+    Q : OUT std_logic_vector(NBIT-1 downto 0));
+  end component;
+
+  begin
+
+    DATA_MEMORY : MEMORY_GENERIC
+    generic map(NumBitMemoryWord,NumBitMemoryAddress)
+    port map(execution_stage_in,b_reg_in,clk,write_control,read_control,data_memory_out);
+
+    REGISTER_OUT : REGISTER_GENERIC
+    generic map(numbit)
+    port map(data_memory_out,clk,reset,memory_stage_out);
+
+end STRUCTURAL;
+
+configuration CFG_MEMORY_STAGE_STRUCTURAL of MEMORY_STAGE is
+	for STRUCTURAL
+    for all : MEMORY_GENERIC
+		  use configuration WORK.CFG_MEMORY_BEHAVIORAL;
+    end for;
+    for all : REGISTER_GENERIC
+		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
+    end for;
+	end for;
+end CFG_MEMORY_STAGE_STRUCTURAL;
