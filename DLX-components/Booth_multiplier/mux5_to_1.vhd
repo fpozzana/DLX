@@ -1,3 +1,5 @@
+--test : tested OK, the component works as expected for the values for which has been tested
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;

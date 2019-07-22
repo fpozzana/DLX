@@ -9,8 +9,7 @@ end MULTIPLIER_tb;
 
 architecture TEST of MULTIPLIER_tb is
 
-
-  constant numBit : integer := 8;    -- :=8  --:=16
+  constant numBit : integer := NumBitBoothMultiplier;
 
   --  input
   signal A : std_logic_vector(numBit-1 downto 0) := (others => '0');
@@ -38,9 +37,9 @@ architecture TEST of MULTIPLIER_tb is
     test: process
     begin
     -- cycle for operand A
-    NumROW : for i in 0 to 2**(NumBit)-1 loop
+    NumROW : for i in 0 to 2**(numBit)-1 loop
       -- cycle for operand B
-    	NumCOL : for i in 0 to 2**(NumBit)-1 loop
+    	NumCOL : for i in 0 to 2**(numBit)-1 loop
 	    wait for 10 ns;
 	    B <= B + '1';
 	    end loop NumCOL ;
