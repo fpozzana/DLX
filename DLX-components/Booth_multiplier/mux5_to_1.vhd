@@ -1,4 +1,4 @@
---test : tested OK, the component works as expected for the values for which has been tested
+--test : tested OK, the component works as expected
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -28,10 +28,10 @@ architecture BEHAVIORAL of MUX51_BOOTH_GENERIC is
 				Y <= A;
 			elsif (S="001" or S="010") then	--S = 1 or S = 2 => Y = B
 				Y <= B;
-			elsif S="011" then 							--S = 3 => Y = C
-				Y <= D;
-			elsif (S="101" or S="110") then	--S = 5 or S = 6 => Y = D
+			elsif (S="101" or S="110") then	--S = 5 or S = 6 => Y = C
 				Y <= C;
+			elsif S="011" then 							--S = 3 => Y = D
+				Y <= D;
 			elsif S="100" then							--S = 4 => Y = E
 				Y <= E;
 			end if;

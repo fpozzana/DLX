@@ -32,21 +32,22 @@ architecture TEST of MULTIPLIER_tb is
     boothmuls : BOOTHMUL generic map(numBit)
 		port map(A, B, Y);
 
-
+    A <= "0000110000001111", "0000111100001111" after 10 ns;
+    B <= "0001111001000101";
 -- PROCESS FOR TESTING TEST - COMLETE CYCLE ---------
-    test: process
-    begin
+    --test: process
+    --begin
     -- cycle for operand A
-    NumROW : for i in 0 to 2**(numBit)-1 loop
+    --NumROW : for i in 0 to 2**(numBit)-1 loop
       -- cycle for operand B
-    	NumCOL : for i in 0 to 2**(numBit)-1 loop
-	    wait for 10 ns;
-	    B <= B + '1';
-	    end loop NumCOL ;
-	  A <= A + '1';
-    end loop NumROW ;
-    wait;
-    end process test;
+    	--NumCOL : for i in 0 to 2**(numBit)-1 loop
+	    --wait for 10 ns;
+	    --B <= B + '1';
+	    --end loop NumCOL ;
+	  --A <= A + '1';
+    --end loop NumROW ;
+    --wait;
+    --end process test;
 
 
 end TEST;
