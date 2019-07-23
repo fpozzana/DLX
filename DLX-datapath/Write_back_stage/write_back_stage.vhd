@@ -1,9 +1,13 @@
+--test : tested OK, the component works as expected
+--the write back stage is a simple MUX21 which has as
+--inputs LMD and ALUOUT
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use WORK.constants.all;
 
 entity WRITE_BACK_STAGE is
-  generic(N : integer := NumBitWriteBack);
+  generic(N : integer := RISC_BIT);
   port(LMD : IN std_logic_vector(N-1 downto 0);
       ALUOUT : IN std_logic_vector(N-1 downto 0);
       CONTROL : IN std_logic;
@@ -22,7 +26,7 @@ architecture STRUCTURAL of WRITE_BACK_STAGE is
 
   begin
     UMUX : MUX21_GENERIC
-    generic map(NumBitWriteBack)
+    generic map(RISC_BIT)
     port map(LMD,ALUOUT,CONTROL,WB_OUT);
 
 end STRUCTURAL;

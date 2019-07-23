@@ -22,8 +22,6 @@ package CONSTANTS is
     -------------memory------------------------
     constant NumBitMemoryWord : integer := 32;
     constant NumBitMemoryAddress : integer := 8;
-    -------------write back stage--------------
-    constant NumBitWriteBack : integer := 32;
     -------------register file-----------------
     constant NumBitData : integer := 32;
     constant NumBitRegisterFile : integer := 32;

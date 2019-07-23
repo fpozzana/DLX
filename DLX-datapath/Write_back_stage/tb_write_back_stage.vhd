@@ -7,14 +7,14 @@ end TB_WRITE_BACK_STAGE;
 
 architecture TEST of TB_WRITE_BACK_STAGE is
 
-  constant NBIT : integer := 32;
+  constant NBIT : integer := RISC_BIT;
   signal TB_LMD : std_logic_vector(NBIT-1 downto 0);
   signal TB_ALU_OUT : std_logic_vector(NBIT-1 downto 0);
   signal TB_CONTROL : std_logic;
   signal TB_WB_OUT : std_logic_vector(NBIT-1 downto 0);
 
   component WRITE_BACK_STAGE
-  generic(N : integer := NumBitWriteBack);
+  generic(N : integer := RISC_BIT);
   port(LMD : IN std_logic_vector(N-1 downto 0);
       ALUOUT : IN std_logic_vector(N-1 downto 0);
       CONTROL : IN std_logic;
