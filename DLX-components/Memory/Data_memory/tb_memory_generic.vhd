@@ -33,10 +33,10 @@ architecture TEST of TB_MEMORY_GENERIC is
     generic map(NBITDATA,NBITADDRESS)
     port map(tb_address,tb_data_in,tb_clock,tb_write_enable,tb_read_enable,tb_data_out);
 
-    tb_data_in <= "00001111000011110000111100001111", "11111111111111111111111111111111" after 4 ns, "11110000111100001111000011110000" after 8 ns;
-    tb_address <= "00000000", "00000001" after 4 ns, "00000010" after 8 ns, "00000011" after 12 ns, "00000100" after 16 ns, "00000101" after 20 ns, "00000000" after 24 ns, "00000001" after 28 ns;
-    tb_write_enable <= '1','0' after 22 ns;
-    tb_read_enable <= '0','1' after 4 ns, '0' after 12 ns, '1' after 22 ns;
+    tb_data_in <= "00001111000011110000111100001111", "11111111111111111111111111111111" after 3 ns, "11110000111100001111000011110000" after 5 ns;
+    tb_address <= "00000000", "00000001" after 3 ns, "00000010" after 5 ns, "00000011" after 7 ns, "00000100" after 9 ns, "00000101" after 11 ns, "00000000" after 13 ns, "00000001" after 15 ns;
+    tb_write_enable <= '1','0' after 25 ns;
+    tb_read_enable <= '1' after 13 ns,'0' after 14 ns, '1' after 15 ns, '0' after 16 ns,'1' after 17 ns, '0' after 18 ns;
 
     PCLOCK : process(tb_clock)
     begin

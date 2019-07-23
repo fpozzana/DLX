@@ -5,6 +5,8 @@ package CONSTANTS is
     constant NumBitMux21 : integer := 32;
     -------------register----------------------
     constant NumBitRegister : integer := 32;
+    -------------latch-------------------------
+    constant NumBitLatch : integer := 32;
     -------------ripple carry adder------------
     constant NumBitRCA : integer := 32;
     -------------comparator--------------------

@@ -18,6 +18,7 @@ architecture TEST of TB_EXECUTION_STAGE is
   signal clk : std_logic := '0';
   signal reset : std_logic := '0';
   signal execution_stage_out : std_logic_vector(NBIT-1 downto 0);
+  signal branch_condition_out : std_logic;
 
   component EXECUTION_STAGE
   generic(numbit : integer := RISC_BIT);
@@ -30,16 +31,17 @@ architecture TEST of TB_EXECUTION_STAGE is
        alu_control : IN std_logic_vector(3 downto 0);
        clk : IN std_logic;
        reset : IN std_logic;
-       execution_stage_out : OUT std_logic_vector(numbit-1 downto 0));
+       execution_stage_out : OUT std_logic_vector(numbit-1 downto 0);
+       branch_condition_out : OUT std_logic);
   end component;
 
   begin
     DUT : EXECUTION_STAGE
     generic map(NBIT)
-    port map(npc_in,a_reg_in,b_reg_in,imm_reg_in,mux_one_control,mux_two_control,alu_control,clk,reset,execution_stage_out);
+    port map(npc_in,a_reg_in,b_reg_in,imm_reg_in,mux_one_control,mux_two_control,alu_control,clk,reset,execution_stage_out,branch_condition_out);
 
     npc_in <= "00000000000000000000000000000001";
-    a_reg_in <= "00000000000000000000000000000010";
+    a_reg_in <= "00000000000000000000000000000010" , "00000000000000000000000000000000" after 31 ns;
     b_reg_in <= "00000000000000000000000000000011";
     imm_reg_in <= "00000000000000000000000000000100";
 

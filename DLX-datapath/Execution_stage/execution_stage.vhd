@@ -1,3 +1,10 @@
+--test : tested OK, the component works as expected
+--during the risign clock the register samlples according to what
+--has been provided before the rise of clock
+--eg: at 2 ns clock rises, the sampled value which goes into execution stage out
+--depends on which inputs the execution stage had right before the
+--2 ns mark, even if at 2 ns the inputs change
+
 library ieee;
 use ieee.std_logic_1164.all;
 use WORK.constants.all;
@@ -13,7 +20,8 @@ entity EXECUTION_STAGE is
        alu_control : IN std_logic_vector(3 downto 0);
        clk : IN std_logic;
        reset : IN std_logic;
-       execution_stage_out : OUT std_logic_vector(numbit-1 downto 0));
+       execution_stage_out : OUT std_logic_vector(numbit-1 downto 0);
+       branch_condition_out : OUT std_logic);
 end EXECUTION_STAGE;
 
 architecture STRUCTURAL of EXECUTION_STAGE is
@@ -21,6 +29,7 @@ architecture STRUCTURAL of EXECUTION_STAGE is
   signal mux_one_out : std_logic_vector(numbit-1 downto 0);
   signal mux_two_out : std_logic_vector(numbit-1 downto 0);
   signal alu_out : std_logic_vector(numbit-1 downto 0);
+  signal zero_comp : std_logic_vector(numbit-1 downto 0) := (others => '0');
 
   component MUX21_GENERIC
   generic (NBIT : integer := NumBitMux21);
@@ -28,6 +37,15 @@ architecture STRUCTURAL of EXECUTION_STAGE is
        B : IN std_logic_vector(NBIT-1 downto 0);
        SEL : IN std_logic;
        Y : OUT std_logic_vector(NBIT-1 downto 0));
+  end component;
+
+  component COMPARATOR_GENERIC
+  generic(numbit : integer := NumBitComparator);
+  port(A : IN std_logic_vector(numbit-1 downto 0);
+       B : IN std_logic_vector(numbit-1 downto 0);
+       less : OUT std_logic;
+       more : OUT std_logic;
+       equal : OUT std_logic);
   end component;
 
   component REGISTER_GENERIC
@@ -64,6 +82,10 @@ architecture STRUCTURAL of EXECUTION_STAGE is
     generic map(numbit)
     port map(alu_out,clk,reset,execution_stage_out);
 
+    COMP : COMPARATOR_GENERIC
+    generic map(numbit)
+    port map(a_reg_in,zero_comp,open,open,branch_condition_out);
+
 end STRUCTURAL;
 
 configuration CFG_EXECUTION_STAGE_STRUCTURAL of EXECUTION_STAGE is
@@ -76,6 +98,9 @@ configuration CFG_EXECUTION_STAGE_STRUCTURAL of EXECUTION_STAGE is
     end for;
     for all : REGISTER_GENERIC
 		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
+    end for;
+    for all : COMPARATOR_GENERIC
+      use configuration WORK.CFG_COMPARATOR_GENERIC;
     end for;
 	end for;
 end CFG_EXECUTION_STAGE_STRUCTURAL;
