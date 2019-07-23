@@ -31,8 +31,8 @@ package CONSTANTS is
     constant NumBitP4Distance : integer := 4;
     constant NumBitP4Data : integer := 32;
     -------------booth multiplier--------------
-    constant NumBitMuxBoothMultiplier : integer := 16;
-    constant NumBitBoothMultiplier : integer := 16;
+    constant NumBitMuxBoothMultiplier : integer := 8;
+    constant NumBitBoothMultiplier : integer := 8;
     -------------instruction memory------------
     constant RAM_DEPTH : integer := 48;
     constant I_SIZE : integer := 32;

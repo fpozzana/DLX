@@ -48,9 +48,6 @@ architecture STRUCTURAL of BOOTHMUL is
   signal A_selection : std_logic_vector(2*numbit-1 downto 0);
   signal B_selection : std_logic_vector(numbit+2 downto 0);
 
-  type selection_signals is array(numbit/2 downto 0) of std_logic_vector(2 downto 0);
-  signal selected : selection_signals;
-
   begin
 
     B_selection <= "00" & B & '0';                                              --initialize B_selection with B & '0' on the first bit and "00" as last bits
@@ -77,11 +74,6 @@ architecture STRUCTURAL of BOOTHMUL is
             generic map(2*numBit)
             port map(A_signals(I)(0),A_signals(I)(1),A_signals(I)(2),A_signals(I)(3),A_signals(I)(4),B_selection(2*I+2 downto 2*I),MUX_signal(I));
     end generate;
-
-    selected_generate : for I in 0 to numbit/2 generate
-      selected(I) <= B_selection(2*I+2 downto 2*I);
-    end generate;
-
     --generation of the first RCA
     first_rca :  RCA_GENERIC
 	               generic map(2*numBit)
