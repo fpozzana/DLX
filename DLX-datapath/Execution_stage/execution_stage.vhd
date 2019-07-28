@@ -30,6 +30,7 @@ architecture STRUCTURAL of EXECUTION_STAGE is
   signal mux_two_out : std_logic_vector(numbit-1 downto 0);
   signal alu_out : std_logic_vector(numbit-1 downto 0);
   signal zero_comp : std_logic_vector(numbit-1 downto 0) := (others => '0');
+  signal comparator_out : std_logic;
 
   component MUX21_GENERIC
   generic (NBIT : integer := NumBitMux21);
@@ -64,6 +65,13 @@ architecture STRUCTURAL of EXECUTION_STAGE is
            OUTALU: OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
+  component FD
+  Port (	D :	IN	std_logic;
+					CK :	IN	std_logic;
+					RESET :	IN	std_logic;
+					Q :	OUT	std_logic);
+  end component;
+
   begin
 
     MUX_ONE : MUX21_GENERIC
@@ -78,13 +86,16 @@ architecture STRUCTURAL of EXECUTION_STAGE is
     generic map(numbit)
     port map(alu_control,mux_one_out,mux_two_out,alu_out);
 
-    REG : REGISTER_GENERIC
+    REG1 : REGISTER_GENERIC
     generic map(numbit)
     port map(alu_out,clk,reset,execution_stage_out);
 
     COMP : COMPARATOR_GENERIC
     generic map(numbit)
-    port map(a_reg_in,zero_comp,open,open,branch_condition_out);
+    port map(a_reg_in,zero_comp,open,open,comparator_out);
+
+    REG2 : FD
+    port map(comparator_out,clk,reset,branch_condition_out);
 
 end STRUCTURAL;
 
@@ -101,6 +112,9 @@ configuration CFG_EXECUTION_STAGE_STRUCTURAL of EXECUTION_STAGE is
     end for;
     for all : COMPARATOR_GENERIC
       use configuration WORK.CFG_COMPARATOR_GENERIC;
+    end for;
+    for all : FD
+      use configuration WORK.CFG_FD_SYNC;
     end for;
 	end for;
 end CFG_EXECUTION_STAGE_STRUCTURAL;

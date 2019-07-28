@@ -42,6 +42,14 @@ architecture STRUCTURAL of FETCH_STAGE is
 				Co:	OUT	std_logic);
   end component;
 
+  component LATCH_GENERIC
+  generic (NBIT : integer := NumBitLatch);
+  port(
+    D : IN std_logic_vector(NBIT-1 downto 0);
+    ENABLE : IN std_logic;
+    Q : OUT std_logic_vector(NBIT-1 downto 0));
+  end component;
+
   begin
     PC : REGISTER_GENERIC
     generic map(numbit)
@@ -55,13 +63,13 @@ architecture STRUCTURAL of FETCH_STAGE is
     generic map(numbit)
     port map(pc_reg_out,plus_four,'0',adder_out,open);
 
-    NPC : REGISTER_GENERIC
+    NPC : LATCH_GENERIC
     generic map(numbit)
-    port map(adder_out,clk,reset,npc_out);
+    port map(adder_out,'1',npc_out);
 
-    IR : REGISTER_GENERIC
+    IR : LATCH_GENERIC
     generic map(numbit)
-    port map(instruction_mem_out,clk,reset,instruction_reg_out);
+    port map(instruction_mem_out,'1',instruction_reg_out);
 
 end STRUCTURAL;
 
@@ -75,6 +83,9 @@ configuration CFG_FETCH_STAGE_STRUCTURAL of FETCH_STAGE is
     end for;
     for all : IRAM
 		  use configuration WORK.CFG_IRAM_BEHAVIORAL;
+    end for;
+    for all : LATCH_GENERIC
+      use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
     end for;
 	end for;
 end CFG_FETCH_STAGE_STRUCTURAL;
