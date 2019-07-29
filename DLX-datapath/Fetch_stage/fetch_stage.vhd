@@ -73,7 +73,7 @@ architecture STRUCTURAL of FETCH_STAGE is
 
 end STRUCTURAL;
 
-configuration CFG_FETCH_STAGE_STRUCTURAL of FETCH_STAGE is
+configuration CFG_FETCH_STAGE of FETCH_STAGE is
 	for STRUCTURAL
     for all : REGISTER_GENERIC
 		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
@@ -88,4 +88,4 @@ configuration CFG_FETCH_STAGE_STRUCTURAL of FETCH_STAGE is
       use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
     end for;
 	end for;
-end CFG_FETCH_STAGE_STRUCTURAL;
+end CFG_FETCH_STAGE;
