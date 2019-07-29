@@ -11,6 +11,8 @@ entity WRITE_BACK_STAGE is
   port(LMD : IN std_logic_vector(N-1 downto 0);
       ALUOUT : IN std_logic_vector(N-1 downto 0);
       CONTROL : IN std_logic;
+      clock : IN std_logic;
+      reset : IN std_logic;
       WB_OUT : OUT std_logic_vector(N-1 downto 0));
 end WRITE_BACK_STAGE;
 
@@ -24,10 +26,25 @@ architecture STRUCTURAL of WRITE_BACK_STAGE is
        Y : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
+  component REGISTER_GENERIC
+  generic (NBIT : integer := NumBitRegister);
+  port(
+    D : IN std_logic_vector(NBIT-1 downto 0);
+    CK : IN std_logic;
+    RESET : IN std_logic;
+    Q : OUT std_logic_vector(NBIT-1 downto 0));
+  end component;
+
+  signal mux_out : std_logic_vector(RISC_BIT-1 downto 0);
+
   begin
     UMUX : MUX21_GENERIC
     generic map(RISC_BIT)
-    port map(LMD,ALUOUT,CONTROL,WB_OUT);
+    port map(LMD,ALUOUT,CONTROL,mux_out);
+
+    REG : REGISTER_GENERIC
+    generic map(RISC_BIT)
+    port map(mux_out,clock,reset,WB_OUT);
 
 end STRUCTURAL;
 
