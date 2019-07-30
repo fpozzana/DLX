@@ -13,11 +13,8 @@ entity MEMORY_STAGE is
        write_control : IN std_logic;
        read_control : IN std_logic;
        enable : IN std_logic;
-       npc_in : IN std_logic_vector(numbit-1 downto 0);
-       branch_condition : IN std_logic;
        clk : IN std_logic;
-       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0);
-       next_PC_out : OUT std_logic_vector(numbit-1 downto 0));
+       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0));
 end MEMORY_STAGE;
 
 architecture STRUCTURAL of MEMORY_STAGE is
@@ -42,14 +39,6 @@ architecture STRUCTURAL of MEMORY_STAGE is
     Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
-  component MUX21_GENERIC
-  generic (NBIT : integer := NumBitMux21);
-  port(A : IN std_logic_vector(NBIT-1 downto 0);
-       B : IN std_logic_vector(NBIT-1 downto 0);
-       SEL : IN std_logic;
-       Y : OUT std_logic_vector(NBIT-1 downto 0));
-  end component;
-
   begin
 
     DATA_MEMORY : MEMORY_GENERIC
@@ -59,10 +48,6 @@ architecture STRUCTURAL of MEMORY_STAGE is
     REGISTER_OUT : LATCH_GENERIC
     generic map(numbit)
     port map(data_memory_out,enable,memory_stage_out);
-
-    MUX_CONDITION : MUX21_GENERIC
-    generic map(numbit)
-    port map(npc_in,execution_stage_in,branch_condition,next_PC_out);
 
 end STRUCTURAL;
 

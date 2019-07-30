@@ -21,7 +21,8 @@ entity EXECUTION_STAGE is
        clk : IN std_logic;
        reset : IN std_logic;
        execution_stage_out : OUT std_logic_vector(numbit-1 downto 0);
-       branch_condition_out : OUT std_logic);
+       npc_out : OUT std_logic_vector(numbit-1 downto 0);
+       b_reg_out : OUT std_logic_vector(numbit-1 downto 0));
 end EXECUTION_STAGE;
 
 architecture STRUCTURAL of EXECUTION_STAGE is
@@ -31,6 +32,8 @@ architecture STRUCTURAL of EXECUTION_STAGE is
   signal alu_out : std_logic_vector(numbit-1 downto 0);
   signal zero_comp : std_logic_vector(numbit-1 downto 0) := (others => '0');
   signal comparator_out : std_logic;
+  signal in_reg_npc : std_logic_vector(numbit-1 downto 0);
+  signal b_latch_out : std_logic_vector(numbit-1 downto 0);
 
   component MUX21_GENERIC
   generic (NBIT : integer := NumBitMux21);
@@ -65,11 +68,12 @@ architecture STRUCTURAL of EXECUTION_STAGE is
            OUTALU: OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
-  component FD
-  Port (	D :	IN	std_logic;
-					CK :	IN	std_logic;
-					RESET :	IN	std_logic;
-					Q :	OUT	std_logic);
+  component LATCH_GENERIC
+  generic (NBIT : integer := NumBitLatch);
+  port(
+    D : IN std_logic_vector(NBIT-1 downto 0);
+    ENABLE : IN std_logic;
+    Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
   begin
@@ -94,8 +98,21 @@ architecture STRUCTURAL of EXECUTION_STAGE is
     generic map(numbit)
     port map(a_reg_in,zero_comp,open,open,comparator_out);
 
-    REG2 : FD
-    port map(comparator_out,clk,reset,branch_condition_out);
+    MUX_ZERO : MUX21_GENERIC
+    generic map(numbit)
+    port map(npc_in,alu_out,comparator_out,in_reg_npc);
+
+    REG2 : REGISTER_GENERIC
+    generic map(numbit)
+    port map(in_reg_npc,clk,reset,npc_out);
+
+    LATCH : LATCH_GENERIC
+    generic map(numbit)
+    port map(b_reg_in,'1',b_latch_out);
+
+    REG3 : REGISTER_GENERIC
+    generic map(numbit)
+    port map(b_latch_out,clk,reset,b_reg_out);
 
 end STRUCTURAL;
 
@@ -113,8 +130,8 @@ configuration CFG_EXECUTION_STAGE_STRUCTURAL of EXECUTION_STAGE is
     for all : COMPARATOR_GENERIC
       use configuration WORK.CFG_COMPARATOR_GENERIC;
     end for;
-    for all : FD
-      use configuration WORK.CFG_FD_SYNC;
+    for all : LATCH_GENERIC
+      use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
     end for;
 	end for;
 end CFG_EXECUTION_STAGE_STRUCTURAL;
