@@ -12,7 +12,7 @@ entity MEMORY_STAGE is
        b_reg_in : IN std_logic_vector(numbit-1 downto 0);
        write_control : IN std_logic;
        read_control : IN std_logic;
-       enable : IN std_logic;
+       reset : IN std_logic;
        clk : IN std_logic;
        memory_stage_out : OUT std_logic_vector(numbit-1 downto 0));
 end MEMORY_STAGE;
@@ -31,11 +31,12 @@ architecture STRUCTURAL of MEMORY_STAGE is
        data_out : OUT std_logic_vector(MBIT-1 downto 0));
   end component;
 
-  component LATCH_GENERIC
-  generic (NBIT : integer := NumBitLatch);
+  component REGISTER_GENRIC
+  generic (NBIT : integer := NumBitRegister);
   port(
     D : IN std_logic_vector(NBIT-1 downto 0);
-    ENABLE : IN std_logic;
+    CK : IN std_logic;
+    RESET : IN std_logic;
     Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
@@ -45,9 +46,9 @@ architecture STRUCTURAL of MEMORY_STAGE is
     generic map(numbit,numbit)
     port map(execution_stage_in,b_reg_in,clk,write_control,read_control,data_memory_out);
 
-    REGISTER_OUT : LATCH_GENERIC
+    REG : REGISTER_GENRIC
     generic map(numbit)
-    port map(data_memory_out,enable,memory_stage_out);
+    port map(data_memory_out,clk,reset,memory_stage_out);
 
 end STRUCTURAL;
 
@@ -56,8 +57,8 @@ configuration CFG_MEMORY_STAGE_STRUCTURAL of MEMORY_STAGE is
     for all : MEMORY_GENERIC
 		  use configuration WORK.CFG_MEMORY_BEHAVIORAL;
     end for;
-    for all : LATCH_GENERIC
-		  use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
+    for all : REGISTER_GENRIC
+		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
     end for;
 	end for;
 end CFG_MEMORY_STAGE_STRUCTURAL;
