@@ -6,6 +6,7 @@ entity DECODE_STAGE is
   generic(numbit : integer := RISC_BIT);
   port(IR_IN : IN std_logic_vector(numbit-1 downto 0);
        WB_STAGE_IN : std_logic_vector(numbit-1 downto 0);
+       NPC_IN : IN std_logic_vector(numbit-1 downto 0);
        MUX_ONE_SEL : IN std_logic;
        MUX_TWO_SEL : IN std_logic;
        CLK : IN std_logic;
@@ -14,7 +15,7 @@ entity DECODE_STAGE is
        WRITE : IN std_logic;
        READ_ONE : IN std_logic;
        READ_TWO : IN std_logic;
-       --NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
+       NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
        A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
        B_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
        IMM_REG_OUT : OUT std_logic_vector(numbit-1 downto 0));
@@ -28,6 +29,7 @@ architecture STRUCTURAL of DECODE_STAGE is
   signal RF_ONE_OUT : std_logic_vector(numbit-1 downto 0);
   signal RF_TWO_OUT : std_logic_vector(numbit-1 downto 0);
   signal latch_out : std_logic_vector(numbit-1 downto 0);
+  signal npc_latch_out : std_logic_vector(numbit-1 downto 0);
 
   component MUX21_GENERIC
   generic (NBIT : integer := NumBitMux21);
@@ -113,6 +115,14 @@ architecture STRUCTURAL of DECODE_STAGE is
   LATCHTHREE : LATCH_GENERIC
   generic map(numbit)
   port map(sign_extention,ENABLE,IMM_REG_OUT);
+
+  LATCHFOUR : LATCH_GENERIC
+  generic map(numbit)
+  port map(npc_in,enable,npc_latch_out);
+
+  NPC_REG : REGISTER_GENERIC
+  generic map(numbit)
+  port map(npc_latch_out,CLK,RESET,NPC_OUT);  
 
 end STRUCTURAL;
 

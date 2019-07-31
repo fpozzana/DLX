@@ -21,11 +21,14 @@ architecture TEST of TB_DECODE_STAGE is
   signal A_REG_OUT :  std_logic_vector(NBIT-1 downto 0);
   signal B_REG_OUT :  std_logic_vector(NBIT-1 downto 0);
   signal IMM_REG_OUT :  std_logic_vector(NBIT-1 downto 0);
+  signal NPC_OUT :  std_logic_vector(NBIT-1 downto 0);
+  signal NPC_IN :  std_logic_vector(NBIT-1 downto 0) := "00000000000000000000000000000000";
 
   component DECODE_STAGE
   generic(numbit : integer := RISC_BIT);
-  port(IR_IN : IN std_logic_vector(NBIT-1 downto 0);
-       WB_STAGE_IN : std_logic_vector(NBIT-1 downto 0);
+  port(IR_IN : IN std_logic_vector(numbit-1 downto 0);
+       WB_STAGE_IN : std_logic_vector(numbit-1 downto 0);
+       NPC_IN : IN std_logic_vector(numbit-1 downto 0);
        MUX_ONE_SEL : IN std_logic;
        MUX_TWO_SEL : IN std_logic;
        CLK : IN std_logic;
@@ -34,20 +37,21 @@ architecture TEST of TB_DECODE_STAGE is
        WRITE : IN std_logic;
        READ_ONE : IN std_logic;
        READ_TWO : IN std_logic;
-       --NPC_OUT : OUT std_logic_vector(NBIT-1 downto 0);
-       A_REG_OUT : OUT std_logic_vector(NBIT-1 downto 0);
-       B_REG_OUT : OUT std_logic_vector(NBIT-1 downto 0);
-       IMM_REG_OUT : OUT std_logic_vector(NBIT-1 downto 0));
+       NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
+       A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
+       B_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
+       IMM_REG_OUT : OUT std_logic_vector(numbit-1 downto 0));
   end component;
 
   begin
     DUT : DECODE_STAGE
     generic map(NBIT)
-    port map(IR_IN,WB_STAGE_IN,MUX_ONE_SEL,MUX_TWO_SEL,CLK,RESET,ENABLE,WRITE,READ_ONE,READ_TWO,A_REG_OUT,B_REG_OUT,IMM_REG_OUT);
+    port map(IR_IN,WB_STAGE_IN,NPC_IN,MUX_ONE_SEL,MUX_TWO_SEL,CLK,RESET,ENABLE,WRITE,READ_ONE,READ_TWO,NPC_OUT,A_REG_OUT,B_REG_OUT,IMM_REG_OUT);
 
     IR_IN <= "00000000001000100001100000000000" after 1 ns, "00000100001000110000000000001111" after 3 ns;    --ITYPE add RS1 1 RD 3 IMM F
     MUX_ONE_SEL <= '1' after 2 ns;
     MUX_TWO_SEL <= '1' after 2 ns;
+    NPC_IN <= "00000000000000000000000000000001" after 1 ns, "00000000000000000000000000000010" after 3 ns;
 
     PCLOCK : process(clk)
     begin
