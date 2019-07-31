@@ -23,7 +23,7 @@ end MEMORY_GENERIC;
 
 architecture BEHAVIORAL of MEMORY_GENERIC is
   type memory is array(NBIT-1 downto 0) of std_logic_vector(MBIT-1 downto 0);
-  signal data_memory : memory;
+  signal data_memory : memory := (others => (others => '0')); --initialize my data memory to 0;
 
   begin
     memory_process : process(clock)
