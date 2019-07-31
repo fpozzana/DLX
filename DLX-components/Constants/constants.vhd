@@ -34,6 +34,6 @@ package CONSTANTS is
     constant NumBitMuxBoothMultiplier : integer := 8;
     constant NumBitBoothMultiplier : integer := 8;
     -------------instruction memory------------
-    constant RAM_DEPTH : integer := 48;
+    constant RAM_DEPTH : integer := 4;
     constant I_SIZE : integer := 32;
 end CONSTANTS;

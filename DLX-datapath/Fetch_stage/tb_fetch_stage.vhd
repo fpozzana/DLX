@@ -31,9 +31,10 @@ architecture TEST of TB_FETCH_STAGE is
 
     test: process
     begin
+      wait for 1 ns;
       NumROW : for i in 0 to RAM_DEPTH loop
-        TB_PC <= TB_PC + '1';
         wait for 2 ns;
+        TB_PC <= TB_PC + '1';
       end loop NumROW ;
     end process test;
 

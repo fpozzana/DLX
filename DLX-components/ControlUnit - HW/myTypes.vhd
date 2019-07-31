@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use WORK.constants.all;
 
 package myTypes is
 
@@ -37,6 +38,38 @@ package myTypes is
     constant ITYPE_L_MEM1 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001101";    -- L_MEM1 RD,INP1
     constant ITYPE_L_MEM2 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001110";    -- L_MEM2 RD,INP2
 
--- Change the values of the instructions coding as you want, depending also on the type of control unit choosen
+--constant registers used to fill the IRAM
+    constant REG0 : std_logic_vector(NumBitAddress-1 downto 0) := "00000";
+    constant REG1 : std_logic_vector(NumBitAddress-1 downto 0) := "00001";
+    constant REG2 : std_logic_vector(NumBitAddress-1 downto 0) := "00010";
+    constant REG3 : std_logic_vector(NumBitAddress-1 downto 0) := "00011";
+    constant REG4 : std_logic_vector(NumBitAddress-1 downto 0) := "00100";
+    constant REG5 : std_logic_vector(NumBitAddress-1 downto 0) := "00101";
+    constant REG6 : std_logic_vector(NumBitAddress-1 downto 0) := "00110";
+    constant REG7 : std_logic_vector(NumBitAddress-1 downto 0) := "00111";
+    constant REG8 : std_logic_vector(NumBitAddress-1 downto 0) := "01000";
+    constant REG9 : std_logic_vector(NumBitAddress-1 downto 0) := "01001";
+    constant REG10 : std_logic_vector(NumBitAddress-1 downto 0) := "01010";
+    constant REG11 : std_logic_vector(NumBitAddress-1 downto 0) := "01011";
+    constant REG12 : std_logic_vector(NumBitAddress-1 downto 0) := "01100";
+    constant REG13 : std_logic_vector(NumBitAddress-1 downto 0) := "01101";
+    constant REG14 : std_logic_vector(NumBitAddress-1 downto 0) := "01110";
+    constant REG15 : std_logic_vector(NumBitAddress-1 downto 0) := "01111";
+    constant REG16 : std_logic_vector(NumBitAddress-1 downto 0) := "10000";
+    constant REG17 : std_logic_vector(NumBitAddress-1 downto 0) := "10001";
+    constant REG18 : std_logic_vector(NumBitAddress-1 downto 0) := "10010";
+    constant REG19 : std_logic_vector(NumBitAddress-1 downto 0) := "10011";
+    constant REG20 : std_logic_vector(NumBitAddress-1 downto 0) := "10100";
+    constant REG21 : std_logic_vector(NumBitAddress-1 downto 0) := "10101";
+    constant REG22 : std_logic_vector(NumBitAddress-1 downto 0) := "10110";
+    constant REG23 : std_logic_vector(NumBitAddress-1 downto 0) := "10111";
+    constant REG24 : std_logic_vector(NumBitAddress-1 downto 0) := "11000";
+    constant REG25 : std_logic_vector(NumBitAddress-1 downto 0) := "11001";
+    constant REG26 : std_logic_vector(NumBitAddress-1 downto 0) := "11010";
+    constant REG27 : std_logic_vector(NumBitAddress-1 downto 0) := "11011";
+    constant REG28 : std_logic_vector(NumBitAddress-1 downto 0) := "11100";
+    constant REG29 : std_logic_vector(NumBitAddress-1 downto 0) := "11101";
+    constant REG30 : std_logic_vector(NumBitAddress-1 downto 0) := "11110";
+    constant REG31 : std_logic_vector(NumBitAddress-1 downto 0) := "11111";
 
 end myTypes;
