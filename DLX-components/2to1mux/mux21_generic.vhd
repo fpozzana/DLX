@@ -4,8 +4,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use WORK.constants.all;
-use IEEE.std_logic_1164.all;
-use WORK.constants.all;
 
 entity MUX21_GENERIC is
   generic (NBIT : integer := NumBitMux21);
