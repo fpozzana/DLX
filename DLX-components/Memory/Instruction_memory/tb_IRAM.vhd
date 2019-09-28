@@ -8,7 +8,7 @@ end TB_IRAM;
 
 architecture TEST of TB_IRAM is
   constant NBIT : integer := I_SIZE;
-  signal reset : std_logic := '0';
+  signal reset : std_logic := '1';
   signal address : std_logic_vector(NBIT-1 downto 0) := (others => '0');
   signal dout : std_logic_vector(NBIT-1 downto 0);
 
@@ -25,12 +25,12 @@ architecture TEST of TB_IRAM is
     generic map(RAM_DEPTH,NBIT)
     port map(reset,address,dout);
 
-    reset <= '1' after 2 ns;
+    reset <= '0' after 4 ns;
 
     test: process
     begin
     wait for 2 ns;
-    NumROW : for i in 0 to RAM_DEPTH - 1 loop
+    NumROW : for i in 0 to RAM_DEPTH loop
       wait for 10 ns ;
 	    address <= address + '1';
     end loop NumROW ;

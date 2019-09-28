@@ -10,37 +10,42 @@ use IEEE.std_logic_unsigned.all;
 use ieee.numeric_std.all;
 use WORK.constants.all;
 
-entity MEMORY_GENERIC is
+entity DRAM is
   generic(MBIT : integer := NumBitMemoryWord;
           NBIT : integer := NumBitMemoryAddress);
   port(address : IN std_logic_vector(NBIT-1 downto 0);
        data_in : IN std_logic_vector(MBIT-1 downto 0);
-       clock : IN std_logic;
        write_enable : IN std_logic;
        read_enable : IN std_logic;
        data_out : OUT std_logic_vector(MBIT-1 downto 0));
-end MEMORY_GENERIC;
+end DRAM;
 
-architecture BEHAVIORAL of MEMORY_GENERIC is
+architecture BEHAVIORAL of DRAM is
   type memory is array(NBIT-1 downto 0) of std_logic_vector(MBIT-1 downto 0);
   signal data_memory : memory := (others => (others => '0')); --initialize my data memory to 0;
 
   begin
-    memory_process : process(clock)
+
+    memory_process_write : process(address, data_in, write_enable, read_enable)
       begin
-        if rising_edge(clock) then                                         --perform actions on the rising clock edge
-          if write_enable = '1' then                                       --if write enable is high
-            data_memory(to_integer(unsigned(address))) <= data_in;         --put data in in the right location
-          end if;
-          if read_enable = '1' then                                        --if read enable is high
-            data_out <= data_memory(to_integer(unsigned(address)));        --output the memory value at address_in
-          end if;
+        if write_enable = '1' and read_enable = '1' then                                       --if write enable is high
+          data_out <= data_memory(to_integer(unsigned(address)));
         end if;
-      end process memory_process;
+        if write_enable = '1' and read_enable = '0' then                                       --if write enable is high
+          data_memory(to_integer(unsigned(address))) <= data_in;         --put data in in the right location
+          data_out <= data_in;
+        end if;
+        if write_enable = '0' and read_enable = '1' then                                       --if write enable is high
+          data_out <= data_memory(to_integer(unsigned(address)));
+        end if;
+        if write_enable = '0' and read_enable = '0' then                                       --if write enable is high
+          data_out <= data_in;
+        end if;
+    end process memory_process_write;
 
   end BEHAVIORAL;
 
-configuration CFG_MEMORY_BEHAVIORAL of MEMORY_GENERIC is
+configuration CFG_DRAM of DRAM is
   for BEHAVIORAL
   end for;
-end CFG_MEMORY_BEHAVIORAL;
+end CFG_DRAM;

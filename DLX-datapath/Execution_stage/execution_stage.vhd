@@ -15,14 +15,15 @@ entity EXECUTION_STAGE is
        a_reg_in : IN std_logic_vector(numbit-1 downto 0);
        b_reg_in : IN std_logic_vector(numbit-1 downto 0);
        imm_reg_in : IN std_logic_vector(numbit-1 downto 0);
+       rd_reg_in : IN std_logic_vector(4 downto 0);
        mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
        clk : IN std_logic;
        reset : IN std_logic;
        execution_stage_out : OUT std_logic_vector(numbit-1 downto 0);
-       npc_out : OUT std_logic_vector(numbit-1 downto 0);
-       b_reg_out : OUT std_logic_vector(numbit-1 downto 0));
+       b_reg_out : OUT std_logic_vector(numbit-1 downto 0);
+       rd_reg_out : OUT std_logic_vector(4 downto 0));
 end EXECUTION_STAGE;
 
 architecture STRUCTURAL of EXECUTION_STAGE is
@@ -30,8 +31,6 @@ architecture STRUCTURAL of EXECUTION_STAGE is
   signal mux_one_out : std_logic_vector(numbit-1 downto 0);
   signal mux_two_out : std_logic_vector(numbit-1 downto 0);
   signal alu_out : std_logic_vector(numbit-1 downto 0);
-  signal zero_comp : std_logic_vector(numbit-1 downto 0) := (others => '0');
-  signal comparator_out : std_logic;
   signal in_reg_npc : std_logic_vector(numbit-1 downto 0);
   signal b_latch_out : std_logic_vector(numbit-1 downto 0);
 
@@ -41,15 +40,6 @@ architecture STRUCTURAL of EXECUTION_STAGE is
        B : IN std_logic_vector(NBIT-1 downto 0);
        SEL : IN std_logic;
        Y : OUT std_logic_vector(NBIT-1 downto 0));
-  end component;
-
-  component COMPARATOR_GENERIC
-  generic(numbit : integer := NumBitComparator);
-  port(A : IN std_logic_vector(numbit-1 downto 0);
-       B : IN std_logic_vector(numbit-1 downto 0);
-       less : OUT std_logic;
-       more : OUT std_logic;
-       equal : OUT std_logic);
   end component;
 
   component REGISTER_GENERIC
@@ -94,18 +84,6 @@ architecture STRUCTURAL of EXECUTION_STAGE is
     generic map(numbit)
     port map(alu_out,clk,reset,execution_stage_out);
 
-    COMP : COMPARATOR_GENERIC
-    generic map(numbit)
-    port map(a_reg_in,zero_comp,open,open,comparator_out);
-
-    MUX_ZERO : MUX21_GENERIC
-    generic map(numbit)
-    port map(npc_in,alu_out,comparator_out,in_reg_npc);
-
-    REG2 : REGISTER_GENERIC
-    generic map(numbit)
-    port map(in_reg_npc,clk,reset,npc_out);
-
     LATCH : LATCH_GENERIC
     generic map(numbit)
     port map(b_reg_in,'1',b_latch_out);
@@ -113,6 +91,10 @@ architecture STRUCTURAL of EXECUTION_STAGE is
     REG3 : REGISTER_GENERIC
     generic map(numbit)
     port map(b_latch_out,clk,reset,b_reg_out);
+
+    REG4 : REGISTER_GENERIC
+    generic map(5)
+    port map(rd_reg_in,clk,reset,rd_reg_out);
 
 end STRUCTURAL;
 
@@ -126,9 +108,6 @@ configuration CFG_EXECUTION_STAGE_STRUCTURAL of EXECUTION_STAGE is
     end for;
     for all : REGISTER_GENERIC
 		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
-    end for;
-    for all : COMPARATOR_GENERIC
-      use configuration WORK.CFG_COMPARATOR_GENERIC;
     end for;
     for all : LATCH_GENERIC
       use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;

@@ -9,7 +9,7 @@ package myTypes is
     constant FUNC_SIZE    : integer :=  11;                                             -- FUNC field size
 	  constant MICROCODE_MEM_SIZE : integer := 18;
     constant ALU_OPC_SIZE : integer := 4;
-    constant CW_SIZE : integer := 15 + ALU_OPC_SIZE;
+    constant CW_SIZE : integer := 12 + ALU_OPC_SIZE;
 
 
 -- R-Type instruction -> FUNC field

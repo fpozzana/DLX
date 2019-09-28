@@ -10,34 +10,32 @@ end TB_MEMORY_STAGE;
 architecture TEST of TB_MEMORY_STAGE is
   constant NBIT : integer := 32;
 
-  signal execution_stage_in : std_logic_vector(NBIT-1 downto 0) := "00000000000000000000000000000000";
-  signal b_reg_in : std_logic_vector(NBIT-1 downto 0) := "00000000000000000000000000000000";
-  signal write_control : std_logic := '1';
-  signal read_control : std_logic := '0';
   signal reset : std_logic := '0';
   signal clk : std_logic := '0';
-  signal memory_stage_out : std_logic_vector(NBIT-1 downto 0);
+  signal memory_stage_out : std_logic_vector(NBIT - 1 downto 0);
+  signal rd_reg_in : std_logic_vector(4 downto 0) := "10101";
+  signal rd_reg_out : std_logic_vector(4 downto 0);
+  signal to_mem_stage_reg : std_logic_vector(NBIT - 1 downto 0) := "11110000111100001111000011110000";
+  signal to_dram_address : std_logic_vector(NBIT - 1 downto 0);
+  signal to_dram_data : std_logic_vector(NBIT - 1 downto 0);
 
   component MEMORY_STAGE
   generic(numbit : integer := RISC_BIT);
-  port(execution_stage_in : IN std_logic_vector(numbit-1 downto 0);
-       b_reg_in : IN std_logic_vector(numbit-1 downto 0);
-       write_control : IN std_logic;
-       read_control : IN std_logic;
+  port(rd_reg_in : IN std_logic_vector(4 downto 0);
        reset : IN std_logic;
        clk : IN std_logic;
-       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0));
+       to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
+       rd_reg_out : OUT std_logic_vector(4 downto 0);
+       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0);
+       to_dram_address : OUT std_logic_vector(numbit-1 downto 0);
+       to_dram_data : OUT std_logic_vector(numbit-1 downto 0));
   end component;
 
   begin
     DUT : MEMORY_STAGE
     generic map(NBIT)
-    port map(execution_stage_in,b_reg_in,write_control,read_control,reset,clk,memory_stage_out);
+    port map(rd_reg_in, reset, clk, to_mem_stage_reg, rd_reg_out, memory_stage_out, to_dram_address, to_dram_data);
 
-    execution_stage_in <= "00000000000000000000000000000001" after 3 ns, "00000000000000000000000000000010" after 5 ns, "00000000000000000000000000000011" after 7 ns, "00000000000000000000000000000100" after 9 ns, "00000000000000000000000000000000" after 11 ns, "00000000000000000000000000000001" after 13 ns, "00000000000000000000000000000010" after 15 ns, "00000000000000000000000000000011" after 17 ns, "00000000000000000000000000000100" after 19 ns;
-    b_reg_in <= "00000000000000000000000000000001" after 3 ns, "00000000000000000000000000000010" after 5 ns, "00000000000000000000000000000011" after 7 ns, "00000000000000000000000000000100" after 9 ns;
-    write_control <= '0' after 11 ns;
-    read_control <= '1' after 11 ns;
     reset <= '1' after 29 ns;
 
     PCLOCK : process(clk)
