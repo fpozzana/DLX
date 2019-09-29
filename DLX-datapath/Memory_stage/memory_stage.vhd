@@ -11,9 +11,7 @@ entity MEMORY_STAGE is
        clk : IN std_logic;
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        rd_reg_out : OUT std_logic_vector(4 downto 0);
-       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0);
-       to_dram_address : OUT std_logic_vector(numbit-1 downto 0);
-       to_dram_data : OUT std_logic_vector(numbit-1 downto 0));
+       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0));
 end MEMORY_STAGE;
 
 architecture STRUCTURAL of MEMORY_STAGE is

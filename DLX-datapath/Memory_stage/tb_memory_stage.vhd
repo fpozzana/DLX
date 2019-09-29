@@ -16,8 +16,6 @@ architecture TEST of TB_MEMORY_STAGE is
   signal rd_reg_in : std_logic_vector(4 downto 0) := "10101";
   signal rd_reg_out : std_logic_vector(4 downto 0);
   signal to_mem_stage_reg : std_logic_vector(NBIT - 1 downto 0) := "11110000111100001111000011110000";
-  signal to_dram_address : std_logic_vector(NBIT - 1 downto 0);
-  signal to_dram_data : std_logic_vector(NBIT - 1 downto 0);
 
   component MEMORY_STAGE
   generic(numbit : integer := RISC_BIT);
@@ -26,15 +24,13 @@ architecture TEST of TB_MEMORY_STAGE is
        clk : IN std_logic;
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        rd_reg_out : OUT std_logic_vector(4 downto 0);
-       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0);
-       to_dram_address : OUT std_logic_vector(numbit-1 downto 0);
-       to_dram_data : OUT std_logic_vector(numbit-1 downto 0));
+       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0));
   end component;
 
   begin
     DUT : MEMORY_STAGE
     generic map(NBIT)
-    port map(rd_reg_in, reset, clk, to_mem_stage_reg, rd_reg_out, memory_stage_out, to_dram_address, to_dram_data);
+    port map(rd_reg_in, reset, clk, to_mem_stage_reg, rd_reg_out, memory_stage_out);
 
     reset <= '1' after 29 ns;
 

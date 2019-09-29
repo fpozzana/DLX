@@ -25,8 +25,10 @@ architecture TEST of tb_dlx is
     signal rd_out_ex : std_logic_vector(4 downto 0);
     signal b_reg_out_ex : std_logic_vector(RISC_BIT - 1 downto 0);
     signal memory_out : std_logic_vector(RISC_BIT - 1 downto 0);
-    --signal lmd_out : std_logic_vector(RISC_BIT - 1 downto 0);
-    --signal rd_out_mem : std_logic_vector(4 downto 0);
+    signal lmd_out : std_logic_vector(RISC_BIT - 1 downto 0);
+    signal rd_out_mem : std_logic_vector(4 downto 0);
+    signal rd_out_wb : std_logic_vector(4 downto 0);
+    signal wb_stage_out : std_logic_vector(RISC_BIT - 1 downto 0);
 
     component DLX
     generic(IR_SIZE      : integer := 32;       -- Instruction Register Size
@@ -44,9 +46,11 @@ architecture TEST of tb_dlx is
          alu_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          rd_out_ex : OUT std_logic_vector(4 downto 0);
          b_reg_out_ex : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-         memory_out : OUT std_logic_vector(IR_SIZE - 1 downto 0));
-         --lmd_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-         --rd_out_mem : OUT std_logic_vector(4 downto 0));
+         memory_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+         rd_out_mem : OUT std_logic_vector(4 downto 0);
+         lmd_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+         rd_out_wb : OUT std_logic_vector(4 downto 0);
+         wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0));
     end component;
 
 begin
@@ -57,7 +61,7 @@ begin
 
   U1: DLX
   Generic Map (SIZE_IR, SIZE_PC)
-	Port Map (clk, reset, pc_in, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, alu_out, rd_out_ex, b_reg_out_ex, memory_out);
+	Port Map (clk, reset, pc_in, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, alu_out, rd_out_ex, b_reg_out_ex, memory_out, rd_out_mem, lmd_out, rd_out_wb, wb_stage_out);
 
   npctopc <= npc_out_if;
   pc_in <= npctopc;

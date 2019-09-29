@@ -19,9 +19,11 @@ entity DLX is
        alu_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_ex : OUT std_logic_vector(4 downto 0);
        b_reg_out_ex : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-       memory_out : OUT std_logic_vector(IR_SIZE - 1 downto 0));
-       --lmd_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-       --rd_out_mem : OUT std_logic_vector(4 downto 0));
+       memory_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+       rd_out_mem : OUT std_logic_vector(4 downto 0);
+       lmd_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+       rd_out_wb : OUT std_logic_vector(4 downto 0);
+       wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0));
 end DLX;
 
 
@@ -72,7 +74,8 @@ architecture dlx_rtl of DLX is
        alu_control : IN std_logic_vector(3 downto 0);
        to_pc : IN std_logic_vector(numbit - 1 downto 0);
        to_ir : IN std_logic_vector(numbit - 1 downto 0);
-       --to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
+       to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
+       wb_control : IN std_logic;
        to_iram : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_if : OUT std_logic_vector(numbit - 1 downto 0);
        ir_out : OUT std_logic_vector(numbit - 1 downto 0);
@@ -83,11 +86,11 @@ architecture dlx_rtl of DLX is
        imm_reg_out : OUT std_logic_vector(numbit - 1 downto 0);
        alu_out : OUT std_logic_vector(numbit - 1 downto 0);
        rd_out_ex : OUT std_logic_vector(4 downto 0);
-       b_reg_out_ex : OUT std_logic_vector(numbit - 1 downto 0));
-       --rd_out_mem : OUT std_logic_vector(4 downto 0);
-       --memory_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
-       --to_dram_address : OUT std_logic_vector(numbit - 1 downto 0);
-       --to_dram_data : OUT std_logic_vector(numbit - 1 downto 0));
+       b_reg_out_ex : OUT std_logic_vector(numbit - 1 downto 0);
+       rd_out_mem : OUT std_logic_vector(4 downto 0);
+       memory_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
+       wb_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
+       rd_out_wb : OUT std_logic_vector(4 downto 0));
   end component;
 
   -- Control Unit
@@ -188,13 +191,9 @@ architecture dlx_rtl of DLX is
     generic map(RISC_BIT, RISC_BIT)
     port map(todramfromaluout, todramfrombreg, '1', '1', tolmdfromdram);
 
-    --DATAPATH_I : DATAPATH
-    --generic map(RISC_BIT)
-    --port map(clk, reset, '1', '1', '1', '1', '0', '0', (others => '0'), pc_in, toirfromiram, tolmdfromdram, toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, alu_out, rd_out_ex, b_reg_out_ex, rd_out_mem, lmd_out, todramfromaluout, todramfrombreg);
-
     DATAPATH_I : DATAPATH
     generic map(RISC_BIT)
-    port map(clk, reset, '1', '1', '1', '1', '0', '0', (others => '0'), pc_in, toirfromiram, toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg);
+    port map(clk, reset, '1', '1', '1', '1', '0', '0', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '0', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, wb_stage_out, rd_out_wb);
 
 
     -- This is the input to program counter: currently zero
