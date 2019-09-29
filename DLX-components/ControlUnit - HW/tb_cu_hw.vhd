@@ -14,20 +14,19 @@ architecture TEST of cu_test is
           RF_EN           : OUT std_logic;    -- RF enable
           RF_RE1          : OUT std_logic;    -- enables the read port 1 of the register file
           RF_RE2          : OUT std_logic;    -- enables the read port 2 of the register file
-          RESET_ID         : OUT std_logic;    -- reset signal
+          --RESET_ID         : OUT std_logic;    -- reset signal
           -- EX Control Signal
           ALU_OPCODE      : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0); -- ALU Operation Code
-          RESET_EX        : OUT std_logic;    -- reset signal
+          --RESET_EX        : OUT std_logic;    -- reset signal
           MUXA_SEL        : OUT std_logic;    -- MUX-A Sel
           MUXB_SEL        : OUT std_logic;    -- MUX-B Sel
           -- MEM Control Signals
           DRAM_WE         : OUT std_logic;    -- Data RAM Write Enable
           DRAM_RE         : OUT std_logic;    -- Data RAM Read Enable
-          RESET_MEM       : OUT std_logic;    -- reset signal
+          --RESET_MEM       : OUT std_logic;    -- reset signal
           -- WB Control Signals
           WB_MUX_SEL      : OUT std_logic;    -- Write Back MUX Sel
           RF_WE           : OUT std_logic;    -- Register File Write Enable
-          --RESET_WB        : OUT std_logic;    -- reset signal
           -- INPUTS
           OPCODE : IN  std_logic_vector(OP_CODE_SIZE - 1 downto 0);
           FUNC   : IN  std_logic_vector(FUNC_SIZE - 1 downto 0);
@@ -40,7 +39,7 @@ architecture TEST of cu_test is
 
     signal cu_opcode_i: std_logic_vector(OP_CODE_SIZE - 1 downto 0) := (others => '0');
     signal cu_func_i: std_logic_vector(FUNC_SIZE - 1 downto 0) := (others => '0');
-    signal RF_EN, RF_RE1, RF_RE2, RESET_ID, RESET_EX, MUXA_SEL, MUXB_SEL, DRAM_WE, DRAM_RE, RESET_MEM, WB_MUX_SEL, RF_WE : std_logic := '0';
+    signal RF_EN, RF_RE1, RF_RE2, MUXA_SEL, MUXB_SEL, DRAM_WE, DRAM_RE, WB_MUX_SEL, RF_WE : std_logic := '0';
     signal ALU_OPCODE : std_logic_vector(ALU_OPC_SIZE -1 downto 0) := (others => '0');
 
 begin
@@ -52,14 +51,14 @@ begin
                  RF_EN    => RF_EN,
                  RF_RE1    => RF_RE1,
                  RF_RE2     => RF_RE2,
-                 RESET_ID     => RESET_ID,
+                 --RESET_ID     => RESET_ID,
                  ALU_OPCODE   => ALU_OPCODE,
-                 RESET_EX   => RESET_EX,
+                 --RESET_EX   => RESET_EX,
                  MUXA_SEL   => MUXA_SEL,
                  MUXB_SEL    => MUXB_SEL,
                  DRAM_WE     => DRAM_WE,
                  DRAM_RE     => DRAM_RE,
-                 RESET_MEM     => RESET_MEM,
+                 --RESET_MEM     => RESET_MEM,
                  WB_MUX_SEL     => WB_MUX_SEL,
                  RF_WE     => RF_WE,
                  --RESET_WB   => RESET_WB,
