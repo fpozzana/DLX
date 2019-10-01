@@ -66,10 +66,7 @@ architecture dlx_rtl of DLX is
   generic(numbit : integer := RISC_BIT);
   port(clk : IN std_logic;
        reset : IN std_logic;
-       enable : IN std_logic;
-       write : IN std_logic;
-       read_one : IN std_logic;
-       read_two : IN std_logic;
+       write_enable : IN std_logic;
        mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
@@ -195,7 +192,7 @@ architecture dlx_rtl of DLX is
 
     DATAPATH_I : DATAPATH
     generic map(RISC_BIT)
-    port map(clk, reset, '1', '1', '1', '1', '0', '0', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '1', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, alu_out_mem, wb_stage_out, rd_out_wb);
+    port map(clk, reset, '0', '1', '1', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '1', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, alu_out_mem, wb_stage_out, rd_out_wb);
 
 
     -- This is the input to program counter: currently zero

@@ -6,10 +6,7 @@ entity DATAPATH is
   generic(numbit : integer := RISC_BIT);
   port(clk : IN std_logic;
        reset : IN std_logic;
-       enable : IN std_logic;
-       write : IN std_logic;
-       read_one : IN std_logic;
-       read_two : IN std_logic;
+       write_enable : IN std_logic;
        mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
@@ -74,10 +71,7 @@ architecture STRUCTURAL of DATAPATH is
        RD_IN : IN std_logic_vector(4 downto 0);
        CLK : IN std_logic;
        RESET : IN std_logic;
-       ENABLE : IN std_logic;
-       WRITE : IN std_logic;
-       READ_ONE : IN std_logic;
-       READ_TWO : IN std_logic;
+       WRITE_ENABLE : IN std_logic;
        RD_OUT : OUT std_logic_vector(4 downto 0);
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
        A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
@@ -152,7 +146,7 @@ architecture STRUCTURAL of DATAPATH is
 
     DECODE : DECODE_STAGE
     generic map(numbit)
-    port map(iroutsignal, wbstageoutsignal, npcoutifsignal, rdoutwbsignal, clk, reset, enable, write, read_one, read_two, rdoutidsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal);
+    port map(iroutsignal, wbstageoutsignal, npcoutifsignal, rdoutwbsignal, clk, reset, write_enable, rdoutidsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal);
 
     EXECUTE : EXECUTION_STAGE
     generic map(numbit)
