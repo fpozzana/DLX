@@ -27,7 +27,6 @@ entity DATAPATH is
        b_reg_out_ex : OUT std_logic_vector(numbit - 1 downto 0);
        rd_out_mem : OUT std_logic_vector(4 downto 0);
        memory_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
-       alu_out_mem : OUT std_logic_vector(numbit - 1 downto 0);
        wb_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
        rd_out_wb : OUT std_logic_vector(4 downto 0));
 end DATAPATH;
@@ -47,7 +46,6 @@ architecture STRUCTURAL of DATAPATH is
 
   signal memstageoutsignal : std_logic_vector(numbit - 1 downto 0);
   signal rdoutmemsignal : std_logic_vector(4 downto 0);
-  signal aluoutmemsignal : std_logic_vector(numbit - 1 downto 0);
 
   signal rdoutwbsignal : std_logic_vector(4 downto 0);
   signal wbstageoutsignal : std_logic_vector(numbit - 1 downto 0);
@@ -98,14 +96,12 @@ architecture STRUCTURAL of DATAPATH is
 
   component MEMORY_STAGE
   generic(numbit : integer := RISC_BIT);
-  port(alu_in : IN std_logic_vector(numbit - 1 downto 0);
-       rd_reg_in : IN std_logic_vector(4 downto 0);
+  port(rd_reg_in : IN std_logic_vector(4 downto 0);
        reset : IN std_logic;
        clk : IN std_logic;
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        rd_reg_out : OUT std_logic_vector(4 downto 0);
-       memory_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
-       alu_out : OUT std_logic_vector(numbit - 1 downto 0));
+       memory_stage_out : OUT std_logic_vector(numbit-1 downto 0));
   end component;
 
   component WRITE_BACK_STAGE
@@ -135,7 +131,6 @@ architecture STRUCTURAL of DATAPATH is
 
     rd_out_mem <= rdoutmemsignal;
     memory_stage_out <= memstageoutsignal;
-    alu_out_mem <= aluoutmemsignal;
 
     rd_out_wb <= rdoutwbsignal;
     wb_stage_out <= wbstageoutsignal;
@@ -154,11 +149,11 @@ architecture STRUCTURAL of DATAPATH is
 
     MEMORY : MEMORY_STAGE
     generic map(numbit)
-    port map(aluoutsignal, rdoutexsignal, reset, clk, to_mem_stage_reg, rdoutmemsignal, memstageoutsignal, aluoutmemsignal);
+    port map(rdoutexsignal, reset, clk, to_mem_stage_reg, rdoutmemsignal, memstageoutsignal);
 
     WRITEBACK : WRITE_BACK_STAGE
     generic map(numbit)
-    port map(memstageoutsignal, aluoutmemsignal, rdoutmemsignal, wb_control, clk, reset, rdoutwbsignal, wbstageoutsignal);
+    port map(memstageoutsignal, aluoutsignal, rdoutmemsignal, wb_control, clk, reset, rdoutwbsignal, wbstageoutsignal);
 
 end STRUCTURAL;
 
