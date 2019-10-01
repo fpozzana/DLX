@@ -191,7 +191,11 @@ architecture dlx_rtl of DLX is
     DATAPATH_I : DATAPATH
     generic map(RISC_BIT)
 <<<<<<< HEAD
+<<<<<<< HEAD
     port map(clk, reset, '0', '1', '1', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '1', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, alu_out_mem, wb_stage_out, rd_out_wb);
+=======
+    port map(clk, reset, '1', '1', '1', '1', '0', '0', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '0', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, wb_stage_out, rd_out_wb);
+>>>>>>> parent of 2f6f13f... fixed timing for alu_out to mux_in_wb
 =======
     port map(clk, reset, '1', '1', '1', '1', '0', '0', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '0', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, wb_stage_out, rd_out_wb);
 >>>>>>> parent of 2f6f13f... fixed timing for alu_out to mux_in_wb
