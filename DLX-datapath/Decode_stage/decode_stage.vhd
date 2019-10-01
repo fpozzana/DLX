@@ -11,7 +11,10 @@ entity DECODE_STAGE is
        RD_IN : IN std_logic_vector(4 downto 0);
        CLK : IN std_logic;
        RESET : IN std_logic;
-       WRITE_ENABLE : IN std_logic;
+       ENABLE : IN std_logic;
+       WRITE : IN std_logic;
+       READ_ONE : IN std_logic;
+       READ_TWO : IN std_logic;
        RD_OUT : OUT std_logic_vector(4 downto 0);
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
        A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
@@ -33,7 +36,10 @@ architecture STRUCTURAL of DECODE_STAGE is
 	         numBit_registers : integer := NumBitRegisterFile);
   port (CK :	IN std_logic;
         Reset : IN std_logic;
-	      Write_enable : IN std_logic;
+	      Enable :	IN std_logic;
+	      Write : IN std_logic;
+	      Read_one :	IN std_logic;
+	      Read_two :	IN std_logic;
 	      Write_address : IN std_logic_vector(numBit_address-1 downto 0);
  	      Read_one_address :	IN std_logic_vector(numBit_address-1 downto 0);
  	      Read_two_address : IN std_logic_vector(numBit_address-1 downto 0);
@@ -79,15 +85,15 @@ end component;
 
   RF : REGISTER_FILE
   generic map(numbit,5,numbit)
-  port map(CLK,RESET,WRITE_ENABLE,RD_IN,IR_IN(25 downto 21),IR_IN(20 downto 16),WB_STAGE_IN,RF_ONE_OUT,RF_TWO_OUT);
+  port map(CLK,RESET,ENABLE,WRITE,READ_ONE,READ_TWO,RD_IN,IR_IN(25 downto 21),IR_IN(20 downto 16),WB_STAGE_IN,RF_ONE_OUT,RF_TWO_OUT);
 
-  REGONE : REGISTER_GENERIC
+  LATCHONE : LATCH_GENERIC
   generic map(numbit)
-  port map(RF_ONE_OUT,CLK,RESET,A_REG_OUT);
+  port map(RF_ONE_OUT,ENABLE,A_REG_OUT);
 
-  REGTWO : REGISTER_GENERIC
+  LATCHTWO : LATCH_GENERIC
   generic map(numbit)
-  port map(RF_TWO_OUT,CLK,RESET,B_REG_OUT);
+  port map(RF_TWO_OUT,ENABLE,B_REG_OUT);
 
   IMMREG : REGISTER_GENERIC
   generic map(numbit)
@@ -95,7 +101,7 @@ end component;
 
   LATCHFOUR : LATCH_GENERIC
   generic map(numbit)
-  port map(npc_in,'1',npc_latch_out);
+  port map(npc_in,enable,npc_latch_out);
 
   NPC_REG : REGISTER_GENERIC
   generic map(numbit)
