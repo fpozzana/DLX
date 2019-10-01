@@ -13,10 +13,7 @@ architecture TEST of TB_DECODE_STAGE is
   signal WB_STAGE_IN :  std_logic_vector(NBIT-1 downto 0) := "00000000000000000000000000001111";    --F is data in
   signal CLK : std_logic := '0';
   signal RESET : std_logic := '0';
-  signal ENABLE : std_logic := '1';
-  signal WRITE : std_logic := '1';
-  signal READ_ONE : std_logic := '1';
-  signal READ_TWO : std_logic := '1';
+  signal WRITE_ENABLE : std_logic := '1';
   signal A_REG_OUT :  std_logic_vector(NBIT-1 downto 0);
   signal B_REG_OUT :  std_logic_vector(NBIT-1 downto 0);
   signal IMM_REG_OUT :  std_logic_vector(NBIT-1 downto 0);
@@ -33,10 +30,7 @@ architecture TEST of TB_DECODE_STAGE is
        RD_IN : IN std_logic_vector(4 downto 0);
        CLK : IN std_logic;
        RESET : IN std_logic;
-       ENABLE : IN std_logic;
-       WRITE : IN std_logic;
-       READ_ONE : IN std_logic;
-       READ_TWO : IN std_logic;
+       WRITE_ENABLE : IN std_logic;
        RD_OUT : OUT std_logic_vector(4 downto 0);
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
        A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
@@ -47,7 +41,7 @@ architecture TEST of TB_DECODE_STAGE is
   begin
     DUT : DECODE_STAGE
     generic map(NBIT)
-    port map(IR_IN,WB_STAGE_IN,NPC_IN,RD_IN,CLK,RESET,ENABLE,WRITE,READ_ONE,READ_TWO,RD_OUT,NPC_OUT,A_REG_OUT,B_REG_OUT,IMM_REG_OUT);
+    port map(IR_IN,WB_STAGE_IN,NPC_IN,RD_IN,CLK,RESET,WRITE_ENABLE,RD_OUT,NPC_OUT,A_REG_OUT,B_REG_OUT,IMM_REG_OUT);
 
     IR_IN <= "00000000001000100001100000000000" after 1 ns, "00000100001000110000000000001111" after 3 ns;    --ITYPE add RS1 1 RD 3 IMM F
     NPC_IN <= "00000000000000000000000000000001" after 1 ns, "00000000000000000000000000000010" after 3 ns;

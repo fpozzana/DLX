@@ -38,11 +38,11 @@ RG : register_file
 GENERIC MAP(NumBitData, NumBitAddress, NumBitRegisterFile)
 PORT MAP (CK,Reset,Write_enable,Write_address,Read_one_address,Read_two_address,Data_in,Data_one_out,Data_two_out);
 
-  Reset <= '1','0' after 3 ns;
-	Write_enable <= '0','1' after 4 ns, '0' after 12 ns;
-	Write_address <= "00001", "11111" after 6 ns;
-	Read_one_address <= "00000", "11111" after 8 ns;
-	Read_two_address <= "00010", "10011" after 9 ns;
+  Reset <= '1','0' after 1 ns;
+	Write_enable <= '0','1' after 1 ns, '0' after 12 ns;
+	Write_address <= "00000", "11111" after 9 ns;
+	Read_one_address <= "00000", "11111" after 5 ns;
+	Read_two_address <= "00010", "00000" after 5 ns;
 	Data_in<=(others => '1'), (others => '0') after 11 ns;
 
   PCLOCK : process(CK)
