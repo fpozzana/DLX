@@ -84,13 +84,13 @@ architecture STRUCTURAL of EXECUTION_STAGE is
     generic map(numbit)
     port map(alu_out,clk,reset,execution_stage_out);
 
-    LATCH : LATCH_GENERIC
-    generic map(numbit)
-    port map(b_reg_in,'1',b_latch_out);
+    --LATCH : LATCH_GENERIC
+    --generic map(numbit)
+    --port map(b_reg_in,'1',b_latch_out);
 
     REG3 : REGISTER_GENERIC
     generic map(numbit)
-    port map(b_latch_out,clk,reset,b_reg_out);
+    port map(b_reg_in,clk,reset,b_reg_out);
 
     REG4 : REGISTER_GENERIC
     generic map(5)
@@ -109,8 +109,8 @@ configuration CFG_EXECUTION_STAGE_STRUCTURAL of EXECUTION_STAGE is
     for all : REGISTER_GENERIC
 		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
     end for;
-    for all : LATCH_GENERIC
-      use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
-    end for;
+    --for all : LATCH_GENERIC
+    --  use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
+    --end for;
 	end for;
 end CFG_EXECUTION_STAGE_STRUCTURAL;

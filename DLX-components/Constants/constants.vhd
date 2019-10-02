@@ -21,7 +21,7 @@ package CONSTANTS is
     constant RISC_BIT : integer := 32;
     -------------memory------------------------
     constant NumBitMemoryWord : integer := 32;
-    constant NumBitMemoryAddress : integer := 8;
+    constant NumBitMemoryCells : integer := 32;
     -------------register file-----------------
     constant NumBitData : integer := 32;
     constant NumBitRegisterFile : integer := 32;

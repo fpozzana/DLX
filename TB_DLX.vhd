@@ -30,6 +30,7 @@ architecture TEST of tb_dlx is
     signal alu_out_mem : std_logic_vector(RISC_BIT - 1 downto 0);
     signal rd_out_wb : std_logic_vector(4 downto 0);
     signal wb_stage_out : std_logic_vector(RISC_BIT - 1 downto 0);
+    signal address_error : std_logic;
 
     component DLX
     generic(IR_SIZE      : integer := 32;       -- Instruction Register Size
@@ -52,7 +53,8 @@ architecture TEST of tb_dlx is
          lmd_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          alu_out_mem : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          rd_out_wb : OUT std_logic_vector(4 downto 0);
-         wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0));
+         wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+         address_error : OUT std_logic);
     end component;
 
 begin
@@ -61,9 +63,32 @@ begin
   --generic Map (SIZE_IR, SIZE_PC)
 	--port Map (clk, reset, pc_in, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, alu_out, rd_out_ex, b_reg_out_ex, lmd_out, rd_out_mem);
 
-  U1: DLX
-  Generic Map (SIZE_IR, SIZE_PC)
-	Port Map (clk, reset, pc_in, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, alu_out, rd_out_ex, b_reg_out_ex, memory_out, rd_out_mem, lmd_out, alu_out_mem, rd_out_wb, wb_stage_out);
+  --U1: DLX
+  --generic map (SIZE_IR, SIZE_PC)
+	--port map (clk, reset, pc_in, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, alu_out, rd_out_ex, b_reg_out_ex, memory_out, rd_out_mem, lmd_out, alu_out_mem, rd_out_wb, wb_stage_out);
+
+  U1 : DLX
+  generic map(SIZE_IR, SIZE_PC)
+  port map(clk => clk,
+           reset => reset,
+           pc_in => pc_in,
+           npc_out_if => npc_out_if,
+           ir_out => ir_out,
+           rd_out_id => rd_out_id,
+           npc_out_id => npc_out_id,
+           a_reg_out => a_reg_out,
+           b_reg_out => b_reg_out,
+           imm_reg_out => imm_reg_out,
+           alu_out => alu_out,
+           rd_out_ex => rd_out_ex,
+           b_reg_out_ex => b_reg_out_ex,
+           memory_out => memory_out,
+           rd_out_mem => rd_out_mem,
+           lmd_out => lmd_out,
+           alu_out_mem => alu_out_mem,
+           rd_out_wb => rd_out_wb,
+           wb_stage_out => wb_stage_out,
+           address_error => address_error);
 
   npctopc <= npc_out_if;
   pc_in <= npctopc;

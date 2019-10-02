@@ -24,7 +24,8 @@ entity DLX is
        lmd_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        alu_out_mem : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_wb : OUT std_logic_vector(4 downto 0);
-       wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0));
+       wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+       address_error : OUT std_logic);
 end DLX;
 
 
@@ -52,13 +53,14 @@ architecture dlx_rtl of DLX is
 
   -- Data Ram
   component DRAM
-  generic(MBIT : integer := NumBitMemoryWord;
-          NBIT : integer := NumBitMemoryAddress);
+  generic(NBIT : integer := NumBitMemoryWord;
+          NCELL : integer := NumBitMemoryCells);
   port(address : IN std_logic_vector(NBIT-1 downto 0);
-       data_in : IN std_logic_vector(MBIT-1 downto 0);
+       data_in : IN std_logic_vector(NBIT-1 downto 0);
        write_enable : IN std_logic;
        read_enable : IN std_logic;
-       data_out : OUT std_logic_vector(MBIT-1 downto 0));
+       data_out : OUT std_logic_vector(NBIT-1 downto 0);
+       address_error : OUT std_logic);
   end component;
 
   -- Datapath
@@ -151,6 +153,7 @@ architecture dlx_rtl of DLX is
   signal todramfromaluout : std_logic_vector(RISC_BIT - 1 downto 0);
   signal todramfrombreg : std_logic_vector(RISC_BIT - 1 downto 0);
   signal tolmdfromdram : std_logic_vector(RISC_BIT - 1 downto 0);
+  signal address_dram : std_logic_vector(RISC_BIT - 1 downto 0);
 
   -- Datapath Bus signals
   --signal PC_BUS : std_logic_vector(PC_SIZE -1 downto 0);
@@ -182,17 +185,48 @@ architecture dlx_rtl of DLX is
     b_reg_out_ex <= todramfrombreg;
     memory_out <= tolmdfromdram;
 
+    address_dram <= "0000000000000000" & todramfrombreg(15 downto 0);
+
     IRAM_I : IRAM
     generic map(RAM_DEPTH,I_SIZE)
     port map(reset, toiramfrompc, toirfromiram);
 
     DRAM_I : DRAM
     generic map(RISC_BIT, RISC_BIT)
-    port map(todramfromaluout, todramfrombreg, '1', '1', tolmdfromdram);
+    port map(todramfromaluout, address_dram, '1', '1', tolmdfromdram, address_error);
+
+    --DATAPATH_I : DATAPATH
+    --generic map(RISC_BIT)
+    --port map(clk, reset, '0', '1', '1', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '1', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, alu_out_mem, wb_stage_out, rd_out_wb);
 
     DATAPATH_I : DATAPATH
     generic map(RISC_BIT)
-    port map(clk, reset, '0', '1', '1', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '1', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, alu_out_mem, wb_stage_out, rd_out_wb);
+    port map(clk =>  clk,
+             reset => reset,
+             write_enable =>  '0',
+             mux_one_control => '1',
+             mux_two_control => '1',
+             alu_control => (others => '0'),
+             to_pc => pc_in,
+             to_ir => toirfromiram,
+             to_mem_stage_reg => tolmdfromdram,
+             wb_control => '1',
+             to_iram => toiramfrompc,
+             npc_out_if => npc_out_if,
+             ir_out => ir_out,
+             rd_out_id => rd_out_id,
+             npc_out_id => npc_out_id,
+             a_reg_out => a_reg_out,
+             b_reg_out => b_reg_out,
+             imm_reg_out => imm_reg_out,
+             alu_out => todramfromaluout,
+             rd_out_ex => rd_out_ex,
+             b_reg_out_ex => todramfrombreg,
+             rd_out_mem => rd_out_mem,
+             memory_stage_out => lmd_out,
+             alu_out_mem => alu_out_mem,
+             wb_stage_out => wb_stage_out,
+             rd_out_wb => rd_out_wb);
 
 
     -- This is the input to program counter: currently zero
