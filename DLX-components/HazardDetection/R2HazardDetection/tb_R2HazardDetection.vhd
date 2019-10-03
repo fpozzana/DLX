@@ -24,7 +24,6 @@ architecture TEST of TB_R2_HAZARD_DETECTION is
   signal rs2_one : std_logic_vector(4 downto 0);
   signal rs2_two : std_logic_vector(4 downto 0);
   signal rs2_three : std_logic_vector(4 downto 0);
-  signal tmp_out : integer;
 
   component R2_HAZARD_DETECTION
   port(clk : IN std_logic;
@@ -50,8 +49,8 @@ architecture TEST of TB_R2_HAZARD_DETECTION is
 
     OPCODE <= "000001" after 40 ns;
 
-    RS2_REG_IN <= "00000", "00010" after 8 ns, "00011" after 10 ns, "00100" after 12 ns, "00101" after 14 ns, "00000" after 16 ns, "11111" after 18 ns, "00000" after 20 ns;
-    RD_REG_IN <= "00000", "00010" after 4 ns, "00011" after 6 ns, "00100" after 8 ns, "00101" after 10 ns, "11111" after 12 ns, "00111" after 14 ns, "10101" after 16 ns, "11100" after 18 ns;
+    RD_REG_IN <= "00000", "00010" after 4 ns, "00101" after 6 ns, "00100" after 8 ns, "00011" after 10 ns, "00000" after 12 ns, "11111" after 14 ns, "00000" after 16 ns;
+    RS2_REG_IN <= "00000", "00010" after 6 ns, "00101" after 8 ns, "00101" after 10 ns, "00101" after 12 ns, "11111" after 14 ns, "00111" after 16 ns, "10101" after 18 ns, "11100" after 20 ns;
 
     clk <= not clk after 1 ns;
     reset <= '0' after 4 ns;
