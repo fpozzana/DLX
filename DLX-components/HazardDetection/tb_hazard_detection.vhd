@@ -11,7 +11,7 @@ architecture TEST of TB_HAZARD_DETECTION is
 
   signal clk : std_logic := '1';
   signal reset : std_logic := '1';
-  signal OPCODE : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "000000";
+  signal OPCODE : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "000001";
   signal RD_REG_IN_ITYPE : std_logic_vector(4 downto 0);
   signal RD_REG_IN_RTYPE : std_logic_vector(4 downto 0);
   signal RS1_REG_IN : std_logic_vector(4 downto 0);
@@ -41,13 +41,18 @@ architecture TEST of TB_HAZARD_DETECTION is
     DUT : HAZARD_DETECTION
     port map(clk,reset,OPCODE,RD_REG_IN_ITYPE,RD_REG_IN_RTYPE,RS1_REG_IN,RS2_REG_IN,alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,RD_OUT);
 
-    OPCODE <= "000001" after 20 ns;
+    --OPCODE <= "000000" after 4 ns, "000001" after 6 ns,"000000" after 8 ns, "000001" after 10 ns,"000000" after 12 ns, "000001" after 14 ns,"000000" after 16 ns, "000001" after 18 ns,"000000" after 20 ns, "000001" after 22 ns;
 
-    RD_REG_IN_RTYPE <= "00000" , "00010" after 8 ns, "00011" after 10 ns, "00100" after 12 ns, "00101" after 14 ns;
-    RD_REG_IN_ITYPE <= "00000";
-    RS1_REG_IN <= "00000", "00010" after 4 ns, "00011" after 6 ns, "00100" after 8 ns, "00101" after 10 ns;
+    RD_REG_IN_ITYPE <= "00000" , "00010" after 4 ns, "00011" after 10 ns, "00100" after 12 ns, "00101" after 14 ns;
+    --RD_REG_IN_RTYPE <= "00010", "00010" after 4 ns, "00011" after 6 ns, "00100" after 8 ns, "00101" after 10 ns;
+    --RS1_REG_IN <= "00000", "00010" after 6 ns, "00011" after 8 ns, "00100" after 10 ns, "00101" after 12 ns;
     --RS2_REG_IN <= "00000", "00010" after 6 ns, "00011" after 8 ns, "00100" after 10 ns, "00101" after 12 ns;
-    RS2_REG_IN <= "00000";
+    --RS2_REG_IN <= "00000", "00010" after 6 ns, "00011" after 8 ns, "00100" after 10 ns, "00101" after 12 ns;
+
+    OPCODE <= "000000";
+    RD_REG_IN_RTYPE <= "00000" , "00010" after 4 ns, "00011" after 10 ns, "00100" after 12 ns, "00101" after 14 ns;
+    RS1_REG_IN <= "00000", "00010" after 6 ns, "00011" after 8 ns, "00100" after 10 ns, "00101" after 12 ns;
+    RS2_REG_IN <= "00000", "00010" after 6 ns, "00011" after 8 ns, "00100" after 10 ns, "00101" after 12 ns;
 
     clk <= not clk after 1 ns;
     reset <= '0' after 4 ns;

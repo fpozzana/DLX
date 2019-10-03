@@ -86,42 +86,37 @@ architecture BEHAVIORAL of R2_HAZARD_DETECTION is
       end if;
     end process RS2_PIPE;
 
-    OUT_PROCESS_RTYPE_RS2 : process (clk, reset)
+    OUT_PROCESS : process (clk, reset)
     variable tmp : integer range 0 to 1 := 0;
     begin
       if reset = '1' then                   -- asynchronous reset (active high)
         alu_forwarding_two <= '0';
         mem_forwarding_two <= '0';
       elsif Clk'event and Clk = '1' then  -- rising clock edge
-          if(rs2_reg_two /= "00000") then
-            if(rd_reg_one = rs2_reg_two) then
-              alu_forwarding_two <= '1';
-              tmp := 1;
-            elsif(rd_reg_one /= rs2_reg_two) then
-              alu_forwarding_two <= '0';
-              tmp := 0;
-            end if;
-          end if;
-          if(rs2_reg_three /= "00000") then
-            if(rd_reg_one = rs2_reg_three and tmp /= 1) then
-              mem_forwarding_two <= '1';
-            elsif(rd_reg_one /= rs2_reg_three and tmp = 1) then
-              mem_forwarding_two <= '0';
-              tmp := 0;
-            elsif(rd_reg_one = rs2_reg_three and tmp = 1) then
-              mem_forwarding_two <= '0';
-              tmp := 0;
-            elsif(rd_reg_one /= rs2_reg_three and tmp /= 1) then
-              mem_forwarding_two <= '0';
-            end if;
+        if(rs2_reg_one /= "00000") then
+          if(rd_reg_two = rs2_reg_one) then
+            alu_forwarding_two <= '1';
+            tmp := 1;
+          elsif(rd_reg_two /= rs2_reg_one) then
+            alu_forwarding_two <= '0';
+            tmp := 0;
           end if;
         end if;
-    end process OUT_PROCESS_RTYPE_RS2;
-
-
-
-
-
+        if(rs2_reg_one /= "00000") then
+          if(rd_reg_three = rs2_reg_one and tmp /= 1) then
+            mem_forwarding_two <= '1';
+          elsif(rd_reg_three /= rs2_reg_one and tmp = 1) then
+            mem_forwarding_two <= '0';
+            tmp := 0;
+          elsif(rd_reg_three = rs2_reg_one and tmp = 1) then
+            mem_forwarding_two <= '0';
+            tmp := 0;
+          elsif(rd_reg_three /= rs2_reg_one and tmp /= 1) then
+            mem_forwarding_two <= '0';
+          end if;
+        end if;
+      end if;
+    end process OUT_PROCESS;
 
 
 end BEHAVIORAL;

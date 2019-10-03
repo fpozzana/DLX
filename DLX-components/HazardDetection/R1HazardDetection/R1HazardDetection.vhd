@@ -93,25 +93,25 @@ architecture BEHAVIORAL of R1_HAZARD_DETECTION is
         alu_forwarding_one <= '0';
         mem_forwarding_one <= '0';
       elsif Clk'event and Clk = '1' then  -- rising clock edge
-        if(rs1_reg_two /= "00000") then
-          if(rd_reg_one = rs1_reg_two) then
+        if(rs1_reg_one /= "00000") then
+          if(rd_reg_two = rs1_reg_one) then
             alu_forwarding_one <= '1';
             tmp := 1;
-          elsif(rd_reg_one /= rs1_reg_two) then
+          elsif(rd_reg_two /= rs1_reg_one) then
             alu_forwarding_one <= '0';
             tmp := 0;
           end if;
         end if;
-        if(rs1_reg_three /= "00000") then
-          if(rd_reg_one = rs1_reg_three and tmp /= 1) then
+        if(rs1_reg_one /= "00000") then
+          if(rd_reg_three = rs1_reg_one and tmp /= 1) then
             mem_forwarding_one <= '1';
-          elsif(rd_reg_one /= rs1_reg_three and tmp = 1) then
+          elsif(rd_reg_three /= rs1_reg_one and tmp = 1) then
             mem_forwarding_one <= '0';
             tmp := 0;
-          elsif(rd_reg_one = rs1_reg_three and tmp = 1) then
+          elsif(rd_reg_three = rs1_reg_one and tmp = 1) then
             mem_forwarding_one <= '0';
             tmp := 0;
-          elsif(rd_reg_one /= rs1_reg_three and tmp /= 1) then
+          elsif(rd_reg_three /= rs1_reg_one and tmp /= 1) then
             mem_forwarding_one <= '0';
           end if;
         end if;

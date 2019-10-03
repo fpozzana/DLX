@@ -79,7 +79,6 @@ begin
   R2_HAZARD : R2_HAZARD_DETECTION
   port map(clk,reset,OPCODE,RS2_REG_IN,rdselectoutsignal,open,open,open,open,open,open,open,open,alu_forwarding_two,mem_forwarding_two);
 
-
 end STRUCTURAL;
 
 configuration CFG_HAZARD_DETECTION of HAZARD_DETECTION is
