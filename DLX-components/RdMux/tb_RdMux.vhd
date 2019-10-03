@@ -1,6 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 use WORK.myTypes.all;
 
 entity TB_RDMUX is

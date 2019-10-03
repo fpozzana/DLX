@@ -4,7 +4,7 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity WRITE_BACK_STAGE is
   generic(N : integer := RISC_BIT);

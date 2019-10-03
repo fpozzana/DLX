@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity TB_IRAM is
 end TB_IRAM;

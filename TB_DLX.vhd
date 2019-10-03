@@ -1,6 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 use WORK.all;
 
 entity tb_dlx is

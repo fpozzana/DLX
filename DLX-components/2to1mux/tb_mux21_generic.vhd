@@ -1,6 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity TB_MUX21_GENERIC is
 end TB_MUX21_GENERIC;

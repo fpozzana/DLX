@@ -1,9 +1,9 @@
 -- RESET is active high, so if RESET is 1 the register has '0' at the output
---test : tested OK, the component works as expected 
+--test : tested OK, the component works as expected
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity REGISTER_GENERIC is
   generic (NBIT : integer := NumBitRegister);

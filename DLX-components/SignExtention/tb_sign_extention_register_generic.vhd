@@ -1,6 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity TB_SIGN_EXTENTION is
 end TB_SIGN_EXTENTION;

@@ -1,6 +1,6 @@
 library IEEE;
-use IEEE.std_logic_1164.all;          
-use WORK.constants.all;
+use IEEE.std_logic_1164.all;
+use WORK.globals.all;
 
 entity ND2 is
   port (

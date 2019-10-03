@@ -4,7 +4,7 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity LATCH_GENERIC is
   generic (NBIT : integer := NumBitLatch);

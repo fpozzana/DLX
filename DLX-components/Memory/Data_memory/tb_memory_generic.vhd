@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 use ieee.numeric_std.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity TB_DRAM is
 end TB_DRAM;

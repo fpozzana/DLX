@@ -8,7 +8,7 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity SIGN_EXTENTION is
   port(D : IN std_logic_vector(15 downto 0);

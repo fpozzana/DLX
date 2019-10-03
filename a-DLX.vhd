@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use work.myTypes.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity DLX is
   generic(IR_SIZE      : integer := 32;       -- Instruction Register Size

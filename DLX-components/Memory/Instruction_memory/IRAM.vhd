@@ -8,7 +8,7 @@ use ieee.std_logic_arith.all;
 use std.textio.all;
 use ieee.std_logic_textio.all;
 use WORK.myTypes.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 
 -- Instruction memory for DLX

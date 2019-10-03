@@ -2,7 +2,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity TB_MEMORY_STAGE is
 end TB_MEMORY_STAGE;

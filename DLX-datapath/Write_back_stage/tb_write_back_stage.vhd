@@ -1,6 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity TB_WRITE_BACK_STAGE is
 end TB_WRITE_BACK_STAGE;

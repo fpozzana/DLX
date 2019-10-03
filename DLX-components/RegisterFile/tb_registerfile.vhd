@@ -1,5 +1,5 @@
 library IEEE;
-use work.constants.all;
+use work.globals.all;
 use IEEE.std_logic_1164.all;
 
 entity TB_REGISTER_FILE is

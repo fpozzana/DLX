@@ -4,7 +4,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.numeric_std.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity REGISTER_FILE is
   generic (numBit_data : integer := NumBitData;

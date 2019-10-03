@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use WORK.myTypes.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity RDMUX is
   port(rtype_in : IN std_logic_vector(4 downto 0);

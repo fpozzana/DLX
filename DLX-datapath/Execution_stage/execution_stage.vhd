@@ -7,7 +7,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity EXECUTION_STAGE is
   generic(numbit : integer := RISC_BIT);

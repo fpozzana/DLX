@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all; -- we need a conversion to unsigned
 use ieee.std_logic_unsigned.all;
-use WORK.constants.all;
+use WORK.globals.all;
 
 entity TB_RCA_GENERIC is
 end TB_RCA_GENERIC;
