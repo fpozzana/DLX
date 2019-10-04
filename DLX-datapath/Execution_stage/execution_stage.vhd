@@ -11,7 +11,13 @@ use WORK.globals.all;
 
 entity EXECUTION_STAGE is
   generic(numbit : integer := RISC_BIT);
-  port(npc_in : IN std_logic_vector(numbit-1 downto 0);
+  port(alu_forwarding_one : IN std_logic;
+       mem_forwarding_one : IN std_logic;
+       alu_forwarding_two : IN std_logic;
+       mem_forwarding_two : IN std_logic;
+       alu_forwarding_value : IN std_logic_vector(numbit - 1 downto 0);
+       mem_forwarding_value : IN std_logic_vector(numbit - 1 downto 0);
+       npc_in : IN std_logic_vector(numbit-1 downto 0);
        a_reg_in : IN std_logic_vector(numbit-1 downto 0);
        b_reg_in : IN std_logic_vector(numbit-1 downto 0);
        imm_reg_in : IN std_logic_vector(numbit-1 downto 0);
@@ -28,11 +34,13 @@ end EXECUTION_STAGE;
 
 architecture STRUCTURAL of EXECUTION_STAGE is
 
-  signal mux_one_out : std_logic_vector(numbit-1 downto 0);
-  signal mux_two_out : std_logic_vector(numbit-1 downto 0);
+  signal mux_one_out_rf : std_logic_vector(numbit-1 downto 0);
+  signal mux_one_out_mem_forwarding : std_logic_vector(numbit-1 downto 0);
+  signal mux_one_out_alu_forwarding : std_logic_vector(numbit-1 downto 0);
+  signal mux_two_out_rf : std_logic_vector(numbit-1 downto 0);
+  signal mux_two_out_mem_forwarding : std_logic_vector(numbit-1 downto 0);
+  signal mux_two_out_alu_forwarding : std_logic_vector(numbit-1 downto 0);
   signal alu_out : std_logic_vector(numbit-1 downto 0);
-  signal in_reg_npc : std_logic_vector(numbit-1 downto 0);
-  signal b_latch_out : std_logic_vector(numbit-1 downto 0);
 
   component MUX21_GENERIC
   generic (NBIT : integer := NumBitMux21);
@@ -68,25 +76,37 @@ architecture STRUCTURAL of EXECUTION_STAGE is
 
   begin
 
-    MUX_ONE : MUX21_GENERIC
+    MUX_ONE_RF : MUX21_GENERIC
     generic map(numbit)
-    port map(npc_in,a_reg_in,mux_one_control,mux_one_out);
+    port map(npc_in,a_reg_in,mux_one_control,mux_one_out_rf);
 
-    MUX_TWO : MUX21_GENERIC
+    MUX_ONE_MEM : MUX21_GENERIC
     generic map(numbit)
-    port map(b_reg_in,imm_reg_in,mux_two_control,mux_two_out);
+    port map(mux_one_out_rf,mem_forwarding_value,mem_forwarding_one,mux_one_out_mem_forwarding);
+
+    MUX_ONE_ALU : MUX21_GENERIC
+    generic map(numbit)
+    port map(mux_one_out_mem_forwarding,alu_forwarding_value,alu_forwarding_one,mux_one_out_alu_forwarding);
+
+    MUX_TWO_RF : MUX21_GENERIC
+    generic map(numbit)
+    port map(b_reg_in,imm_reg_in,mux_two_control,mux_two_out_rf);
+
+    MUX_TWO_MEM : MUX21_GENERIC
+    generic map(numbit)
+    port map(mux_two_out_rf,mem_forwarding_value,mem_forwarding_two,mux_two_out_mem_forwarding);
+
+    MUX_TWO_ALU : MUX21_GENERIC
+    generic map(numbit)
+    port map(mux_two_out_mem_forwarding,alu_forwarding_value,alu_forwarding_two,mux_two_out_alu_forwarding);
 
     ALU : ALU_BEHAVIORAL
     generic map(numbit)
-    port map(alu_control,mux_one_out,mux_two_out,alu_out);
+    port map(alu_control,mux_one_out_alu_forwarding,mux_two_out_alu_forwarding,alu_out);
 
     REG1 : REGISTER_GENERIC
     generic map(numbit)
     port map(alu_out,clk,reset,execution_stage_out);
-
-    --LATCH : LATCH_GENERIC
-    --generic map(numbit)
-    --port map(b_reg_in,'1',b_latch_out);
 
     REG3 : REGISTER_GENERIC
     generic map(numbit)
@@ -109,8 +129,5 @@ configuration CFG_EXECUTION_STAGE_STRUCTURAL of EXECUTION_STAGE is
     for all : REGISTER_GENERIC
 		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
     end for;
-    --for all : LATCH_GENERIC
-    --  use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
-    --end for;
 	end for;
 end CFG_EXECUTION_STAGE_STRUCTURAL;

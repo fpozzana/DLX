@@ -16,7 +16,11 @@ entity DECODE_STAGE is
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
        A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
        B_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
-       IMM_REG_OUT : OUT std_logic_vector(numbit-1 downto 0));
+       IMM_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
+       alu_forwarding_one : OUT std_logic;
+       mem_forwarding_one : OUT std_logic;
+       alu_forwarding_two : OUT std_logic;
+       mem_forwarding_two : OUT std_logic);
 end DECODE_STAGE;
 
 architecture STRUCTURAL of DECODE_STAGE is
@@ -71,6 +75,21 @@ architecture STRUCTURAL of DECODE_STAGE is
        rd_out : OUT std_logic_vector(4 downto 0));
 end component;
 
+component HAZARD_DETECTION
+port(clk : IN std_logic;
+     reset : IN std_logic;
+     OPCODE : IN std_logic_vector(OP_CODE_SIZE - 1 downto 0);
+     RD_REG_IN_ITYPE : IN std_logic_vector(4 downto 0);
+     RD_REG_IN_RTYPE : IN std_logic_vector(4 downto 0);
+     RS1_REG_IN : IN std_logic_vector(4 downto 0);
+     RS2_REG_IN : IN std_logic_vector(4 downto 0);
+     alu_forwarding_one : OUT std_logic;
+     mem_forwarding_one : OUT std_logic;
+     alu_forwarding_two : OUT std_logic;
+     mem_forwarding_two : OUT std_logic;
+     RD_OUT : OUT std_logic_vector(4 downto 0));
+end component;
+
   begin
 
   SIGN_REG : SIGN_EXTENTION
@@ -108,6 +127,9 @@ end component;
   generic map(5)
   port map(rdmux_out,CLK,RESET,RD_OUT);
 
+  HAZARD : HAZARD_DETECTION
+  port map(CLK,RESET,IR_IN(31 downto 26),IR_IN(15 downto 11),IR_IN(20 downto 16),IR_IN(25 downto 21),IR_IN(20 downto 16),alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,open);
+
 end STRUCTURAL;
 
 configuration CFG_DECODE_STAGE_STRUCTURAL of DECODE_STAGE is
@@ -123,6 +145,9 @@ configuration CFG_DECODE_STAGE_STRUCTURAL of DECODE_STAGE is
     end for;
     for all : SIGN_EXTENTION
       use configuration WORK.CFG_SIGN_EXTENTION_BEHAVIORAL;
+    end for;
+    for all : HAZARD_DETECTION
+      use configuration WORK.CFG_HAZARD_DETECTION;
     end for;
 	end for;
 end CFG_DECODE_STAGE_STRUCTURAL;

@@ -21,6 +21,10 @@ architecture TEST of TB_DECODE_STAGE is
   signal NPC_IN :  std_logic_vector(NBIT-1 downto 0) := "00000000000000000000000000000000";
   signal RD_IN : std_logic_vector(4 downto 0) := "00000";
   signal RD_OUT : std_logic_vector(4 downto 0);
+  signal alu_forwarding_one : std_logic;
+  signal mem_forwarding_one : std_logic;
+  signal alu_forwarding_two : std_logic;
+  signal mem_forwarding_two : std_logic;
 
   component DECODE_STAGE
   generic(numbit : integer := RISC_BIT);
@@ -35,13 +39,17 @@ architecture TEST of TB_DECODE_STAGE is
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
        A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
        B_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
-       IMM_REG_OUT : OUT std_logic_vector(numbit-1 downto 0));
+       IMM_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
+       alu_forwarding_one : OUT std_logic;
+       mem_forwarding_one : OUT std_logic;
+       alu_forwarding_two : OUT std_logic;
+       mem_forwarding_two : OUT std_logic);
   end component;
 
   begin
     DUT : DECODE_STAGE
     generic map(NBIT)
-    port map(IR_IN,WB_STAGE_IN,NPC_IN,RD_IN,CLK,RESET,WRITE_ENABLE,RD_OUT,NPC_OUT,A_REG_OUT,B_REG_OUT,IMM_REG_OUT);
+    port map(IR_IN,WB_STAGE_IN,NPC_IN,RD_IN,CLK,RESET,WRITE_ENABLE,RD_OUT,NPC_OUT,A_REG_OUT,B_REG_OUT,IMM_REG_OUT,alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two);
 
     IR_IN <= "00001011101110111011101110111011" after 5 ns;    --ITYPE add RS1 1 RD 3 IMM F
     NPC_IN <= "00000000000000000000000000000001" after 10 ns, "00000000000000000000000000000010" after 13 ns;
