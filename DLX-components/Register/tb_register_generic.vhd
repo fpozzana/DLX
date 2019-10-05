@@ -34,7 +34,7 @@ architecture TEST of TB_REGISTER_GENERIC is
     port map(D_IN,CLK_IN,RESET_IN,Q_OUT_ASYNC);
 
     D_IN <= "10001000100010001000100010001000", "00010001000100010001000100010001" after 5 ns;
-    RESET_IN <= '0' after 4 ns,'1' after 15 ns,'0' after 18.5 ns;
+    RESET_IN <= '0' after 3 ns,'1' after 15 ns,'0' after 18.5 ns;
 
     PCLOCK : process(CLK_IN)
     begin

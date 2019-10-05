@@ -44,21 +44,22 @@ architecture STRUCTURAL of FETCH_STAGE is
   end component;
 
   begin
-    PC : REGISTER_GENERIC
+
+    PC : LATCH_GENERIC
     generic map(numbit)
-    port map(program_counter,clk,reset,pc_reg_out);
+    port map(program_counter,'1',pc_reg_out);
 
     RCA : RCA_GENERIC
     generic map(numbit)
     port map(pc_reg_out,plus_one,'0',adder_out,open);
-
-    NPC : LATCH_GENERIC
+    
+    NPC : REGISTER_GENERIC
     generic map(numbit)
-    port map(adder_out,'1',npc_out);
+    port map(adder_out,clk,reset,npc_out);
 
-    IR : LATCH_GENERIC
+    IR : REGISTER_GENERIC
     generic map(numbit)
-    port map(to_IR,'1',instruction_reg_out);
+    port map(to_IR,clk,reset,instruction_reg_out);
 
     to_IRAM <= pc_reg_out;
 

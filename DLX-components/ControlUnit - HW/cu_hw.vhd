@@ -9,19 +9,14 @@ use work.myTypes.all;
 
 entity CU_HARDWIRED is
        port (-- ID Control Signals
-             RF_EN           : OUT std_logic;    -- RF enable
-             RF_RE1          : OUT std_logic;    -- enables the read port 1 of the register file
-             RF_RE2          : OUT std_logic;    -- enables the read port 2 of the register file
-             --RESET_ID         : OUT std_logic;    -- reset signal
+
              -- EX Control Signal
+             MUXA_CONTROL    : OUT std_logic;    -- MUX-A Sel
+             MUXB_CONTROL    : OUT std_logic;    -- MUX-B Sel
              ALU_OPCODE      : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0); -- ALU Operation Code
-             --RESET_EX        : OUT std_logic;    -- reset signal
-             MUXA_SEL        : OUT std_logic;    -- MUX-A Sel
-             MUXB_SEL        : OUT std_logic;    -- MUX-B Sel
              -- MEM Control Signals
              DRAM_WE         : OUT std_logic;    -- Data RAM Write Enable
              DRAM_RE         : OUT std_logic;    -- Data RAM Read Enable
-             --RESET_MEM       : OUT std_logic;    -- reset signal
              -- WB Control Signals
              WB_MUX_SEL      : OUT std_logic;    -- Write Back MUX Sel
              RF_WE           : OUT std_logic;    -- Register File Write Enable
@@ -35,24 +30,24 @@ end CU_HARDWIRED;
 architecture BEHAVIORAL of CU_HARDWIRED is
 
   type mem_array is array (integer range 0 to MICROCODE_MEM_SIZE - 1) of std_logic_vector(CW_SIZE - 1 downto 0);
-  signal cw_mem : mem_array := ("1111111111111", --R TYPE_ADD
-						                    "0000000000000", --R TYPE_SUB
-						                    "1111111111111", --R TYPE_AND
-						                    "0000000000000", --R TYPE_OR
-                                "1111111111111", --ADDI1
-                                "0000000000000", --SUBI1
-                                "1111111111111", --ANDI1
-                                "0000000000000", --ORI1
-                                "1111111111111", --ADDI2
-                                "0000000000000", --SUBI2
-                                "1111111111111", --ANDI2
-                                "0000000000000", --ORI2
-                                "1111111111111", --MOV
-                                "0000000000000", --S_REG1
-                                "1111111111111", --S_REG2
-                                "0000000000000", --S_MEM2
-                                "1111111111111", --L_MEM1
-                                "0000000000000"); --L_MEM2
+  signal cw_mem : mem_array := ("1111111111", --R TYPE_ADD
+						                    "0000000000", --R TYPE_SUB
+						                    "1111111111", --R TYPE_AND
+						                    "0000000000", --R TYPE_OR
+                                "1111111111", --ADDI1
+                                "0000000000", --SUBI1
+                                "1111111111", --ANDI1
+                                "0000000000", --ORI1
+                                "1111111111", --ADDI2
+                                "0000000000", --SUBI2
+                                "1111111111", --ANDI2
+                                "0000000000", --ORI2
+                                "1111111111", --MOV
+                                "0000000000", --S_REG1
+                                "1111111111", --S_REG2
+                                "0000000000", --S_MEM2
+                                "1111111111", --L_MEM1
+                                "0000000000"); --L_MEM2
 
 --                                signal cw_mem : mem_array := ("1111011001000", --R TYPE_ADD
 --                              						                    "1111011011000", --R TYPE_SUB
@@ -76,10 +71,10 @@ architecture BEHAVIORAL of CU_HARDWIRED is
   signal cw : std_logic_vector(CW_SIZE - 1 downto 0); -- full control word read from cw_mem
 
   -- control word is shifted to the correct stage
-  signal cw1 : std_logic_vector(CW_SIZE - 1 downto 0);                            -- decode stage
-  signal cw2 : std_logic_vector(CW_SIZE - 1 - 3 downto 0);                        -- execution stage
-  signal cw3 : std_logic_vector(CW_SIZE - 1 - 3 - 2 - ALU_OPC_SIZE downto 0);     -- memory stage
-  signal cw4 : std_logic_vector(CW_SIZE - 1 - 3 - 2 - ALU_OPC_SIZE - 2 downto 0); -- write back stage
+  signal cw1 : std_logic_vector(CW_SIZE - 1 downto 0);                        -- decode stage
+  signal cw2 : std_logic_vector(CW_SIZE - 1 downto 0);                        -- execution stage
+  signal cw3 : std_logic_vector(CW_SIZE - 1 - 2 - ALU_OPC_SIZE downto 0);     -- memory stage
+  signal cw4 : std_logic_vector(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 2 downto 0); -- write back stage
 
   --signal next_address: integer range 0 to MICROCODE_MEM_SIZE - 1; --is the pointer to the first microcode address to execute, given an OPCODE and a FUNC
 
@@ -88,25 +83,19 @@ begin
   --cw <= cw_mem(conv_integer(OPCODE));
 
   -- stage one control signals
-  RF_EN <= cw1(CW_SIZE - 1);
-  RF_RE1 <= cw1(CW_SIZE - 2);
-  RF_RE2 <= cw1(CW_SIZE - 3);
-  --RESET_ID <= cw1(CW_SIZE - 4);
 
   -- stage two control signals
-  ALU_OPCODE <= cw2(CW_SIZE - 4 downto CW_SIZE - 4 - ALU_OPC_SIZE + 1);
-  --RESET_EX <= cw2(CW_SIZE - 4 - ALU_OPC_SIZE);
-  MUXA_SEL <= cw2(CW_SIZE - 4 - ALU_OPC_SIZE);
-  MUXB_SEL <= cw2(CW_SIZE - 4 - ALU_OPC_SIZE - 1);
+  MUXA_CONTROL <= cw2(CW_SIZE - 1);
+  MUXB_CONTROL <= cw2(CW_SIZE - 2);
+  ALU_OPCODE <= cw2(CW_SIZE - 3 downto CW_SIZE - 3 - ALU_OPC_SIZE + 1);
 
   -- stage three control signals
-  DRAM_WE <= cw3(CW_SIZE - 4 - ALU_OPC_SIZE - 2);
-  DRAM_RE <= cw3(CW_SIZE - 4 - ALU_OPC_SIZE - 3);
-  --RESET_MEM <= cw3(CW_SIZE - 4 - ALU_OPC_SIZE - 4);
+  DRAM_WE <= cw3(CW_SIZE - 3 - ALU_OPC_SIZE);
+  DRAM_RE <= cw3(CW_SIZE - 4 - ALU_OPC_SIZE);
 
   --stage four control singals
-  WB_MUX_SEL <= cw4(CW_SIZE - 4 - ALU_OPC_SIZE - 4);
-  RF_WE <= cw4(CW_SIZE - 4 - ALU_OPC_SIZE - 5);
+  WB_MUX_SEL <= cw4(CW_SIZE - 5 - ALU_OPC_SIZE);
+  RF_WE <= cw4(CW_SIZE - 6 - ALU_OPC_SIZE);
 
 	process(OPCODE, FUNC) --COMBINATIONAL PROCESS, calculates the address of the next microcode to execute given its OPCODE and FUNC.
 	begin
@@ -126,11 +115,11 @@ begin
       cw2 <= (others => '0');
       cw3 <= (others => '0');
       cw4 <= (others => '0');
-    elsif Clk'event and Clk = '0' then  -- falling clock edge
+    elsif Clk'event and Clk = '1' then  -- rising clock edge
       cw1 <= cw;
-      cw2 <= cw1(CW_SIZE - 1 - 3 downto 0);
-      cw3 <= cw2(CW_SIZE - 1 - 3 - 2 - ALU_OPC_SIZE downto 0);
-      cw4 <= cw3(CW_SIZE - 1 - 3 - 2 - ALU_OPC_SIZE - 2 downto 0);
+      cw2 <= cw1(CW_SIZE - 1 downto 0);
+      cw3 <= cw2(CW_SIZE - 1 - 2 - ALU_OPC_SIZE downto 0);
+      cw4 <= cw3(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 2 downto 0);
     end if;
   end process CW_PIPE;
 

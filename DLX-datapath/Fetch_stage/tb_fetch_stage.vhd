@@ -40,8 +40,8 @@ architecture TEST of TB_FETCH_STAGE is
     npctopc <= TB_NPC_OUT;
     TB_PC <= npctopc;
 
-    TB_TO_IR <= (others => '1') after 6 ns;
-    TB_RESET <= '1', '0' after 2 ns;
+    TB_TO_IR <= (others => '1') after 2 ns;
+    TB_RESET <= '1', '0' after 3 ns;
 
     PCLOCK : process(TB_CLOCK)
     begin
