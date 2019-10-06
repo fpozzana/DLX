@@ -10,12 +10,13 @@ entity DATAPATH is
        mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
-       to_pc : IN std_logic_vector(numbit - 1 downto 0);
+       --to_pc : IN std_logic_vector(numbit - 1 downto 0);
        to_ir : IN std_logic_vector(numbit - 1 downto 0);
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        wb_control : IN std_logic;
        to_iram : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_if : OUT std_logic_vector(numbit - 1 downto 0);
+       npc_out_bpu : OUT std_logic_vector(numbit - 1 downto 0);
        ir_out : OUT std_logic_vector(numbit - 1 downto 0);
        rd_out_id : OUT std_logic_vector(4 downto 0);
        npc_out_id : OUT std_logic_vector(numbit - 1 downto 0);
@@ -52,6 +53,13 @@ architecture STRUCTURAL of DATAPATH is
   signal rdoutwbsignal : std_logic_vector(4 downto 0);
   signal wbstageoutsignal : std_logic_vector(numbit - 1 downto 0);
 
+  signal aluforwardingonesignal : std_logic;
+  signal aluforwardingtwosignal : std_logic;
+  signal memforwardingonesignal : std_logic;
+  signal memforwardingtwosignal : std_logic;
+
+  signal npcoutbpusignal : std_logic_vector(numbit - 1 downto 0);
+
   component FETCH_STAGE
   generic(numbit : integer := RISC_BIT);
   port(program_counter : IN std_logic_vector(numbit-1 downto 0);
@@ -72,16 +80,27 @@ architecture STRUCTURAL of DATAPATH is
        CLK : IN std_logic;
        RESET : IN std_logic;
        WRITE_ENABLE : IN std_logic;
+       NPC_OUT_BPU : OUT std_logic_vector(numbit - 1 downto 0);
        RD_OUT : OUT std_logic_vector(4 downto 0);
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
        A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
        B_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
-       IMM_REG_OUT : OUT std_logic_vector(numbit-1 downto 0));
+       IMM_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
+       alu_forwarding_one : OUT std_logic;
+       mem_forwarding_one : OUT std_logic;
+       alu_forwarding_two : OUT std_logic;
+       mem_forwarding_two : OUT std_logic);
   end component;
 
   component EXECUTION_STAGE
   generic(numbit : integer := RISC_BIT);
-  port(npc_in : IN std_logic_vector(numbit-1 downto 0);
+  port(alu_forwarding_one : IN std_logic;
+       mem_forwarding_one : IN std_logic;
+       alu_forwarding_two : IN std_logic;
+       mem_forwarding_two : IN std_logic;
+       alu_forwarding_value : IN std_logic_vector(numbit - 1 downto 0);
+       mem_forwarding_value : IN std_logic_vector(numbit - 1 downto 0);
+       npc_in : IN std_logic_vector(numbit-1 downto 0);
        a_reg_in : IN std_logic_vector(numbit-1 downto 0);
        b_reg_in : IN std_logic_vector(numbit-1 downto 0);
        imm_reg_in : IN std_logic_vector(numbit-1 downto 0);
@@ -140,17 +159,19 @@ architecture STRUCTURAL of DATAPATH is
     rd_out_wb <= rdoutwbsignal;
     wb_stage_out <= wbstageoutsignal;
 
+    npc_out_bpu <= npcoutbpusignal;
+
     FETCH : FETCH_STAGE
     generic map(numbit)
-    port map(to_pc, to_ir, clk, reset, to_iram, npcoutifsignal, iroutsignal);
+    port map(npcoutbpusignal, to_ir, clk, reset, to_iram, npcoutifsignal, iroutsignal);
 
     DECODE : DECODE_STAGE
     generic map(numbit)
-    port map(iroutsignal, wbstageoutsignal, npcoutifsignal, rdoutwbsignal, clk, reset, write_enable, rdoutidsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal);
+    port map(iroutsignal, wbstageoutsignal, npcoutifsignal, rdoutwbsignal, clk, reset, write_enable, npcoutbpusignal, rdoutidsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal, aluforwardingonesignal, memforwardingonesignal, aluforwardingtwosignal, memforwardingtwosignal);
 
     EXECUTE : EXECUTION_STAGE
     generic map(numbit)
-    port map(npcoutidsignal, aregsignal, bregsignal, immregsignal, rdoutidsignal, mux_one_control, mux_two_control, alu_control, clk, reset, aluoutsignal, b_reg_out_ex, rdoutexsignal);
+    port map(aluforwardingonesignal, memforwardingonesignal, aluforwardingtwosignal, memforwardingtwosignal, aluoutsignal, aluoutmemsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal, rdoutidsignal, mux_one_control, mux_two_control, alu_control, clk, reset, aluoutsignal, b_reg_out_ex, rdoutexsignal);
 
     MEMORY : MEMORY_STAGE
     generic map(numbit)

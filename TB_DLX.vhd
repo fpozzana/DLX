@@ -15,7 +15,6 @@ architecture TEST of tb_dlx is
     signal npc_out_if : std_logic_vector(RISC_BIT - 1 downto 0);
     signal ir_out : std_logic_vector(RISC_BIT - 1 downto 0);
     signal pc_in : std_logic_vector(RISC_BIT - 1 downto 0);
-    signal npctopc : std_logic_vector(RISC_BIT - 1 downto 0);
     signal rd_out_id : std_logic_vector(4 downto 0);
     signal npc_out_id : std_logic_vector(RISC_BIT - 1 downto 0);
     signal a_reg_out : std_logic_vector(RISC_BIT - 1 downto 0);
@@ -31,13 +30,15 @@ architecture TEST of tb_dlx is
     signal rd_out_wb : std_logic_vector(4 downto 0);
     signal wb_stage_out : std_logic_vector(RISC_BIT - 1 downto 0);
     signal address_error : std_logic;
+    signal npc_out_bpu : std_logic_vector(RISC_BIT - 1 downto 0);
 
     component DLX
     generic(IR_SIZE      : integer := 32;       -- Instruction Register Size
             PC_SIZE      : integer := 32);       -- Program Counter Size
     port(clk : IN std_logic;
          reset : IN std_logic;
-         pc_in : IN std_logic_vector(PC_SIZE - 1 downto 0);
+         --pc_in : IN std_logic_vector(PC_SIZE - 1 downto 0);
+         npc_out_bpu : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          npc_out_if : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          ir_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          rd_out_id : OUT std_logic_vector(4 downto 0);
@@ -71,7 +72,8 @@ begin
   generic map(SIZE_IR, SIZE_PC)
   port map(clk => clk,
            reset => reset,
-           pc_in => pc_in,
+           --pc_in => pc_in,
+           npc_out_bpu => npc_out_bpu,
            npc_out_if => npc_out_if,
            ir_out => ir_out,
            rd_out_id => rd_out_id,
@@ -89,9 +91,6 @@ begin
            rd_out_wb => rd_out_wb,
            wb_stage_out => wb_stage_out,
            address_error => address_error);
-
-  npctopc <= npc_out_if;
-  pc_in <= npctopc;
 
   PCLOCK : process(clk)
 	begin

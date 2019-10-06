@@ -13,30 +13,30 @@ package myTypes is
 
 
 -- R-Type instruction -> FUNC field
-    constant RTYPE_ADD : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000000000";    -- ADD RS1,RS2,RD
-    constant RTYPE_SUB : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000000001";    -- SUB RS1,RS2,RD
-    constant RTYPE_AND : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000000010";    -- AND RS1,RS2,RD
-    constant RTYPE_OR : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000000011";    -- OR RS1,RS2,RD
+    constant RTYPE_SLL : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000000100";    -- RTYPE_SLL
+    constant RTYPE_SRL : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000000110";    -- RTYPE_SRL
+    constant RTYPE_SRA : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000000111";    -- RTYPE_SRA
+    constant RTYPE_ADD : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000100000";    -- RTYPE_ADD
+    constant RTYPE_ADDU : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000100001";    -- RTYPE_ADDU
+    constant RTYPE_SUB : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000100010";    -- RTYPE_SUB
+    constant RTYPE_SUBU : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000100011";    -- RTYPE_SUBU
+    constant RTYPE_AND : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000100100";    -- RTYPE_AND
+    constant RTYPE_OR : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000100101";    -- RTYPE_OR
+    constant RTYPE_XOR : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000100110";    -- RTYPE_XOR
+    constant RTYPE_SEQ : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000101000";    -- RTYPE_SEQ
+    constant RTYPE_SNE : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000101001";    -- RTYPE_SNE
+    constant RTYPE_SLT : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000101010";    -- RTYPE_SLT
+    constant RTYPE_SGT : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000101011";    -- RTYPE_SGT
+    constant RTYPE_SLE : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000101100";    -- RTYPE_SLE
+    constant RTYPE_SGE : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000101101";    -- RTYPE_SGE
     constant NOP : std_logic_vector(FUNC_SIZE - 1 downto 0) :=  "00000000000";
 
 -- R-Type instruction -> OPCODE field
     constant RTYPE : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000000";          -- for ADD, SUB, AND, OR register-to-register operation
 
 -- I-Type instruction -> OPCODE field
-    constant ITYPE_ADDI1 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000001";    -- ADDI1 RS1,RD,INP1
-    constant ITYPE_SUBI1 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000010";    -- SUBI1 RS1,RD,INP1
-    constant ITYPE_ANDI1 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000011";    -- ANDI1 RS1,RD,INP1
-    constant ITYPE_ORI1 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000100";    -- ORI1 RS1,RD,INP1
-    constant ITYPE_ADDI2 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000101";    -- ADDI2 RS1,RD,INP2
-    constant ITYPE_SUBI2 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000110";    -- SUBI2 RS1,RD,INP2
-    constant ITYPE_ANDI2 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000111";    -- ANDI2 RS1,RD,INP2
-    constant ITYPE_ORI2 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001000";    -- ORI2 RS1,RD,INP2
-    constant ITYPE_MOV : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001001";    -- MOV RS,RD
-    constant ITYPE_S_REG1 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001010";    -- S_REG1 RD,INP1
-    constant ITYPE_S_REG2 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001011";    -- S_REG2 RD,INP2
-    constant ITYPE_S_MEM2 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001100";    -- S_MEM2 RD,INP2
-    constant ITYPE_L_MEM1 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001101";    -- L_MEM1 RD,INP1
-    constant ITYPE_L_MEM2 : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "001110";    -- L_MEM2 RD,INP2
+    constant ITYPE_J : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000010";    -- ITYPE_J
+    constant ITYPE_JAL : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000011";    -- ITYPE_JAL    
 
 --constant registers used to fill the IRAM
     constant REG0 : std_logic_vector(NumBitAddress-1 downto 0) := "00000";

@@ -66,84 +66,21 @@ begin
 
         wait for 1 ns;
 
-        -- ADD RS1,RS2,RD -> Rtype
+        cu_opcode_i <= RTYPE;
+        cu_func_i <= RTYPE_SLL;
+        wait for 2 ns;
+
         cu_opcode_i <= RTYPE;
         cu_func_i <= RTYPE_ADD;
         wait for 2 ns;
 
-        cu_opcode_i <= RTYPE;
-        cu_func_i <= RTYPE_SUB;
-        wait for 2 ns;
-
-        cu_opcode_i <= RTYPE;
-        cu_func_i <= RTYPE_AND;
-        wait for 2 ns;
-
-        cu_opcode_i <= RTYPE;
-        cu_func_i <= RTYPE_OR;
-        wait for 2 ns;
-
-        -- ADDI1 RS1,RD,INP1 -> Itype
-        cu_opcode_i <= ITYPE_ADDI1;
+        cu_opcode_i <= ITYPE_J;
         cu_func_i <= NOP;
         wait for 2 ns;
 
-        cu_opcode_i <= ITYPE_SUBI1;
+        cu_opcode_i <= ITYPE_JAL;
         cu_func_i <= NOP;
         wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_ANDI1;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_ORI1;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_ADDI2;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_SUBI2;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_ANDI2;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_ORI2;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_MOV;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_S_REG1;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_S_REG2;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        --cu_opcode_i <= ITYPE_S_MEM1;
-        --cu_func_i <= NOP;
-        --wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_S_MEM2;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_L_MEM1;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
-        cu_opcode_i <= ITYPE_L_MEM2;
-        cu_func_i <= NOP;
-        wait for 2 ns;
-
 
         wait;
         end process;

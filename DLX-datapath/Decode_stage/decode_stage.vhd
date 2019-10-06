@@ -12,6 +12,7 @@ entity DECODE_STAGE is
        CLK : IN std_logic;
        RESET : IN std_logic;
        WRITE_ENABLE : IN std_logic;
+       NPC_OUT_BPU : OUT std_logic_vector(numbit - 1 downto 0);
        RD_OUT : OUT std_logic_vector(4 downto 0);
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
        A_REG_OUT : OUT std_logic_vector(numbit-1 downto 0);
@@ -90,6 +91,16 @@ port(clk : IN std_logic;
      RD_OUT : OUT std_logic_vector(4 downto 0));
 end component;
 
+component BRANCHPREDICTIONUNIT
+port(OPCODE : IN std_logic_vector(5 downto 0);
+     JOFFSET : IN std_logic_vector(25 downto 0);
+     BOFFSET : IN std_logic_vector(15 downto 0);
+     NPC_IN : IN std_logic_vector(31 downto 0);
+     REG1_IN : IN std_logic_vector(31 downto 0);
+     REG2_IN : IN std_logic_vector(31 downto 0);
+     NPC_OUT : OUT std_logic_vector(31 downto 0));
+end component;
+
   begin
 
   SIGN_REG : SIGN_EXTENTION
@@ -130,6 +141,9 @@ end component;
   HAZARD : HAZARD_DETECTION
   port map(CLK,RESET,IR_IN(31 downto 26),IR_IN(15 downto 11),IR_IN(20 downto 16),IR_IN(25 downto 21),IR_IN(20 downto 16),alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,open);
 
+  BRANCHUNIT : BRANCHPREDICTIONUNIT
+  port map(IR_IN(31 downto 26),IR_IN(25 downto 0),IR_IN(15 downto 0),npc_latch_out,RF_ONE_OUT,RF_TWO_OUT,NPC_OUT_BPU);
+
 end STRUCTURAL;
 
 configuration CFG_DECODE_STAGE_STRUCTURAL of DECODE_STAGE is
@@ -148,6 +162,9 @@ configuration CFG_DECODE_STAGE_STRUCTURAL of DECODE_STAGE is
     end for;
     for all : HAZARD_DETECTION
       use configuration WORK.CFG_HAZARD_DETECTION;
+    end for;
+    for all : BRANCHPREDICTIONUNIT
+      use configuration WORK.CFG_BRANCHPREDICTIONUNIT;
     end for;
 	end for;
 end CFG_DECODE_STAGE_STRUCTURAL;

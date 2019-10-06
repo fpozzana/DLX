@@ -8,7 +8,8 @@ entity DLX is
           PC_SIZE      : integer := 32);       -- Program Counter Size
   port(clk : IN std_logic;
        reset : IN std_logic;
-       pc_in : IN std_logic_vector(PC_SIZE - 1 downto 0);
+       --pc_in : IN std_logic_vector(PC_SIZE - 1 downto 0);
+       npc_out_bpu : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        npc_out_if : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        ir_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_id : OUT std_logic_vector(4 downto 0);
@@ -72,12 +73,13 @@ architecture dlx_rtl of DLX is
        mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
-       to_pc : IN std_logic_vector(numbit - 1 downto 0);
+       --to_pc : IN std_logic_vector(numbit - 1 downto 0);
        to_ir : IN std_logic_vector(numbit - 1 downto 0);
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        wb_control : IN std_logic;
        to_iram : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_if : OUT std_logic_vector(numbit - 1 downto 0);
+       npc_out_bpu : OUT std_logic_vector(numbit - 1 downto 0);
        ir_out : OUT std_logic_vector(numbit - 1 downto 0);
        rd_out_id : OUT std_logic_vector(4 downto 0);
        npc_out_id : OUT std_logic_vector(numbit - 1 downto 0);
@@ -207,12 +209,13 @@ architecture dlx_rtl of DLX is
              mux_one_control => '1',
              mux_two_control => '1',
              alu_control => (others => '0'),
-             to_pc => pc_in,
+             --to_pc => pc_in,
              to_ir => toirfromiram,
              to_mem_stage_reg => tolmdfromdram,
              wb_control => '1',
              to_iram => toiramfrompc,
              npc_out_if => npc_out_if,
+             npc_out_bpu => npc_out_bpu,
              ir_out => ir_out,
              rd_out_id => rd_out_id,
              npc_out_id => npc_out_id,

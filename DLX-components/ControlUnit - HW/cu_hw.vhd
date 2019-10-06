@@ -29,44 +29,134 @@ end CU_HARDWIRED;
 
 architecture BEHAVIORAL of CU_HARDWIRED is
 
+  --if bits in mem_array are (others => '0') it means that either the instruction
+  --is not implemented or is a NTYPE_NOP
   type mem_array is array (integer range 0 to MICROCODE_MEM_SIZE - 1) of std_logic_vector(CW_SIZE - 1 downto 0);
-  signal cw_mem : mem_array := ("1111111111", --R TYPE_ADD
-						                    "0000000000", --R TYPE_SUB
-						                    "1111111111", --R TYPE_AND
-						                    "0000000000", --R TYPE_OR
-                                "1111111111", --ADDI1
-                                "0000000000", --SUBI1
-                                "1111111111", --ANDI1
-                                "0000000000", --ORI1
-                                "1111111111", --ADDI2
-                                "0000000000", --SUBI2
-                                "1111111111", --ANDI2
-                                "0000000000", --ORI2
-                                "1111111111", --MOV
-                                "0000000000", --S_REG1
-                                "1111111111", --S_REG2
-                                "0000000000", --S_MEM2
-                                "1111111111", --L_MEM1
-                                "0000000000"); --L_MEM2
-
---                                signal cw_mem : mem_array := ("1111011001000", --R TYPE_ADD
---                              						                    "1111011011000", --R TYPE_SUB
---                              						                    "1111011101000", --R TYPE_AND
---                              						                    "1111011111000", --R TYPE_OR
---                                                              "1011111001000", --ADDI1
---                                                              "1011111011000", --SUBI1
---                                                              "1011111101000", --ANDI1
---                                                              "1011111111000", --ORI1
---                                                              "1101001001000", --ADDI2
---                                                              "1101001011000", --SUBI2
---                                                              "1101001101000", --ANDI2
---                                                              "1101001111000", --ORI2
---                                                              "1101001001000", --MOV
---                                                              "1000000000000", --S_REG1
---                                                              "1000000000000", --S_REG2
---                                                              "1111001000010", --S_MEM2
---                                                              "1011111001101", --L_MEM1
---                                                              "1101001001101"); --L_MEM2
+  signal cw_mem : mem_array := ("0000000000",
+						                    "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "1000000011",     --RTYPE_SLL
+                                "0000000000",
+                                "1000010011",     --RTYPE_SRL
+                                "0000000000",     --RTYPE_SRA
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "1000100011",     --RTYPE_ADD
+                                "0000000000",     --RTYPE_ADDU
+                                "1000110011",     --RTYPE_SUB
+                                "0000000000",     --RTYPE_SUBU
+                                "1001000011",     --RTYPE_AND
+                                "1001010011",     --RTYPE_OR
+                                "1001100011",     --RTYPE_XOR
+                                "0000000000",
+                                "1001110011",     --RTYPE_SEQ
+                                "1010000011",     --RTYPE_SNE
+                                "1010010011",     --RTYPE_SLT
+                                "1010100011",     --RTYPE_SGT
+                                "1010110011",     --RTYPE_SLE
+                                "1011000011",     --RTYPE_SGE
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",     --RTYPE_MOVI2S
+                                "0000000000",     --RTYPE_MOVS2I
+                                "0000000000",     --RTYPE_MOVF
+                                "0000000000",     --RTYPE_MOVD
+                                "0000000000",     --RTYPE_MOVFP2I
+                                "0000000000",     --RTYPE_MOVI2FP
+                                "0000000000",     --RTYPE_MOVI2T
+                                "0000000000",     --RTYPE_MOVT2I
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",     --RTYPE_SLTU
+                                "0000000000",     --RTYPE_SGTU
+                                "0000000000",     --RTYPE_SLEU
+                                "0000000000",     --RTYPE_SGEU
+                                "0000000000",     --START NOT R_TYPE
+                                "0000000000",
+                                "1111111111",     --JTYPE_J
+                                "1111111111",     --JTYPE_JAL
+                                "0000000000",     --ITYPE_BEQZ
+                                "0000000000",     --ITYPE_BNEZ
+                                "0000000000",     --ITYPE_BFPT
+                                "0000000000",     --ITYPE_BFPF
+                                "0000000000",     --ITYPE_ADD
+                                "0000000000",     --ITYPE_ADDU
+                                "0000000000",     --ITYPE_SUB
+                                "0000000000",     --ITYPE_SUBU
+                                "0000000000",     --ITYPE_AND
+                                "0000000000",     --ITYPE_OR
+                                "0000000000",     --ITYPE_XOR
+                                "0000000000",     --ITYPE_LH
+                                "0000000000",     --ITYPE_RFE
+                                "0000000000",     --ITYPE_TRAP
+                                "0000000000",     --JTYPE_JR
+                                "0000000000",     --JTYPE_JALR
+                                "0000000000",     --ITYPE_SLL
+                                "0000000000",     --NTYPE_NOP
+                                "0000000000",     --ITYPE_SRL
+                                "0000000000",     --ITYPE_SRA
+                                "0000000000",     --ITYPE_SEQ
+                                "0000000000",     --ITYPE_SNE
+                                "0000000000",     --ITYPE_SLT
+                                "0000000000",     --ITYPE_SGT
+                                "0000000000",     --ITYPE_SLE
+                                "0000000000",     --ITYPE_SGE
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",     --ITYPE_LB
+                                "0000000000",     --ITYPE_LH
+                                "0000000000",
+                                "0000000000",     --ITYPE_LW
+                                "0000000000",     --ITYPE_LBU
+                                "0000000000",     --ITYPE_LHU
+                                "0000000000",     --ITYPE_LF
+                                "0000000000",     --ITYPE_LD
+                                "0000000000",     --ITYPE_SB
+                                "0000000000",     --ITYPE_SH
+                                "0000000000",
+                                "0000000000",     --ITYPE_SW
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",     --ITYPE_SF
+                                "0000000000",     --ITYPE_SD
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",     --NTYPE_ITLB
+                                "0000000000",
+                                "0000000000",     --ITYPE_SLTU
+                                "0000000000",     --ITYPE_SGTU
+                                "0000000000",     --ITYPE_SLEU
+                                "0000000000"      --ITYPE_SGEU
+                                );
 
   signal cw : std_logic_vector(CW_SIZE - 1 downto 0); -- full control word read from cw_mem
 
@@ -76,11 +166,7 @@ architecture BEHAVIORAL of CU_HARDWIRED is
   signal cw3 : std_logic_vector(CW_SIZE - 1 - 2 - ALU_OPC_SIZE downto 0);     -- memory stage
   signal cw4 : std_logic_vector(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 2 downto 0); -- write back stage
 
-  --signal next_address: integer range 0 to MICROCODE_MEM_SIZE - 1; --is the pointer to the first microcode address to execute, given an OPCODE and a FUNC
-
 begin
-
-  --cw <= cw_mem(conv_integer(OPCODE));
 
   -- stage one control signals
 
@@ -102,11 +188,11 @@ begin
 		if (OPCODE = RTYPE) then
 			cw <= cw_mem(conv_integer(FUNC)); --(opcode = 0 for rtype)->(FUNC+OPCODE)->FUNC directly points to RTYPE addresses in memory
 		else
-			cw <= cw_mem(conv_integer(OPCODE + 3));    -- +3 to point in the right spot on the memory
+			cw <= cw_mem(conv_integer(OPCODE + 62));    -- +62 to point in the right spot on the memory
 		end if;
 	end process;
 
-
+  --3D = 61
   -- process to pipeline control words
   CW_PIPE: process (Clk, Rst)
   begin  -- process Clk
