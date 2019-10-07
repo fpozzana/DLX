@@ -40,16 +40,30 @@ architecture BEHAVIORAL of REGISTER_FILE is
 
     read : process (Read_one_address, Read_two_address,Write_enable,Data_in,Write_address)
 	   begin
-       if(Write_enable = '1' and Read_one_address = Write_address) then
+      if (Write_enable = '1' and Read_one_address = Write_address and Read_two_address = Write_address) then
+        if(not(to_integer(unsigned(Write_address)) = 0)) then
+          data_one_out <= Data_in;
+          data_two_out <= Data_in;
+        elsif(to_integer(unsigned(Write_address)) = 0) then
+          data_one_out <= REGISTERS(to_integer(unsigned(Read_one_address)));
+          data_two_out <= REGISTERS(to_integer(unsigned(Read_two_address)));
+        end if;
+      elsif(Write_enable = '1' and Read_one_address = Write_address) then
          if(not(to_integer(unsigned(Write_address)) = 0)) then
            data_one_out <= Data_in;
+           data_two_out <= REGISTERS(to_integer(unsigned(Read_two_address)));
+         elsif(to_integer(unsigned(Write_address)) = 0) then
+           data_one_out <= REGISTERS(to_integer(unsigned(Read_one_address)));
+           data_two_out <= REGISTERS(to_integer(unsigned(Read_two_address)));
          end if;
-        data_two_out <= REGISTERS(to_integer(unsigned(Read_two_address)));
       elsif(Write_enable = '1' and Read_two_address = Write_address) then
         if(not(to_integer(unsigned(Write_address)) = 0)) then
           data_two_out <= Data_in;
+          data_one_out <= REGISTERS(to_integer(unsigned(Read_one_address)));
+        elsif(to_integer(unsigned(Write_address)) = 0) then
+          data_one_out <= REGISTERS(to_integer(unsigned(Read_one_address)));
+          data_two_out <= REGISTERS(to_integer(unsigned(Read_two_address)));
         end if;
-        data_one_out <= REGISTERS(to_integer(unsigned(Read_one_address)));
       else
         data_one_out <= REGISTERS(to_integer(unsigned(Read_one_address)));
         data_two_out <= REGISTERS(to_integer(unsigned(Read_two_address)));

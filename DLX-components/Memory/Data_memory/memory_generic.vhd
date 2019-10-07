@@ -33,7 +33,7 @@ architecture BEHAVIORAL of DRAM is
             data_out <= data_memory(to_integer(unsigned(address)));
           end if;
           if write_enable = '1' and read_enable = '0' then                                       --if write enable is high
-            data_memory(to_integer(unsigned(address))) <= data_in;         --put data in in the right location
+            data_memory(to_integer(unsigned(address))) <= data_in;                               --put data in in the right location
             data_out <= data_in;
           end if;
           if write_enable = '0' and read_enable = '1' then                                       --if write enable is high
