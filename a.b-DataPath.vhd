@@ -30,13 +30,7 @@ entity DATAPATH is
        memory_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
        alu_out_mem : OUT std_logic_vector(numbit - 1 downto 0);
        wb_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
-       rd_out_wb : OUT std_logic_vector(4 downto 0);
-       alu_forwarding_one : OUT std_logic;
-       mem_forwarding_one : OUT std_logic;
-       alu_forwarding_two : OUT std_logic;
-       mem_forwarding_two : OUT std_logic;
-       alu_forwarding_value : OUT std_logic_vector(numbit - 1 downto 0);
-       mem_forwarding_value : OUT std_logic_vector(numbit - 1 downto 0));
+       rd_out_wb : OUT std_logic_vector(4 downto 0));
 end DATAPATH;
 
 architecture STRUCTURAL of DATAPATH is
@@ -166,14 +160,6 @@ architecture STRUCTURAL of DATAPATH is
     wb_stage_out <= wbstageoutsignal;
 
     npc_out_bpu <= npcoutbpusignal;
-
-    alu_forwarding_one <= aluforwardingonesignal;
-    mem_forwarding_one <= memforwardingonesignal;
-    alu_forwarding_two <= aluforwardingtwosignal;
-    mem_forwarding_two <= memforwardingtwosignal;
-
-    alu_forwarding_value <= aluoutsignal;
-    mem_forwarding_value <= aluoutmemsignal;
 
     FETCH : FETCH_STAGE
     generic map(numbit)

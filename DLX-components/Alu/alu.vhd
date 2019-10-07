@@ -56,7 +56,6 @@ architecture BEHAVIORAL of ALU_BEHAVIORAL is
                          else
 				                   OUTALU <= (others => '0');
 			                   end if;
-          when "1101" => OUTALU <= (others => '0');
 	       when others => null;
       end case;
     end process ALU_PROCESS;
