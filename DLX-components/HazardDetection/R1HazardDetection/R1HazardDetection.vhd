@@ -66,7 +66,7 @@ architecture BEHAVIORAL of R1_HAZARD_DETECTION is
         rd_reg_one <= (others => '0');
         rd_reg_two <= (others => '0');
         rd_reg_three <= (others => '0');
-      elsif Clk'event and Clk = '0' then  -- falling clock edge
+      elsif Clk'event and Clk = '1' then  -- rising clock edge
         rd_reg_one <= rd_reg;
         rd_reg_two <= rd_reg_one;
         rd_reg_three <= rd_reg_two;
@@ -79,7 +79,7 @@ architecture BEHAVIORAL of R1_HAZARD_DETECTION is
         rs1_reg_one <= (others => '0');
         rs1_reg_two <= (others => '0');
         rs1_reg_three <= (others => '0');
-      elsif Clk'event and Clk = '0' then  -- falling clock edge
+      elsif Clk'event and Clk = '1' then  -- rising clock edge
         rs1_reg_one <= rs1_reg;
         rs1_reg_two <= rs1_reg_one;
         rs1_reg_three <= rs1_reg_two;
@@ -87,19 +87,18 @@ architecture BEHAVIORAL of R1_HAZARD_DETECTION is
     end process RS1_PIPE;
 
     OUT_PROCESS : process (clk, reset)
+    variable tmp : integer range 0 to 1 := 0;
     begin
-      if reset = '1' then                  -- asynchronous reset (active high)
+      if reset = '1' then                   -- asynchronous reset (active high)
         alu_forwarding_one <= '0';
         mem_forwarding_one <= '0';
-      elsif Clk'event and Clk = '1' then                 -- falling clock edge
+      elsif Clk'event and Clk = '1' then  -- rising clock edge
         if(rs1_reg_one /= "00000") then
           if(rd_reg_two = rs1_reg_one) then
             alu_forwarding_one <= '1';
           elsif(rd_reg_two /= rs1_reg_one) then
             alu_forwarding_one <= '0';
           end if;
-        elsif (rs1_reg_one = "00000") then
-          alu_forwarding_one <= '0';
         end if;
         if(rs1_reg_one /= "00000") then
           if(rd_reg_three = rs1_reg_one) then
@@ -107,10 +106,8 @@ architecture BEHAVIORAL of R1_HAZARD_DETECTION is
           elsif(rd_reg_three /= rs1_reg_one) then
             mem_forwarding_one <= '0';
           end if;
-        elsif (rs1_reg_one = "00000") then
-          mem_forwarding_one <= '0';
-        end if;
       end if;
+    end if;
     end process OUT_PROCESS;
 
 

@@ -19,8 +19,8 @@ architecture TEST of TB_BRANCHPREDICIONUNIT is
 
   component BRANCHPREDICTIONUNIT
   port(OPCODE : IN std_logic_vector(5 downto 0);
-       JOFFSET_IN : IN std_logic_vector(25 downto 0);
-       BOFFSET_IN : IN std_logic_vector(15 downto 0);
+       JOFFSET : IN std_logic_vector(25 downto 0);
+       BOFFSET : IN std_logic_vector(15 downto 0);
        NPC_IN : IN std_logic_vector(31 downto 0);
        REG1_IN : IN std_logic_vector(31 downto 0);
        REG2_IN : IN std_logic_vector(31 downto 0);
@@ -32,10 +32,10 @@ architecture TEST of TB_BRANCHPREDICIONUNIT is
     DUT : BRANCHPREDICTIONUNIT
     port map(OPCODE,JOFFSET,BOFFSET,NPC_IN,REG1_IN,REG2_IN,NPC_OUT);
 
-    OPCODE <= "000010" after 2 ns, "000100" after 14 ns, "000101" after 18 ns, "111111" after 24 ns;
-    JOFFSET <= "11111111111111111111110000" after 2 ns, "11111111110000000011111111" after 14 ns, "11111111110000111100001111" after 18 ns, "11111111111111111111111111" after 24 ns;
-    BOFFSET <= "1111111111110000" after 2 ns, "0000000011111111" after 14 ns, "0000111100001111" after 18 ns, "1111111111111111" after 24 ns;
-    NPC_IN <= "00000000000000000000000000010100";
+    OPCODE <= "000010" after 2 ns, "000100" after 4 ns, "000101" after 8 ns, "111111" after 14 ns;
+    JOFFSET <= "00111111110000000011111111" after 2 ns, "11111111110000000011111111" after 4 ns, "11111111110000111100001111" after 8 ns, "11111111111111111111111111" after 14 ns;
+    BOFFSET <= "0000000011111111" after 2 ns, "0000000011111111" after 4 ns, "0000111100001111" after 8 ns, "1111111111111111" after 14 ns;
+    NPC_IN <= "00000000000000000000000000000011";
     REG1_IN <= (others => '1') after 6 ns, (others => '0') after 10 ns;
 
 end TEST;

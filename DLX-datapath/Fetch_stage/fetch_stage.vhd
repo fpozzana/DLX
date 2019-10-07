@@ -16,7 +16,7 @@ end FETCH_STAGE;
 architecture STRUCTURAL of FETCH_STAGE is
   signal pc_reg_out : std_logic_vector(numbit-1 downto 0);
   signal adder_out : std_logic_vector(numbit-1 downto 0);
-  signal plus_four : std_logic_vector(numbit-1 downto 0) := ("00000000000000000000000000000100");
+  signal plus_one : std_logic_vector(numbit-1 downto 0) := ("00000000000000000000000000000001");
 
   component REGISTER_GENERIC
   generic (NBIT : integer := NumBitRegister);
@@ -43,8 +43,6 @@ architecture STRUCTURAL of FETCH_STAGE is
     Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
-  signal pcdiv : std_logic_vector(31 downto 0);
-
   begin
 
     PC : LATCH_GENERIC
@@ -53,8 +51,8 @@ architecture STRUCTURAL of FETCH_STAGE is
 
     RCA : RCA_GENERIC
     generic map(numbit)
-    port map(pc_reg_out,plus_four,'0',adder_out,open);
-
+    port map(pc_reg_out,plus_one,'0',adder_out,open);
+    
     NPC : REGISTER_GENERIC
     generic map(numbit)
     port map(adder_out,clk,reset,npc_out);
@@ -63,7 +61,7 @@ architecture STRUCTURAL of FETCH_STAGE is
     generic map(numbit)
     port map(to_IR,clk,reset,instruction_reg_out);
 
-    to_IRAM <= "00" & pc_reg_out(31 downto 2);
+    to_IRAM <= pc_reg_out;
 
 end STRUCTURAL;
 
