@@ -51,7 +51,7 @@ architecture BEHAVIORAL of R1_HAZARD_DETECTION is
 
     IN_PROCESS : process(OPCODE,RS1_REG_IN,RD_REG_IN)
   	begin
-  		if (OPCODE = RTYPE or OPCODE = "000001") then      --any non rtype opcode
+  		if (OPCODE = RTYPE or OPCODE = "001000" or OPCODE = "001010" or OPCODE = "001100" or OPCODE = "001101" or OPCODE = "001110" or OPCODE = "010100" or OPCODE = "010110" or OPCODE = "011000" or OPCODE = "011001" or OPCODE = "011010" or OPCODE = "011011" or OPCODE = "011100" or OPCODE = "011101") then      --any non rtype opcode
   			rd_reg <= RD_REG_IN;
         rs1_reg <= RS1_REG_IN;
   		else
