@@ -93,8 +93,8 @@ end component;
 
 component BRANCHPREDICTIONUNIT
 port(OPCODE : IN std_logic_vector(5 downto 0);
-     JOFFSET : IN std_logic_vector(25 downto 0);
-     BOFFSET : IN std_logic_vector(15 downto 0);
+     JOFFSET_IN : IN std_logic_vector(25 downto 0);
+     BOFFSET_IN : IN std_logic_vector(15 downto 0);
      NPC_IN : IN std_logic_vector(31 downto 0);
      REG1_IN : IN std_logic_vector(31 downto 0);
      REG2_IN : IN std_logic_vector(31 downto 0);
