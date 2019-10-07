@@ -39,7 +39,7 @@ architecture BEHAVIORAL of CU_HARDWIRED is
                                 "1000000011",     --RTYPE_SLL
                                 "0000000000",
                                 "1000010011",     --RTYPE_SRL
-                                "0000000000",     --RTYPE_SRA
+                                "0000000000",     --RTYPE_SRA                   --not implemented
                                 "0000000000",
                                 "0000000000",
                                 "0000000000",
@@ -80,82 +80,82 @@ architecture BEHAVIORAL of CU_HARDWIRED is
                                 "1011000011",     --RTYPE_SGE
                                 "0000000000",
                                 "0000000000",
-                                "0000000000",     --RTYPE_MOVI2S
-                                "0000000000",     --RTYPE_MOVS2I
-                                "0000000000",     --RTYPE_MOVF
-                                "0000000000",     --RTYPE_MOVD
-                                "0000000000",     --RTYPE_MOVFP2I
-                                "0000000000",     --RTYPE_MOVI2FP
-                                "0000000000",     --RTYPE_MOVI2T
-                                "0000000000",     --RTYPE_MOVT2I
+                                "0000000000",     --RTYPE_MOVI2S                --not implemented
+                                "0000000000",     --RTYPE_MOVS2I                --not implemented
+                                "0000000000",     --RTYPE_MOVF                  --not implemented
+                                "0000000000",     --RTYPE_MOVD                  --not implemented
+                                "0000000000",     --RTYPE_MOVFP2I               --not implemented
+                                "0000000000",     --RTYPE_MOVI2FP               --not implemented
+                                "0000000000",     --RTYPE_MOVI2T                --not implemented
+                                "0000000000",     --RTYPE_MOVT2I                --not implemented
                                 "0000000000",
                                 "0000000000",
-                                "0000000000",     --RTYPE_SLTU
-                                "0000000000",     --RTYPE_SGTU
-                                "0000000000",     --RTYPE_SLEU
-                                "0000000000",     --RTYPE_SGEU
+                                "0000000000",     --RTYPE_SLTU                  --not implemented
+                                "0000000000",     --RTYPE_SGTU                  --not implemented
+                                "0000000000",     --RTYPE_SLEU                  --not implemented
+                                "0000000000",     --RTYPE_SGEU                  --not implemented
                                 "0000000000",     --START NOT R_TYPE
                                 "0000000000",
-                                "1111111111",     --JTYPE_J
-                                "1111111111",     --JTYPE_JAL
-                                "0000000000",     --ITYPE_BEQZ
-                                "0000000000",     --ITYPE_BNEZ
-                                "0000000000",     --ITYPE_BFPT
-                                "0000000000",     --ITYPE_BFPF
-                                "0000000000",     --ITYPE_ADD
-                                "0000000000",     --ITYPE_ADDU
-                                "0000000000",     --ITYPE_SUB
-                                "0000000000",     --ITYPE_SUBU
-                                "0000000000",     --ITYPE_AND
-                                "0000000000",     --ITYPE_OR
-                                "0000000000",     --ITYPE_XOR
-                                "0000000000",     --ITYPE_LH
-                                "0000000000",     --ITYPE_RFE
-                                "0000000000",     --ITYPE_TRAP
-                                "0000000000",     --JTYPE_JR
-                                "0000000000",     --JTYPE_JALR
-                                "0000000000",     --ITYPE_SLL
+                                "0000000000",     --JTYPE_J                     --implemented in the branch prediction unit
+                                "0000000000",     --JTYPE_JAL                   --not implemented
+                                "0000000000",     --ITYPE_BEQZ                  --implemented in the branch prediction unit
+                                "0000000000",     --ITYPE_BNEZ                  --implemented in the branch prediction unit
+                                "0000000000",     --ITYPE_BFPT                  --not implemented
+                                "0000000000",     --ITYPE_BFPF                  --not implemented
+                                "1100100011",     --ITYPE_ADD
+                                "0000000000",     --ITYPE_ADDU                  --not implemented
+                                "1100110011",     --ITYPE_SUB
+                                "0000000000",     --ITYPE_SUBU                  --not implemented
+                                "1101000011",     --ITYPE_AND
+                                "1101010011",     --ITYPE_OR
+                                "1101100011",     --ITYPE_XOR
+                                "0000000000",     --ITYPE_LH                    --not implemented
+                                "0000000000",     --ITYPE_RFE                   --not implemented
+                                "0000000000",     --ITYPE_TRAP                  --not implemented
+                                "0000000000",     --JTYPE_JR                    --not implemented
+                                "0000000000",     --JTYPE_JALR                  --not implemented
+                                "1100000011",     --ITYPE_SLL
                                 "0000000000",     --NTYPE_NOP
-                                "0000000000",     --ITYPE_SRL
-                                "0000000000",     --ITYPE_SRA
-                                "0000000000",     --ITYPE_SEQ
-                                "0000000000",     --ITYPE_SNE
-                                "0000000000",     --ITYPE_SLT
-                                "0000000000",     --ITYPE_SGT
-                                "0000000000",     --ITYPE_SLE
-                                "0000000000",     --ITYPE_SGE
+                                "1100010011",     --ITYPE_SRL
+                                "0000000000",     --ITYPE_SRA                   --not implemented
+                                "1101110011",     --ITYPE_SEQ
+                                "1110000011",     --ITYPE_SNE
+                                "1110010011",     --ITYPE_SLT
+                                "1110100011",     --ITYPE_SGT
+                                "1110110011",     --ITYPE_SLE
+                                "1111000011",     --ITYPE_SGE
                                 "0000000000",
                                 "0000000000",
-                                "0000000000",     --ITYPE_LB
-                                "0000000000",     --ITYPE_LH
+                                "0000000000",     --ITYPE_LB                    --not implemented
+                                "0000000000",     --ITYPE_LH                    --not implemented
                                 "0000000000",
-                                "0000000000",     --ITYPE_LW
-                                "0000000000",     --ITYPE_LBU
-                                "0000000000",     --ITYPE_LHU
-                                "0000000000",     --ITYPE_LF
-                                "0000000000",     --ITYPE_LD
-                                "0000000000",     --ITYPE_SB
-                                "0000000000",     --ITYPE_SH
+                                "1100100101",     --ITYPE_LW
+                                "0000000000",     --ITYPE_LBU                   --not implemented
+                                "0000000000",     --ITYPE_LHU                   --not implemented
+                                "0000000000",     --ITYPE_LF                    --not implemented
+                                "0000000000",     --ITYPE_LD                    --not implemented
+                                "0000000000",     --ITYPE_SB                    --not implemented
+                                "0000000000",     --ITYPE_SH                    --not implemented
                                 "0000000000",
-                                "0000000000",     --ITYPE_SW
-                                "0000000000",
-                                "0000000000",
-                                "0000000000",     --ITYPE_SF
-                                "0000000000",     --ITYPE_SD
+                                "1100101000",     --ITYPE_SW
                                 "0000000000",
                                 "0000000000",
-                                "0000000000",
+                                "0000000000",     --ITYPE_SF                    --not implemented
+                                "0000000000",     --ITYPE_SD                    --not implemented
                                 "0000000000",
                                 "0000000000",
                                 "0000000000",
                                 "0000000000",
                                 "0000000000",
-                                "0000000000",     --NTYPE_ITLB
                                 "0000000000",
-                                "0000000000",     --ITYPE_SLTU
-                                "0000000000",     --ITYPE_SGTU
-                                "0000000000",     --ITYPE_SLEU
-                                "0000000000"      --ITYPE_SGEU
+                                "0000000000",
+                                "0000000000",
+                                "0000000000",     --NTYPE_ITLB                  --not implemented
+                                "0000000000",
+                                "0000000000",     --ITYPE_SLTU                  --not implemented
+                                "0000000000",     --ITYPE_SGTU                  --not implemented
+                                "0000000000",     --ITYPE_SLEU                  --not implemented
+                                "0000000000"      --ITYPE_SGEU                  --not implemented
                                 );
 
   signal cw : std_logic_vector(CW_SIZE - 1 downto 0); -- full control word read from cw_mem
