@@ -33,9 +33,9 @@ architecture TEST of TB_DRAM is
     generic map(NBITDATA,NCELL)
     port map(tb_address,tb_data_in,tb_write_enable,tb_read_enable,tb_data_out,tb_address_error);
 
-    tb_data_in <= "11111111111111111111111111111111", "00000000000000000000000000000000" after 22 ns, "11111111111111111111111111111111" after 25 ns;
+    tb_data_in <= "11111111111111111111111111111111", "00000000000000000000000000000000" after 20 ns, "11111111111111111111111111111111" after 25 ns;
     tb_address <= (others => '0'), "00000000000000001111111111111111" after 20 ns;
-    tb_write_enable <= '1','0' after 13 ns, '1' after 20 ns, '0' after 30 ns;
+    tb_write_enable <= '1','0' after 13 ns, '1' after 22 ns, '0' after 30 ns;
     tb_read_enable <= '0' after 4 ns, '1' after 13 ns,'0' after 20 ns, '1' after 25 ns;
 
   end TEST;

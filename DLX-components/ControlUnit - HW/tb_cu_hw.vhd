@@ -66,29 +66,21 @@ begin
 
         wait for 1 ns;
 
-        --cu_opcode_i <= RTYPE;
-        --cu_func_i <= RTYPE_SLL;
-        --wait for 2 ns;
+        cu_opcode_i <= RTYPE;
+        cu_func_i <= RTYPE_SLL;
+        wait for 2 ns;
 
         cu_opcode_i <= RTYPE;
         cu_func_i <= RTYPE_ADD;
         wait for 2 ns;
 
-        --cu_opcode_i <= ITYPE_J;
-        --cu_func_i <= NOP;
-        --wait for 2 ns;
-
-        cu_opcode_i <= NTYPE_NOP;
-        cu_func_i <= RTYPE_SLL;
+        cu_opcode_i <= ITYPE_J;
+        cu_func_i <= NOP;
         wait for 2 ns;
 
-
-
-
-
-        --cu_opcode_i <= ITYPE_SRA;
-        --cu_func_i <= NOP;
-        --wait for 2 ns;
+        cu_opcode_i <= ITYPE_JAL;
+        cu_func_i <= NOP;
+        wait for 2 ns;
 
         wait;
         end process;
