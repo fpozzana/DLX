@@ -1,7 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use WORK.globals.all;
-use WORK.myTypes.all;
 use WORK.all;
 
 entity tb_dlx is
@@ -15,7 +14,7 @@ architecture TEST of tb_dlx is
     signal reset: std_logic := '1';
     signal npc_out_if : std_logic_vector(RISC_BIT - 1 downto 0);
     signal ir_out : std_logic_vector(RISC_BIT - 1 downto 0);
-    --signal pc_in : std_logic_vector(RISC_BIT - 1 downto 0);
+    signal pc_in : std_logic_vector(RISC_BIT - 1 downto 0);
     signal rd_out_id : std_logic_vector(4 downto 0);
     signal npc_out_id : std_logic_vector(RISC_BIT - 1 downto 0);
     signal a_reg_out : std_logic_vector(RISC_BIT - 1 downto 0);
@@ -32,10 +31,6 @@ architecture TEST of tb_dlx is
     signal wb_stage_out : std_logic_vector(RISC_BIT - 1 downto 0);
     signal address_error : std_logic;
     signal npc_out_bpu : std_logic_vector(RISC_BIT - 1 downto 0);
-    signal MUXA_CONTROL, MUXB_CONTROL, DRAM_WE, DRAM_RE, WB_MUX_SEL, RF_WE : std_logic;
-    signal ALU_OPCODE : std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
-    signal alu_forwarding_one, alu_forwarding_two, mem_forwarding_one, mem_forwarding_two : std_logic;
-    signal alu_forwarding_value, mem_forwarding_value : std_logic_vector(RISC_BIT - 1 downto 0);
 
     component DLX
     generic(IR_SIZE      : integer := 32;       -- Instruction Register Size
@@ -60,20 +55,7 @@ architecture TEST of tb_dlx is
          alu_out_mem : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          rd_out_wb : OUT std_logic_vector(4 downto 0);
          wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-         address_error : OUT std_logic;
-         MUXA_CONTROL : OUT std_logic;
-         MUXB_CONTROL : OUT std_logic;
-         ALU_OPCODE : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
-         DRAM_WE : OUT std_logic;
-         DRAM_RE : OUT std_logic;
-         WB_MUX_SEL : OUT std_logic;
-         RF_WE : OUT std_logic;
-         alu_forwarding_one : OUT std_logic;
-         mem_forwarding_one : OUT std_logic;
-         alu_forwarding_two : OUT std_logic;
-         mem_forwarding_two : OUT std_logic;
-         alu_forwarding_value : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-         mem_forwarding_value : OUT std_logic_vector(IR_SIZE - 1 downto 0));
+         address_error : OUT std_logic);
     end component;
 
 begin
@@ -108,27 +90,14 @@ begin
            alu_out_mem => alu_out_mem,
            rd_out_wb => rd_out_wb,
            wb_stage_out => wb_stage_out,
-           address_error => address_error,
-           MUXA_CONTROL => MUXA_CONTROL,
-           MUXB_CONTROL => MUXB_CONTROL,
-           ALU_OPCODE => ALU_OPCODE,
-           DRAM_WE => DRAM_WE,
-           DRAM_RE => DRAM_RE,
-           WB_MUX_SEL => WB_MUX_SEL,
-           RF_WE => RF_WE,
-           alu_forwarding_one => alu_forwarding_one,
-           mem_forwarding_one => mem_forwarding_one,
-           alu_forwarding_two => alu_forwarding_two,
-           mem_forwarding_two => mem_forwarding_two,
-           alu_forwarding_value => alu_forwarding_value,
-           mem_forwarding_value => mem_forwarding_value);
+           address_error => address_error);
 
   PCLOCK : process(clk)
 	begin
 		clk <= not(clk) after 1 ns;
 	end process;
 
-	reset <= '0' after 3 ns;
+	reset <= '0' after 4 ns;
 
 
 end TEST;

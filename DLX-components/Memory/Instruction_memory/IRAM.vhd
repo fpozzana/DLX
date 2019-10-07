@@ -24,10 +24,8 @@ end IRAM;
 
 architecture IRam_Bhe of IRAM is
 
-  signal nop : std_logic_vector(I_SIZE - 1 downto 0) := "01010100000000000000000000000000";
-
   type RAMtype is array (0 to RAM_DEPTH - 1) of integer;
-  signal IRAM_mem : RAMtype :=  (others => conv_integer(unsigned(nop)));
+  signal IRAM_mem : RAMtype;
 
 begin  -- IRam_Bhe
 

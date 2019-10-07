@@ -37,7 +37,7 @@ package globals is
 	constant NumBitMuxBoothMultiplier : integer := 8;
 	constant NumBitBoothMultiplier : integer := 8;
 	-------------instruction memory------------
-	constant RAM_DEPTH : integer := 15;
+	constant RAM_DEPTH : integer := 8;
 	constant I_SIZE : integer := 32;
 
 

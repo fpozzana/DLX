@@ -26,20 +26,7 @@ entity DLX is
        alu_out_mem : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_wb : OUT std_logic_vector(4 downto 0);
        wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-       address_error : OUT std_logic;
-       MUXA_CONTROL : OUT std_logic;
-       MUXB_CONTROL : OUT std_logic;
-       ALU_OPCODE : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
-       DRAM_WE : OUT std_logic;
-       DRAM_RE : OUT std_logic;
-       WB_MUX_SEL : OUT std_logic;
-       RF_WE : OUT std_logic;
-       alu_forwarding_one : OUT std_logic;
-       mem_forwarding_one : OUT std_logic;
-       alu_forwarding_two : OUT std_logic;
-       mem_forwarding_two : OUT std_logic;
-       alu_forwarding_value : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-       mem_forwarding_value : OUT std_logic_vector(IR_SIZE - 1 downto 0));
+       address_error : OUT std_logic);
 end DLX;
 
 
@@ -106,39 +93,59 @@ architecture dlx_rtl of DLX is
        memory_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
        alu_out_mem : OUT std_logic_vector(numbit - 1 downto 0);
        wb_stage_out : OUT std_logic_vector(numbit - 1 downto 0);
-       rd_out_wb : OUT std_logic_vector(4 downto 0);
-       alu_forwarding_one : OUT std_logic;
-       mem_forwarding_one : OUT std_logic;
-       alu_forwarding_two : OUT std_logic;
-       mem_forwarding_two : OUT std_logic;
-       alu_forwarding_value : OUT std_logic_vector(numbit - 1 downto 0);
-       mem_forwarding_value : OUT std_logic_vector(numbit - 1 downto 0));
+       rd_out_wb : OUT std_logic_vector(4 downto 0));
   end component;
 
-  component CU_HARDWIRED
-  port (-- ID Control Signals
-        -- EX Control Signal
-        MUXA_CONTROL    : OUT std_logic;    -- MUX-A Sel
-        MUXB_CONTROL    : OUT std_logic;    -- MUX-B Sel
-        ALU_OPCODE      : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0); -- ALU Operation Code
-        -- MEM Control Signals
-        DRAM_WE         : OUT std_logic;    -- Data RAM Write Enable
-        DRAM_RE         : OUT std_logic;    -- Data RAM Read Enable
-        -- WB Control Signals
-        WB_MUX_SEL      : OUT std_logic;    -- Write Back MUX Sel
-        RF_WE           : OUT std_logic;    -- Register File Write Enable
-        -- INPUTS
-        OPCODE : IN  std_logic_vector(OP_CODE_SIZE - 1 downto 0);
-        FUNC   : IN  std_logic_vector(FUNC_SIZE - 1 downto 0);
-        Clk : IN std_logic;
-        Rst : IN std_logic);                  -- Active high
-  end component;
+  -- Control Unit
+  --component dlx_cu
+  --generic (
+  --  MICROCODE_MEM_SIZE :     integer := 10;  -- Microcode Memory Size
+  --  FUNC_SIZE          :     integer := 11;  -- Func Field Size for R-Type Ops
+  --  OP_CODE_SIZE       :     integer := 6;  -- Op Code Size
+    --ALU_OPC_SIZE       :     integer := 6;  -- ALU Op Code Word Size
+  --  IR_SIZE            :     integer := 32;  -- Instruction Register Size
+  --  CW_SIZE            :     integer := 15);  -- Control Word Size
+  --port (
+  --  Clk                : in  std_logic;  -- Clock
+  --  Rst                : in  std_logic;  -- Reset:Active-Low
+    -- Instruction Register
+  --  IR_IN              : in  std_logic_vector(IR_SIZE - 1 downto 0);
+    -- IF Control Signal
+  --  IR_LATCH_EN        : out std_logic;  -- Instruction Register Latch Enable
+  --  NPC_LATCH_EN       : out std_logic;
+    -- ID Control Signals
+  --  RegA_LATCH_EN      : out std_logic;  -- Register A Latch Enable
+  --  RegB_LATCH_EN      : out std_logic;  -- Register B Latch Enable
+  --  RegIMM_LATCH_EN    : out std_logic;  -- Immediate Register Latch Enable
+    -- EX Control Signals
+  --  MUXA_SEL           : out std_logic;  -- MUX-A Sel
+  --  MUXB_SEL           : out std_logic;  -- MUX-B Sel
+  --  ALU_OUTREG_EN      : out std_logic;  -- ALU Output Register Enable
+  --  EQ_COND            : out std_logic;  -- Branch if (not) Equal to Zero
+    -- ALU Operation Code
+  --  ALU_OPCODE         : out aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
+    -- MEM Control Signals
+  --  DRAM_WE            : out std_logic;  -- Data RAM Write Enable
+  --  LMD_LATCH_EN       : out std_logic;  -- LMD Register Latch Enable
+  --  JUMP_EN            : out std_logic;  -- JUMP Enable Signal for PC input MUX
+  --  PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
+    -- WB Control signals
+  --  WB_MUX_SEL         : out std_logic;  -- Write Back MUX Sel
+  --  RF_WE              : out std_logic);  -- Register File Write Enable
 
+  --end component;
 
 
   ----------------------------------------------------------------
   -- Signals Declaration
   ----------------------------------------------------------------
+
+
+
+
+  -- Instruction Register (IR) and Program Counter (PC) declaration
+  --signal IR : std_logic_vector(IR_SIZE - 1 downto 0);
+  --signal PC : std_logic_vector(PC_SIZE - 1 downto 0);
 
   -- Instruction Ram Bus signals
   signal toiramfrompc : std_logic_vector(RISC_BIT - 1 downto 0);
@@ -150,36 +157,37 @@ architecture dlx_rtl of DLX is
   signal tolmdfromdram : std_logic_vector(RISC_BIT - 1 downto 0);
   signal address_dram : std_logic_vector(RISC_BIT - 1 downto 0);
 
-  -- Control Unit Bus signals
-  signal muxacontrolsignal : std_logic;
-  signal muxbcontrolsignal : std_logic;
-  signal dramwesignal : std_logic;
-  signal dramresignal : std_logic;
-  signal wbmuxselsignal : std_logic;
-  signal rfwesignal : std_logic;
-  signal aluopcodesignal : std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
+  -- Datapath Bus signals
+  --signal PC_BUS : std_logic_vector(PC_SIZE -1 downto 0);
 
-  --IR signal
-  signal iroutsignal : std_logic_vector(RISC_BIT - 1 downto 0);
+  -- Control Unit Bus signals
+  --signal IR_LATCH_EN_i : std_logic;
+  --signal NPC_LATCH_EN_i : std_logic;
+  --signal RegA_LATCH_EN_i : std_logic;
+  --signal RegB_LATCH_EN_i : std_logic;
+  --signal RegIMM_LATCH_EN_i : std_logic;
+  --signal EQ_COND_i : std_logic;
+  --signal JUMP_EN_i : std_logic;
+  --signal ALU_OPCODE_i : aluOp;
+  --signal MUXA_SEL_i : std_logic;
+  --signal MUXB_SEL_i : std_logic;
+  --signal ALU_OUTREG_EN_i : std_logic;
+  --signal DRAM_WE_i : std_logic;
+  --signal LMD_LATCH_EN_i : std_logic;
+  --signal PC_LATCH_EN_i : std_logic;
+  --signal WB_MUX_SEL_i : std_logic;
+  --signal RF_WE_i : std_logic;
+
+
 
 
 
   begin  -- DLX
-    ir_out <= iroutsignal;
-
     alu_out <= todramfromaluout;
     b_reg_out_ex <= todramfrombreg;
     memory_out <= tolmdfromdram;
 
-    address_dram <= "0000000000000000" & todramfromaluout(15 downto 0);
-
-    MUXA_CONTROL <= muxacontrolsignal;
-    MUXB_CONTROL <= muxbcontrolsignal;
-    ALU_OPCODE <= aluopcodesignal;
-    DRAM_WE <= dramwesignal;
-    DRAM_RE <= dramresignal;
-    WB_MUX_SEL <= wbmuxselsignal;
-    RF_WE <= rfwesignal;
+    address_dram <= "0000000000000000" & todramfrombreg(15 downto 0);
 
     IRAM_I : IRAM
     generic map(RAM_DEPTH,I_SIZE)
@@ -187,38 +195,28 @@ architecture dlx_rtl of DLX is
 
     DRAM_I : DRAM
     generic map(RISC_BIT, RISC_BIT)
-    port map(address_dram, todramfrombreg, dramwesignal, dramresignal, tolmdfromdram, address_error);
+    port map(todramfromaluout, address_dram, '1', '1', tolmdfromdram, address_error);
 
-    CONTROL_I : CU_HARDWIRED
-    port map(MUXA_CONTROL => muxacontrolsignal,
-             MUXB_CONTROL => muxbcontrolsignal,
-             ALU_OPCODE => aluopcodesignal,
-             DRAM_WE => dramwesignal,
-             DRAM_RE => dramresignal,
-             WB_MUX_SEL => wbmuxselsignal,
-             RF_WE => rfwesignal,
-             OPCODE => iroutsignal(31 downto 26),
-             FUNC => iroutsignal(10 downto 0),
-             Clk => clk,
-             Rst => reset);
-
+    --DATAPATH_I : DATAPATH
+    --generic map(RISC_BIT)
+    --port map(clk, reset, '0', '1', '1', (others => '0'), pc_in, toirfromiram, tolmdfromdram, '1', toiramfrompc, npc_out_if, ir_out, rd_out_id, npc_out_id, a_reg_out, b_reg_out, imm_reg_out, todramfromaluout, rd_out_ex, todramfrombreg, rd_out_mem, lmd_out, alu_out_mem, wb_stage_out, rd_out_wb);
 
     DATAPATH_I : DATAPATH
     generic map(RISC_BIT)
     port map(clk =>  clk,
              reset => reset,
-             write_enable =>  rfwesignal,
-             mux_one_control => muxacontrolsignal,
-             mux_two_control => muxbcontrolsignal,
-             alu_control => aluopcodesignal,
+             write_enable =>  '0',
+             mux_one_control => '1',
+             mux_two_control => '1',
+             alu_control => (others => '0'),
              --to_pc => pc_in,
              to_ir => toirfromiram,
              to_mem_stage_reg => tolmdfromdram,
-             wb_control => wbmuxselsignal,
+             wb_control => '1',
              to_iram => toiramfrompc,
              npc_out_if => npc_out_if,
              npc_out_bpu => npc_out_bpu,
-             ir_out => iroutsignal,
+             ir_out => ir_out,
              rd_out_id => rd_out_id,
              npc_out_id => npc_out_id,
              a_reg_out => a_reg_out,
@@ -231,13 +229,7 @@ architecture dlx_rtl of DLX is
              memory_stage_out => lmd_out,
              alu_out_mem => alu_out_mem,
              wb_stage_out => wb_stage_out,
-             rd_out_wb => rd_out_wb,
-             alu_forwarding_one => alu_forwarding_one,
-             mem_forwarding_one => mem_forwarding_one,
-             alu_forwarding_two => alu_forwarding_two,
-             mem_forwarding_two => mem_forwarding_two,
-             alu_forwarding_value => alu_forwarding_value,
-             mem_forwarding_value => mem_forwarding_value);
+             rd_out_wb => rd_out_wb);
 
 
     -- This is the input to program counter: currently zero
@@ -323,9 +315,6 @@ configuration CFG_DLX of DLX is
     end for;
     for all : DRAM
       use configuration WORK.CFG_DRAM;
-    end for;
-    for all : CU_HARDWIRED
-      use configuration WORK.CFG_CONTROL_UNIT_HW;
     end for;
 	end for;
 end CFG_DLX;

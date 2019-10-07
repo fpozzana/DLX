@@ -7,9 +7,9 @@ package myTypes is
 -- Control unit input sizes
     constant OP_CODE_SIZE : integer :=  6;                                              -- OPCODE field size
     constant FUNC_SIZE    : integer :=  11;                                             -- FUNC field size
-	  constant MICROCODE_MEM_SIZE : integer := 62;                                        -- size of each memory
-    constant ALU_OPC_SIZE : integer := 4;                                               -- size of alu control signals
-    constant CW_SIZE : integer := 6 + ALU_OPC_SIZE;                                     -- cw final size
+	  constant MICROCODE_MEM_SIZE : integer := 18;
+    constant ALU_OPC_SIZE : integer := 4;
+    constant CW_SIZE : integer := 6 + ALU_OPC_SIZE;
 
 
 -- R-Type instruction -> FUNC field
@@ -35,10 +35,8 @@ package myTypes is
     constant RTYPE : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000000";          -- for ADD, SUB, AND, OR register-to-register operation
 
 -- I-Type instruction -> OPCODE field
-    constant ITYPE_J : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000010";     -- ITYPE_J
-    constant ITYPE_JAL : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000011";   -- ITYPE_JAL
-    constant ITYPE_SRA : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "010111";    --ITYPE_SRA
-    constant NTYPE_NOP : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "010101";    --NTYPE_NOP
+    constant ITYPE_J : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000010";    -- ITYPE_J
+    constant ITYPE_JAL : std_logic_vector(OP_CODE_SIZE - 1 downto 0) :=  "000011";    -- ITYPE_JAL    
 
 --constant registers used to fill the IRAM
     constant REG0 : std_logic_vector(NumBitAddress-1 downto 0) := "00000";
