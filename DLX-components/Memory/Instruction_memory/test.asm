@@ -1,13 +1,10 @@
-addi r1,r0,#2
-subi r2,r1,#1
-addi r3,r1,#-4
-subi r4,r3,#-1
-addui r5,r1,#4
-subui r6,r5,#3
-add r7,r1,r2
-sub r8,r5,r6
+addi r1, r0,#5   ; r1 <= 1
+addi r2, r0,#7
+addi r3, r0,#9
+add r4, r1,r1
+add r5,r2,r2
 nop
 nop
 nop
 nop
-nop
+

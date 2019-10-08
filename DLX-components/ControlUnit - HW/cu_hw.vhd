@@ -163,26 +163,26 @@ signal cw_mem_itype : mem_array := ("0000000000",     --START NOT R_TYPE
 
   -- control word is shifted to the correct stage
   --signal cw1 : std_logic_vector(CW_SIZE - 1 downto 0);                        -- decode stage
-  signal cw1 : std_logic_vector(CW_SIZE - 1 downto 0);                        -- execution stage
-  signal cw2 : std_logic_vector(CW_SIZE - 1 - 2 - ALU_OPC_SIZE downto 0);     -- memory stage
-  signal cw3 : std_logic_vector(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 2 downto 0); -- write back stage
+  signal cw2 : std_logic_vector(CW_SIZE - 1 downto 0);                        -- execution stage
+  signal cw3 : std_logic_vector(CW_SIZE - 1 - 2 - ALU_OPC_SIZE downto 0);     -- memory stage
+  signal cw4 : std_logic_vector(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 2 downto 0); -- write back stage
 
 begin
 
   -- stage one control signals
 
   -- stage two control signals
-  MUXA_CONTROL <= cw1(CW_SIZE - 1);
-  MUXB_CONTROL <= cw1(CW_SIZE - 2);
-  ALU_OPCODE <= cw1(CW_SIZE - 3 downto CW_SIZE - 3 - ALU_OPC_SIZE + 1);
+  MUXA_CONTROL <= cw2(CW_SIZE - 1);
+  MUXB_CONTROL <= cw2(CW_SIZE - 2);
+  ALU_OPCODE <= cw2(CW_SIZE - 3 downto CW_SIZE - 3 - ALU_OPC_SIZE + 1);
 
   -- stage three control signals
-  DRAM_WE <= cw2(CW_SIZE - 3 - ALU_OPC_SIZE);
-  DRAM_RE <= cw2(CW_SIZE - 4 - ALU_OPC_SIZE);
+  DRAM_WE <= cw3(CW_SIZE - 3 - ALU_OPC_SIZE);
+  DRAM_RE <= cw3(CW_SIZE - 4 - ALU_OPC_SIZE);
 
   --stage four control singals
-  WB_MUX_SEL <= cw3(CW_SIZE - 5 - ALU_OPC_SIZE);
-  RF_WE <= cw3(CW_SIZE - 6 - ALU_OPC_SIZE);
+  WB_MUX_SEL <= cw4(CW_SIZE - 5 - ALU_OPC_SIZE);
+  RF_WE <= cw4(CW_SIZE - 6 - ALU_OPC_SIZE);
 
 	process(OPCODE, FUNC) --COMBINATIONAL PROCESS, calculates the address of the next microcode to execute given its OPCODE and FUNC.
 	begin
@@ -199,14 +199,15 @@ begin
   begin  -- process Clk
     if Rst = '1' then                   -- asynchronous reset (active low)
       --cw1 <= (others => '0');
-      cw1 <= (others => '0');
       cw2 <= (others => '0');
       cw3 <= (others => '0');
+      cw4 <= (others => '0');
     elsif Clk'event and Clk = '1' then  -- rising clock edge
-      cw1 <= cw;
-      cw2 <= cw1(CW_SIZE - 1 - 2 - ALU_OPC_SIZE downto 0);
-      cw3 <= cw2(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 2 downto 0);
-      --cw4 <= cw3(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 2 downto 0);
+      --cw1 <= cw;
+      cw2 <= cw;
+      --cw2 <= cw1(CW_SIZE - 1 downto 0);
+      cw3 <= cw2(CW_SIZE - 1 - ALU_OPC_SIZE - 2 downto 0);
+      cw4 <= cw3(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 2 downto 0);
     end if;
   end process CW_PIPE;
 

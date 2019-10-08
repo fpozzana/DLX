@@ -139,8 +139,6 @@ architecture STRUCTURAL of DATAPATH is
       ALUOUT : IN std_logic_vector(N-1 downto 0);
       RD_IN : IN std_logic_vector(4 downto 0);
       CONTROL : IN std_logic;
-      CLOCK : IN std_logic;
-      RESET : IN std_logic;
       RD_OUT : OUT std_logic_vector(4 downto 0);
       WB_OUT : OUT std_logic_vector(N-1 downto 0));
   end component;
@@ -193,7 +191,7 @@ architecture STRUCTURAL of DATAPATH is
 
     WRITEBACK : WRITE_BACK_STAGE
     generic map(numbit)
-    port map(memstageoutsignal, aluoutmemsignal, rdoutmemsignal, wb_control, clk, reset, rdoutwbsignal, wbstageoutsignal);
+    port map(memstageoutsignal, aluoutmemsignal, rdoutmemsignal, wb_control, rdoutwbsignal, wbstageoutsignal);
 
 end STRUCTURAL;
 

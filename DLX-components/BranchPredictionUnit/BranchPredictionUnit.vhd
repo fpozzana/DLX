@@ -10,42 +10,79 @@ use work.myTypes.all;
 
 entity BRANCHPREDICTIONUNIT is
   port(OPCODE : IN std_logic_vector(5 downto 0);
-       JOFFSET : IN std_logic_vector(25 downto 0);
-       BOFFSET : IN std_logic_vector(15 downto 0);
+       JOFFSET_IN : IN std_logic_vector(25 downto 0);
+       BOFFSET_IN : IN std_logic_vector(15 downto 0);
        NPC_IN : IN std_logic_vector(31 downto 0);
        REG1_IN : IN std_logic_vector(31 downto 0);
        REG2_IN : IN std_logic_vector(31 downto 0);
        NPC_OUT : OUT std_logic_vector(31 downto 0));
 end BRANCHPREDICTIONUNIT;
 
-architecture BEHAVIORAL of BRANCHPREDICTIONUNIT is
+architecture MIXED of BRANCHPREDICTIONUNIT is
+
+  component BOFFSET
+  port(BOFFSET_IN : IN std_logic_vector(15 downto 0);
+       BOFFSET_OUT : OUT std_logic_vector(31 downto 0));
+  end component;
+
+  component JOFFSET
+  port(JOFFSET_IN : IN std_logic_vector(25 downto 0);
+       JOFFSET_OUT : OUT std_logic_vector(31 downto 0));
+  end component;
+
+  component NPCDIVFOUR
+  port(NPC_IN : IN std_logic_vector(31 downto 0);
+       NPC_DIV : OUT std_logic_vector(31 downto 0));
+  end component;
+
+  signal boffsetadjusted : std_logic_vector(31 downto 0);
+  signal joffsetadjusted : std_logic_vector(31 downto 0);
+
+  signal npcoutfinal : std_logic_vector(31 downto 0);
+
 
   begin
 
-    OUT_PROCESS : process(OPCODE, NPC_IN, JOFFSET, BOFFSET, REG1_IN, REG2_IN)
-  	begin
+    BOFF : BOFFSET
+    port map(BOFFSET_IN, boffsetadjusted);
+
+    JOFF : JOFFSET
+    port map(JOFFSET_IN, joffsetadjusted);
+
+
+    OUT_PROCESS : process(OPCODE, NPC_IN, joffsetadjusted, boffsetadjusted, REG1_IN, REG2_IN)
+    begin
   		if (OPCODE = "000010") then         --JTYPE_J
-  			NPC_OUT <= "000000" & JOFFSET;
+        npcoutfinal <= joffsetadjusted + NPC_IN;
   		elsif (OPCODE = "000100") then      --BTYPE_BEQZ
   			if(REG1_IN = "00000") then
-          NPC_OUT <= "0000000000000000" & BOFFSET;
+          npcoutfinal <= NPC_IN + boffsetadjusted;
         else
-          NPC_OUT <= NPC_IN;
+          npcoutfinal <= NPC_IN;
         end if;
       elsif (OPCODE = "000101") then      --BTYPE_BNEZ
         if(REG1_IN /= "00000") then
-          NPC_OUT <= "0000000000000000" & BOFFSET;
+          npcoutfinal <= NPC_IN + boffsetadjusted;
         else
-          NPC_OUT <= NPC_IN;
+          npcoutfinal <= NPC_IN;
         end if;
       else
-        NPC_OUT <= NPC_IN;
+        npcoutfinal <= NPC_IN;
   		end if;
   	end process;
 
-end BEHAVIORAL;
+    NPC_OUT <= npcoutfinal;
+
+
+end MIXED;
 
 configuration CFG_BRANCHPREDICTIONUNIT of BRANCHPREDICTIONUNIT is
-  for BEHAVIORAL
+  for MIXED
+    for all : JOFFSET
+      use configuration WORK.CFG_JOFFSET;
+    end for;
+    for all : BOFFSET
+      use configuration WORK.CFG_BOFFSET;
+    end for;
   end for;
 end CFG_BRANCHPREDICTIONUNIT;

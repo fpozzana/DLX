@@ -41,11 +41,11 @@ architecture TEST of TB_HAZARD_DETECTION is
     DUT : HAZARD_DETECTION
     port map(clk,reset,OPCODE,RD_REG_IN_ITYPE,RD_REG_IN_RTYPE,RS1_REG_IN,RS2_REG_IN,alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,RD_OUT);
 
-    RD_REG_IN_ITYPE <= "00000" , "00010" after 4 ns, "00011" after 6 ns, "00100" after 8 ns;
-    OPCODE <= "000000", "000001" after 4 ns, "000000" after 6 ns,"000001" after 8 ns, "000000" after 10 ns,"000001" after 12 ns, "000000" after 14 ns,"000001" after 16 ns, "000000" after 18 ns,"000001" after 20 ns, "000000" after 22 ns,"000001" after 24 ns, "000000" after 26 ns;
-    RD_REG_IN_RTYPE <= "00000" , "00010" after 4 ns, "00011" after 6 ns, "00100" after 8 ns;
-    RS2_REG_IN <= "00000", "00010" after 8 ns, "00011" after 10 ns, "00100" after 12 ns;
-    RS1_REG_IN <= "00000", "11111" after 6 ns, "11111" after 8 ns, "11111" after 10 ns;
+    RD_REG_IN_ITYPE <= "00000" ;
+    OPCODE <= "000000", "000000" after 4 ns, "000000" after 6 ns,"000000" after 8 ns;
+    RD_REG_IN_RTYPE <= "00000" , "11001" after 4 ns, "10100" after 6 ns, "00001" after 8 ns;
+    RS2_REG_IN <= "00000", "11001" after 4 ns, "10100" after 6 ns, "11001" after 8 ns;
+    RS1_REG_IN <= "00000", "11001" after 4 ns, "11001" after 6 ns, "00001" after 8 ns;
 
     clk <= not clk after 1 ns;
     reset <= '0' after 4 ns;
