@@ -9,7 +9,7 @@ end TB_HAZARD_DETECTION;
 
 architecture TEST of TB_HAZARD_DETECTION is
 
-  signal clk : std_logic := '1';
+  signal clk : std_logic := '0';
   signal reset : std_logic := '1';
   signal OPCODE : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "000001";
   signal RD_REG_IN_ITYPE : std_logic_vector(4 downto 0);
@@ -41,14 +41,15 @@ architecture TEST of TB_HAZARD_DETECTION is
     DUT : HAZARD_DETECTION
     port map(clk,reset,OPCODE,RD_REG_IN_ITYPE,RD_REG_IN_RTYPE,RS1_REG_IN,RS2_REG_IN,alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,RD_OUT);
 
-    RD_REG_IN_ITYPE <= "00000" ;
-    OPCODE <= "000000", "000000" after 4 ns, "000000" after 6 ns,"000000" after 8 ns;
-    RD_REG_IN_RTYPE <= "00000" , "11001" after 4 ns, "10100" after 6 ns, "00001" after 8 ns;
-    RS2_REG_IN <= "00000", "11001" after 4 ns, "10100" after 6 ns, "11001" after 8 ns;
-    RS1_REG_IN <= "00000", "11001" after 4 ns, "11001" after 6 ns, "00001" after 8 ns;
+    OPCODE <= "000000", "001000" after 3 ns, "010101" after 5 ns,"001000" after 7 ns, "010101" after 9 ns;
+    RD_REG_IN_ITYPE <= "00000" , "00001" after 3 ns, "00000" after 5 ns, "00010" after 7 ns, "00000" after 9 ns;
+    RD_REG_IN_RTYPE <= "00000" , "00000" after 3 ns, "00000" after 5 ns, "00000" after 7 ns, "00000" after 9 ns;
+    RS1_REG_IN <= "00000", "00000" after 3 ns, "00000" after 5 ns, "00001" after 7 ns, "00000" after 9 ns;
+    RS2_REG_IN <= "00000", "00001" after 3 ns, "00000" after 5 ns, "00010" after 7 ns, "00000" after 9 ns;
+
 
     clk <= not clk after 1 ns;
-    reset <= '0' after 4 ns;
+    reset <= '0' after 3 ns;
 
 end TEST;
 
