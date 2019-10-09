@@ -29,12 +29,7 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
   port(JOFFSET_IN : IN std_logic_vector(25 downto 0);
        JOFFSET_OUT : OUT std_logic_vector(31 downto 0));
   end component;
-
-  component NPCDIVFOUR
-  port(NPC_IN : IN std_logic_vector(31 downto 0);
-       NPC_DIV : OUT std_logic_vector(31 downto 0));
-  end component;
-
+  
   signal boffsetadjusted : std_logic_vector(31 downto 0);
   signal joffsetadjusted : std_logic_vector(31 downto 0);
 
