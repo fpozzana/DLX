@@ -4,7 +4,6 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
---use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
 use WORK.globals.all;
 use work.myTypes.all;
@@ -16,6 +15,7 @@ entity BRANCHPREDICTIONUNIT is
        NPC_IN : IN std_logic_vector(31 downto 0);
        REG1_IN : IN std_logic_vector(31 downto 0);
        REG2_IN : IN std_logic_vector(31 downto 0);
+       COND_TAKEN : OUT std_logic;
        NPC_OUT : OUT std_logic_vector(31 downto 0));
 end BRANCHPREDICTIONUNIT;
 
@@ -31,11 +31,17 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
        JOFFSET_OUT : OUT std_logic_vector(31 downto 0));
   end component;
 
+  component MUX21_GENERIC
+  generic (NBIT : integer := NumBitMux21);
+  port(A : IN std_logic_vector(NBIT-1 downto 0);
+       B : IN std_logic_vector(NBIT-1 downto 0);
+       SEL : IN std_logic;
+       Y : OUT std_logic_vector(NBIT-1 downto 0));
+  end component;
+
   signal boffsetadjusted : std_logic_vector(31 downto 0);
   signal joffsetadjusted : std_logic_vector(31 downto 0);
-
   signal npcoutfinal : std_logic_vector(31 downto 0);
-
 
   begin
 
@@ -45,30 +51,39 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
     JOFF : JOFFSET
     port map(JOFFSET_IN, joffsetadjusted);
 
-
-    OUT_PROCESS : process(OPCODE, NPC_IN, joffsetadjusted, boffsetadjusted, REG1_IN, REG2_IN)
+    NPC_PROCESS : process(OPCODE, NPC_IN, joffsetadjusted, boffsetadjusted, REG1_IN, REG2_IN)
     begin
   		if (OPCODE = "000010") then         --JTYPE_J
         npcoutfinal <= std_logic_vector(unsigned(joffsetadjusted) + unsigned(NPC_IN));
   		elsif (OPCODE = "000100") then      --BTYPE_BEQZ
-  			if(REG1_IN = "00000000000000000000000000000000") then
+  			if (unsigned(REG1_IN) = 0) then
           npcoutfinal <= std_logic_vector(unsigned(NPC_IN) + unsigned(boffsetadjusted));
-        else
-          npcoutfinal <= NPC_IN;
         end if;
       elsif (OPCODE = "000101") then      --BTYPE_BNEZ
-        if(REG1_IN /= "00000000000000000000000000000000") then
+        if (unsigned(REG1_IN) /= 0) then
           npcoutfinal <= std_logic_vector(unsigned(NPC_IN) + unsigned(boffsetadjusted));
-        else
-          npcoutfinal <= NPC_IN;
         end if;
-      else
-        npcoutfinal <= NPC_IN;
-  		end if;
+      end if;
   	end process;
 
-    NPC_OUT <= npcoutfinal(31 downto 0);
+    COND_PROCESS : process(OPCODE, REG1_IN)
+    begin
+      COND_TAKEN <= '0';
+      case OPCODE is
+        when "000010" => COND_TAKEN <= '1';
+        when "000100" => if (unsigned(REG1_IN) = 0) then
+                           COND_TAKEN <= '1';
+                         end if;
+        when "000101" => if (unsigned(REG1_IN) /= 0) then
+                           COND_TAKEN <= '1';
+                         end if;
+        when others => COND_TAKEN <= '0';
+      end case;
+    end process;
 
+    MUX : MUX21_GENERIC
+    generic map(32)
+    port map(NPC_IN, npcoutfinal, COND_TAKEN, NPC_OUT);
 
 end MIXED;
 
@@ -80,5 +95,8 @@ configuration CFG_BRANCHPREDICTIONUNIT of BRANCHPREDICTIONUNIT is
     for all : BOFFSET
       use configuration WORK.CFG_BOFFSET;
     end for;
+    for all : MUX21_GENERIC
+      use configuration WORK.CFG_MUX21_GENERIC_BEHAVIORAL;
+    end if;
   end for;
 end CFG_BRANCHPREDICTIONUNIT;
