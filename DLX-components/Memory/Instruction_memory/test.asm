@@ -1,8 +1,8 @@
-addi r1, r0,#5   ; r1 <= 1
-addi r2, r1,#5
-nop
-nop
-addi r3, r2,#5
-nop
-nop
-nop
+addi r1, r0, 100
+ciclo:
+subi r1, r1, 10
+addi r3, r3, 10
+add r4,r3,r1
+bnez r1, ciclo
+end:
+j end
