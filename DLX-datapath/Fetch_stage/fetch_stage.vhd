@@ -1,5 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;
 use WORK.globals.all;
 
 entity FETCH_STAGE is
@@ -16,7 +18,7 @@ end FETCH_STAGE;
 architecture STRUCTURAL of FETCH_STAGE is
   signal pc_reg_out : std_logic_vector(numbit-1 downto 0);
   signal adder_out : std_logic_vector(numbit-1 downto 0);
-  signal plus_one : std_logic_vector(numbit-1 downto 0) := ("00000000000000000000000000000001");
+  signal plus_four : std_logic_vector(numbit-1 downto 0) := ("00000000000000000000000000000100");
 
   component REGISTER_GENERIC
   generic (NBIT : integer := NumBitRegister);
@@ -25,16 +27,7 @@ architecture STRUCTURAL of FETCH_STAGE is
        RESET : IN std_logic;
        Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
-
-  component RCA_GENERIC
-  generic (NBIT : integer := NumBitRCA);
-	port (A:	IN	std_logic_vector(NBIT-1 downto 0);
-			  B:	IN	std_logic_vector(NBIT-1 downto 0);
-				Ci:	IN	std_logic;
-				S:	OUT	std_logic_vector(NBIT-1 downto 0);
-				Co:	OUT	std_logic);
-  end component;
-
+  
   component LATCH_GENERIC
   generic (NBIT : integer := NumBitLatch);
   port(
@@ -43,16 +36,14 @@ architecture STRUCTURAL of FETCH_STAGE is
     Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
+  signal tomem : std_logic_vector(numbit - 1 downto 0);
+
   begin
 
     PC : LATCH_GENERIC
     generic map(numbit)
     port map(program_counter,'1',pc_reg_out);
 
-    RCA : RCA_GENERIC
-    generic map(numbit)
-    port map(pc_reg_out,plus_one,'0',adder_out,open);
-    
     NPC : REGISTER_GENERIC
     generic map(numbit)
     port map(adder_out,clk,reset,npc_out);
@@ -61,7 +52,9 @@ architecture STRUCTURAL of FETCH_STAGE is
     generic map(numbit)
     port map(to_IR,clk,reset,instruction_reg_out);
 
-    to_IRAM <= pc_reg_out;
+    tomem <= "00" & pc_reg_out(31 downto 2);
+    adder_out <= pc_reg_out + plus_four;
+    to_IRAM <= tomem;
 
 end STRUCTURAL;
 
@@ -69,9 +62,6 @@ configuration CFG_FETCH_STAGE of FETCH_STAGE is
 	for STRUCTURAL
     for all : REGISTER_GENERIC
 		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
-    end for;
-    for all : RCA_GENERIC
-		  use configuration WORK.CFG_RCA_GENERIC;
     end for;
     for all : LATCH_GENERIC
       use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
