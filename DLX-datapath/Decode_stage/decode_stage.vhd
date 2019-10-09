@@ -139,7 +139,7 @@ end component;
   port map(rdmux_out,CLK,RESET,RD_OUT);
 
   HAZARD : HAZARD_DETECTION
-  port map(CLK,RESET,IR_IN(31 downto 26),IR_IN(15 downto 11),IR_IN(20 downto 16),IR_IN(25 downto 21),IR_IN(20 downto 16),alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,open);
+  port map(CLK,RESET,IR_IN(31 downto 26),IR_IN(20 downto 16),IR_IN(15 downto 11),IR_IN(25 downto 21),IR_IN(20 downto 16),alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,open);
 
   BRANCHUNIT : BRANCHPREDICTIONUNIT
   port map(IR_IN(31 downto 26),IR_IN(25 downto 0),IR_IN(15 downto 0),npc_latch_out,RF_ONE_OUT,RF_TWO_OUT,NPC_OUT_BPU);
