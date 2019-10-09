@@ -104,7 +104,6 @@ end component;
   begin
 
   SIGN_REG : SIGN_EXTENTION
-  generic map(numbit)
   port map(IR_IN(15 downto 0),sign_extention_signal);
 
   RF : REGISTER_FILE

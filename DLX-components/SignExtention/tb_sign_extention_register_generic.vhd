@@ -17,7 +17,6 @@ architecture TEST of TB_SIGN_EXTENTION is
 
   begin
     DUT : SIGN_EXTENTION
-    generic map(NBIT)
     port map(D_IN,Q_OUT);
 
     D_IN <= "0000111100001111", "1111000011110000" after 5 ns;
