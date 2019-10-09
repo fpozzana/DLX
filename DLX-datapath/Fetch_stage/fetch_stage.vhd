@@ -27,7 +27,7 @@ architecture STRUCTURAL of FETCH_STAGE is
        RESET : IN std_logic;
        Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
-  
+
   component LATCH_GENERIC
   generic (NBIT : integer := NumBitLatch);
   port(
@@ -53,7 +53,7 @@ architecture STRUCTURAL of FETCH_STAGE is
     port map(to_IR,clk,reset,instruction_reg_out);
 
     tomem <= "00" & pc_reg_out(31 downto 2);
-    adder_out <= pc_reg_out + plus_four;
+    adder_out <= std_logic_vector(unsigned(pc_reg_out) + 4);
     to_IRAM <= tomem;
 
 end STRUCTURAL;

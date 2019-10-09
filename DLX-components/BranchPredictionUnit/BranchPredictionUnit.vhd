@@ -4,7 +4,8 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
+--use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;
 use WORK.globals.all;
 use work.myTypes.all;
 
@@ -48,16 +49,16 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
     OUT_PROCESS : process(OPCODE, NPC_IN, joffsetadjusted, boffsetadjusted, REG1_IN, REG2_IN)
     begin
   		if (OPCODE = "000010") then         --JTYPE_J
-        npcoutfinal <= joffsetadjusted + NPC_IN;
+        npcoutfinal <= std_logic_vector(unsigned(joffsetadjusted) + unsigned(NPC_IN));
   		elsif (OPCODE = "000100") then      --BTYPE_BEQZ
-  			if(REG1_IN = "00000") then
-          npcoutfinal <= NPC_IN + boffsetadjusted;
+  			if(REG1_IN = "00000000000000000000000000000000") then
+          npcoutfinal <= std_logic_vector(unsigned(NPC_IN) + unsigned(boffsetadjusted));
         else
           npcoutfinal <= NPC_IN;
         end if;
       elsif (OPCODE = "000101") then      --BTYPE_BNEZ
-        if(REG1_IN /= "00000") then
-          npcoutfinal <= NPC_IN + boffsetadjusted;
+        if(REG1_IN /= "00000000000000000000000000000000") then
+          npcoutfinal <= std_logic_vector(unsigned(NPC_IN) + unsigned(boffsetadjusted));
         else
           npcoutfinal <= NPC_IN;
         end if;
@@ -66,7 +67,7 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
   		end if;
   	end process;
 
-    NPC_OUT <= npcoutfinal;
+    NPC_OUT <= npcoutfinal(31 downto 0);
 
 
 end MIXED;
