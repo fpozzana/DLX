@@ -9,7 +9,7 @@ end TB_DECODE_STAGE;
 architecture TEST of TB_DECODE_STAGE is
 
   constant NBIT : integer := 32;
-  signal IR_IN  : std_logic_vector(NBIT-1 downto 0) := "00001010101010101010101010101010";  --RTYPE ADD RS1 1 RS2 2 RD 3
+  signal IR_IN  : std_logic_vector(NBIT-1 downto 0) := (others => '0');  --RTYPE ADD RS1 1 RS2 2 RD 3
   signal WB_STAGE_IN :  std_logic_vector(NBIT-1 downto 0) := "00000000000000000000000000001111";    --F is data in
   signal CLK : std_logic := '0';
   signal RESET : std_logic := '1';
@@ -53,9 +53,13 @@ architecture TEST of TB_DECODE_STAGE is
     generic map(NBIT)
     port map(IR_IN,WB_STAGE_IN,NPC_IN,RD_IN,CLK,RESET,WRITE_ENABLE,NPC_OUT_BPU,RD_OUT,NPC_OUT,A_REG_OUT,B_REG_OUT,IMM_REG_OUT,alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two);
 
-    IR_IN <= "00001011101110111011101110111011" after 3 ns, "00001011111111111111111111111111" after 5 ns;   
-    NPC_IN <= "00000000000000000000000000000001" after 10 ns, "00000000000000000000000000000010" after 13 ns;
-    RESET <= '0' after 4 ns;
+    IR_IN <= "00100000000000010000000001100100" after 3 ns, "00101000001000010000000000001010" after 5 ns, "00100000011000110000000000001010" after 7 ns, "00000000011000010010000000100000" after 9 ns, "00010100001000001111111111110000" after 11 ns, "00001011111111111111111111111100" after 13 ns;
+    NPC_IN <= "00000000000000000000000000000100" after 3 ns, "00000000000000000000000000001000" after 5 ns, "00000000000000000000000000001100" after 7 ns, "00000000000000000000000000010000" after 9 ns, "00000000000000000000000000010100" after 11 ns, "00000000000000000000000000011000" after 13 ns;
+
+    WB_STAGE_IN <= (others => '1') after 8 ns;
+    RD_IN <= "00001" after 8 ns;
+
+    RESET <= '0' after 3 ns;
 
     PCLOCK : process(clk)
     begin
