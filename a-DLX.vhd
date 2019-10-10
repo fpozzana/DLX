@@ -22,7 +22,7 @@ entity DLX is
        b_reg_out_ex : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        memory_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_mem : OUT std_logic_vector(4 downto 0);
-       lmd_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+       memory_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        alu_out_mem : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_wb : OUT std_logic_vector(4 downto 0);
        wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
@@ -229,7 +229,7 @@ architecture dlx_rtl of DLX is
              rd_out_ex => rd_out_ex,
              b_reg_out_ex => todramfrombreg,
              rd_out_mem => rd_out_mem,
-             memory_stage_out => lmd_out,
+             memory_stage_out => memory_stage_out,
              alu_out_mem => alu_out_mem,
              wb_stage_out => wb_stage_out,
              rd_out_wb => rd_out_wb,
