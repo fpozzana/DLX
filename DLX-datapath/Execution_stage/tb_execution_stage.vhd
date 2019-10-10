@@ -12,7 +12,7 @@ architecture TEST of TB_EXECUTION_STAGE is
   signal a_reg_in : std_logic_vector(NBIT-1 downto 0);
   signal b_reg_in : std_logic_vector(NBIT-1 downto 0);
   signal imm_reg_in : std_logic_vector(NBIT-1 downto 0);
-  signal mux_one_control : std_logic;
+  --signal mux_one_control : std_logic;
   signal mux_two_control : std_logic;
   signal alu_control : std_logic_vector(3 downto 0);
   signal clk : std_logic := '0';
@@ -41,7 +41,7 @@ architecture TEST of TB_EXECUTION_STAGE is
        b_reg_in : IN std_logic_vector(numbit-1 downto 0);
        imm_reg_in : IN std_logic_vector(numbit-1 downto 0);
        rd_reg_in : IN std_logic_vector(4 downto 0);
-       mux_one_control : IN std_logic;
+       --mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
        clk : IN std_logic;
@@ -53,16 +53,20 @@ architecture TEST of TB_EXECUTION_STAGE is
 
   begin
 
+    --DUT : EXECUTION_STAGE
+    --generic map(NBIT)
+    --port map(alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,alu_forwarding_value,mem_forwarding_value,npc_in,a_reg_in,b_reg_in,imm_reg_in,rd_reg_in,mux_one_control,mux_two_control,alu_control,clk,reset,execution_stage_out,b_reg_out,rd_reg_out);
+
     DUT : EXECUTION_STAGE
     generic map(NBIT)
-    port map(alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,alu_forwarding_value,mem_forwarding_value,npc_in,a_reg_in,b_reg_in,imm_reg_in,rd_reg_in,mux_one_control,mux_two_control,alu_control,clk,reset,execution_stage_out,b_reg_out,rd_reg_out);
+    port map(alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,alu_forwarding_value,mem_forwarding_value,npc_in,a_reg_in,b_reg_in,imm_reg_in,rd_reg_in,mux_two_control,alu_control,clk,reset,execution_stage_out,b_reg_out,rd_reg_out);
 
     npc_in <= "00000000000000000000000000000001";
     a_reg_in <= "00000000000000000000000000000010" , "00000000000000000000000000000000" after 31 ns;
     b_reg_in <= "00000000000000000000000000000011", "00000000000000000000000000000000" after 31 ns;
     imm_reg_in <= "00000000000000000000000000000100";
 
-    mux_one_control <= '0', '1' after 9 ns, '0' after 19 ns, '1' after 31 ns;
+    --mux_one_control <= '0', '1' after 9 ns, '0' after 19 ns, '1' after 31 ns;
     mux_two_control <= '1', '0' after 5 ns, '1' after 9 ns, '0' after 15 ns, '1' after 21 ns, '0' after 25 ns;
 
     alu_control <= "0000", "0001" after 3 ns, "0010" after 5 ns, "0011" after 7 ns, "0100" after 9 ns, "0101" after 11 ns, "0110" after 13 ns, "0111" after 15 ns, "1000" after 17 ns, "1001" after 19 ns, "0010" after 25 ns;

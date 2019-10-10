@@ -27,7 +27,7 @@ entity DLX is
        rd_out_wb : OUT std_logic_vector(4 downto 0);
        wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        address_error : OUT std_logic;
-       MUXA_CONTROL : OUT std_logic;
+       --MUXA_CONTROL : OUT std_logic;
        MUXB_CONTROL : OUT std_logic;
        ALU_OPCODE : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
        DRAM_WE : OUT std_logic;
@@ -83,7 +83,7 @@ architecture dlx_rtl of DLX is
   port(clk : IN std_logic;
        reset : IN std_logic;
        write_enable : IN std_logic;
-       mux_one_control : IN std_logic;
+       --mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
        --to_pc : IN std_logic_vector(numbit - 1 downto 0);
@@ -118,7 +118,7 @@ architecture dlx_rtl of DLX is
   component CU_HARDWIRED
   port (-- ID Control Signals
         -- EX Control Signal
-        MUXA_CONTROL    : OUT std_logic;    -- MUX-A Sel
+        --MUXA_CONTROL    : OUT std_logic;    -- MUX-A Sel
         MUXB_CONTROL    : OUT std_logic;    -- MUX-B Sel
         ALU_OPCODE      : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0); -- ALU Operation Code
         -- MEM Control Signals
@@ -173,7 +173,7 @@ architecture dlx_rtl of DLX is
 
     address_dram <= "0000000000000000" & todramfromaluout(15 downto 0);
 
-    MUXA_CONTROL <= muxacontrolsignal;
+    --MUXA_CONTROL <= muxacontrolsignal;
     MUXB_CONTROL <= muxbcontrolsignal;
     ALU_OPCODE <= aluopcodesignal;
     DRAM_WE <= dramwesignal;
@@ -190,7 +190,7 @@ architecture dlx_rtl of DLX is
     port map(address_dram, todramfrombreg, dramwesignal, dramresignal, tolmdfromdram, address_error);
 
     CONTROL_I : CU_HARDWIRED
-    port map(MUXA_CONTROL => muxacontrolsignal,
+    port map(--MUXA_CONTROL => muxacontrolsignal,
              MUXB_CONTROL => muxbcontrolsignal,
              ALU_OPCODE => aluopcodesignal,
              DRAM_WE => dramwesignal,
@@ -208,7 +208,7 @@ architecture dlx_rtl of DLX is
     port map(clk =>  clk,
              reset => reset,
              write_enable =>  rfwesignal,
-             mux_one_control => muxacontrolsignal,
+             --mux_one_control => muxacontrolsignal,
              mux_two_control => muxbcontrolsignal,
              alu_control => aluopcodesignal,
              --to_pc => pc_in,

@@ -13,7 +13,7 @@ architecture TEST of cu_test is
     port (-- ID Control Signals
 
           -- EX Control Signal
-          MUXA_CONTROL    : OUT std_logic;    -- MUX-A Sel
+          --MUXA_CONTROL    : OUT std_logic;    -- MUX-A Sel
           MUXB_CONTROL    : OUT std_logic;    -- MUX-B Sel
           ALU_OPCODE      : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0); -- ALU Operation Code
           -- MEM Control Signals
@@ -34,7 +34,8 @@ architecture TEST of cu_test is
 
     signal cu_opcode_i: std_logic_vector(OP_CODE_SIZE - 1 downto 0) := (others => '0');
     signal cu_func_i: std_logic_vector(FUNC_SIZE - 1 downto 0) := (others => '0');
-    signal MUXA_CONTROL, MUXB_CONTROL, DRAM_WE, DRAM_RE, WB_MUX_SEL, RF_WE : std_logic := '0';
+    --signal MUXA_CONTROL, MUXB_CONTROL, DRAM_WE, DRAM_RE, WB_MUX_SEL, RF_WE : std_logic := '0';
+    signal MUXB_CONTROL, DRAM_WE, DRAM_RE, WB_MUX_SEL, RF_WE : std_logic := '0';
     signal ALU_OPCODE : std_logic_vector(ALU_OPC_SIZE -1 downto 0) := (others => '0');
 
 begin
@@ -44,7 +45,7 @@ begin
        port map (
                  -- OUTPUTS
                  ALU_OPCODE   => ALU_OPCODE,
-                 MUXA_CONTROL => MUXA_CONTROL,
+                 --MUXA_CONTROL => MUXA_CONTROL,
                  MUXB_CONTROL => MUXB_CONTROL,
                  DRAM_WE      => DRAM_WE,
                  DRAM_RE      => DRAM_RE,
