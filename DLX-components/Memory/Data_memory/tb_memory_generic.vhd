@@ -16,6 +16,7 @@ architecture TEST of TB_DRAM is
   signal tb_read_enable : std_logic := '1';
   signal tb_data_out : std_logic_vector(NBITDATA-1 downto 0);
   signal tb_address_error : std_logic;
+  signal tb_reset : std_logic := '1';
 
   component DRAM
   generic(NBIT : integer := NumBitMemoryWord;
@@ -24,6 +25,7 @@ architecture TEST of TB_DRAM is
        data_in : IN std_logic_vector(NBIT-1 downto 0);
        write_enable : IN std_logic;
        read_enable : IN std_logic;
+       reset : IN std_logic;
        data_out : OUT std_logic_vector(NBIT-1 downto 0);
        address_error : OUT std_logic);
   end component;
@@ -31,8 +33,9 @@ architecture TEST of TB_DRAM is
   begin
     DUT : DRAM
     generic map(NBITDATA,NCELL)
-    port map(tb_address,tb_data_in,tb_write_enable,tb_read_enable,tb_data_out,tb_address_error);
+    port map(tb_address,tb_data_in,tb_write_enable,tb_read_enable,tb_reset,tb_data_out,tb_address_error);
 
+    tb_reset <= '0' after 2 ns;
     tb_data_in <= "11111111111111111111111111111111", "00000000000000000000000000000000" after 22 ns, "11111111111111111111111111111111" after 25 ns;
     tb_address <= (others => '0'), "00000000000000001111111111111111" after 20 ns;
     tb_write_enable <= '1','0' after 13 ns, '1' after 20 ns, '0' after 30 ns;

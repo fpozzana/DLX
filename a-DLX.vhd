@@ -73,6 +73,7 @@ architecture dlx_rtl of DLX is
        data_in : IN std_logic_vector(NBIT-1 downto 0);
        write_enable : IN std_logic;
        read_enable : IN std_logic;
+       reset : IN std_logic;
        data_out : OUT std_logic_vector(NBIT-1 downto 0);
        address_error : OUT std_logic);
   end component;
@@ -187,7 +188,7 @@ architecture dlx_rtl of DLX is
 
     DRAM_I : DRAM
     generic map(RISC_BIT, RISC_BIT)
-    port map(address_dram, todramfrombreg, dramwesignal, dramresignal, tolmdfromdram, address_error);
+    port map(address_dram, todramfrombreg, dramwesignal, dramresignal, reset, tolmdfromdram, address_error);
 
     CONTROL_I : CU_HARDWIRED
     port map(--MUXA_CONTROL => muxacontrolsignal,
