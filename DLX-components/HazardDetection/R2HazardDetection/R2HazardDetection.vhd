@@ -63,7 +63,7 @@ architecture BEHAVIORAL of R2_HAZARD_DETECTION is
     RD_PIPE: process (clk, reset)
     begin
       if reset = '1' then                   -- asynchronous reset (active high)
-        rd_reg_one <= (others => '0');
+        rd_reg_one <= rd_reg;
         rd_reg_two <= (others => '0');
         rd_reg_three <= (others => '0');
       elsif Clk'event and Clk = '0' then  -- falling clock edge
@@ -76,7 +76,7 @@ architecture BEHAVIORAL of R2_HAZARD_DETECTION is
     RS2_PIPE : process(clk, reset)
     begin
       if reset = '1' then                   -- asynchronous reset (active high)
-        rs2_reg_one <= (others => '0');
+        rs2_reg_one <= rs2_reg;
         rs2_reg_two <= (others => '0');
         rs2_reg_three <= (others => '0');
       elsif Clk'event and Clk = '0' then  -- falling clock edge

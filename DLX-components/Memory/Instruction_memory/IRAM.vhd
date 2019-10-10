@@ -54,6 +54,7 @@ begin  -- IRam_Bhe
         IRAM_mem(index) <= conv_integer(unsigned(tmp_data_u));
         index := index + 1;
       end loop;
+        IRAM_mem(index - 1) <= conv_integer(unsigned(nop));
     end if;
   end process FILL_MEM_P;
 

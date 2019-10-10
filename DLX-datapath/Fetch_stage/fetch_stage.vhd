@@ -40,17 +40,29 @@ architecture STRUCTURAL of FETCH_STAGE is
 
   begin
 
-    PC : LATCH_GENERIC
-    generic map(numbit)
-    port map(program_counter,'1',pc_reg_out);
+    --PC : LATCH_GENERIC
+    --generic map(numbit)
+    --port map(program_counter,'1',pc_reg_out);
 
-    NPC : REGISTER_GENERIC
+    PC : REGISTER_GENERIC
     generic map(numbit)
-    port map(adder_out,clk,reset,npc_out);
+    port map(program_counter, clk,reset, pc_reg_out);
 
-    IR : REGISTER_GENERIC
+    --NPC : REGISTER_GENERIC
+    --generic map(numbit)
+    --port map(adder_out,clk,reset,npc_out);
+
+    NPC : LATCH_GENERIC
     generic map(numbit)
-    port map(to_IR,clk,reset,instruction_reg_out);
+    port map(adder_out,'1',npc_out);
+
+    IR : LATCH_GENERIC
+    generic map(numbit)
+    port map(to_IR,'1',instruction_reg_out);
+
+    --IR : REGISTER_GENERIC
+    --generic map(numbit)
+    --port map(to_IR,clk,reset,instruction_reg_out);
 
     tomem <= "00" & pc_reg_out(31 downto 2);
     adder_out <= std_logic_vector(unsigned(pc_reg_out) + 4);
