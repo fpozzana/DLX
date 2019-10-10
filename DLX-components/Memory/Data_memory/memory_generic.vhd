@@ -35,18 +35,19 @@ architecture BEHAVIORAL of DRAM is
           address_error <= '0';
         else
           if((to_integer(unsigned(address))) < NCELL) then
-            if write_enable = '1' and read_enable = '1' then                                       --if write enable is high
+            if write_enable = '1' and read_enable = '1' then
               data_out <= data_memory(to_integer(unsigned(address)));
+              data_memory(to_integer(unsigned(address))) <= data_in;
             end if;
-            if write_enable = '1' and read_enable = '0' then                                       --if write enable is high
-              data_memory(to_integer(unsigned(address))) <= data_in;                               --put data in in the right location
+            if write_enable = '1' and read_enable = '0' then
+              data_memory(to_integer(unsigned(address))) <= data_in;
               data_out <= data_in;
             end if;
-            if write_enable = '0' and read_enable = '1' then                                       --if write enable is high
+            if write_enable = '0' and read_enable = '1' then
               data_out <= data_memory(to_integer(unsigned(address)));
             end if;
-            if write_enable = '0' and read_enable = '0' then                                       --if write enable is high
-              data_out <= data_in;
+            if write_enable = '0' and read_enable = '0' then
+              data_out <= (others => '0');
             end if;
             address_error <= '0';
           elsif((to_integer(unsigned(address))) > NCELL - 1 and (write_enable = '1' or read_enable = '1')) then
