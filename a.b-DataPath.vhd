@@ -7,13 +7,14 @@ entity DATAPATH is
   port(clk : IN std_logic;
        reset : IN std_logic;
        write_enable : IN std_logic;
-       --mux_one_control : IN std_logic;
+       mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
        --to_pc : IN std_logic_vector(numbit - 1 downto 0);
        to_ir : IN std_logic_vector(numbit - 1 downto 0);
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        wb_control : IN std_logic;
+       jal_sel : IN std_logic;
        to_iram : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_if : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_bpu : OUT std_logic_vector(numbit - 1 downto 0);
@@ -111,7 +112,7 @@ architecture STRUCTURAL of DATAPATH is
        b_reg_in : IN std_logic_vector(numbit-1 downto 0);
        imm_reg_in : IN std_logic_vector(numbit-1 downto 0);
        rd_reg_in : IN std_logic_vector(4 downto 0);
-       --mux_one_control : IN std_logic;
+       mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
        clk : IN std_logic;
@@ -139,6 +140,7 @@ architecture STRUCTURAL of DATAPATH is
       ALUOUT : IN std_logic_vector(N-1 downto 0);
       RD_IN : IN std_logic_vector(4 downto 0);
       CONTROL : IN std_logic;
+      JAL_SEL : IN std_logic;
       RD_OUT : OUT std_logic_vector(4 downto 0);
       WB_OUT : OUT std_logic_vector(N-1 downto 0));
   end component;
@@ -187,7 +189,7 @@ architecture STRUCTURAL of DATAPATH is
 
     EXECUTE : EXECUTION_STAGE
     generic map(numbit)
-    port map(aluforwardingonesignal, memforwardingonesignal, aluforwardingtwosignal, memforwardingtwosignal, aluoutsignal, aluoutmemsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal, rdoutidsignal, mux_two_control, alu_control, clk, reset, aluoutsignal, b_reg_out_ex, rdoutexsignal);
+    port map(aluforwardingonesignal, memforwardingonesignal, aluforwardingtwosignal, memforwardingtwosignal, aluoutsignal, aluoutmemsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal, rdoutidsignal, mux_one_control, mux_two_control, alu_control, clk, reset, aluoutsignal, b_reg_out_ex, rdoutexsignal);
 
     MEMORY : MEMORY_STAGE
     generic map(numbit)
@@ -195,7 +197,7 @@ architecture STRUCTURAL of DATAPATH is
 
     WRITEBACK : WRITE_BACK_STAGE
     generic map(numbit)
-    port map(memstageoutsignal, aluoutmemsignal, rdoutmemsignal, wb_control, rdoutwbsignal, wbstageoutsignal);
+    port map(memstageoutsignal, aluoutmemsignal, rdoutmemsignal, wb_control, jal_sel, rdoutwbsignal, wbstageoutsignal);
 
 end STRUCTURAL;
 

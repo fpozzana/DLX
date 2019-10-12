@@ -1,8 +1,15 @@
-addi r1, r0,#5   ; r1 <= 1
-addi r2, r1,#5
-nop
-nop
-addi r3, r2,#5
+addi r1, r0, 100
 nop
 nop
 nop
+sw 1(r0),r1
+nop
+nop
+nop
+lw r3,1(r0)
+nop
+nop
+nop
+addi r4,r3, 5
+end:
+j end

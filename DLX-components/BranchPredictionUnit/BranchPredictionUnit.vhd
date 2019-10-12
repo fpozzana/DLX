@@ -62,6 +62,12 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
         else
           npcoutfinal <= NPC_IN;
         end if;
+      elsif (OPCODE = "000011") then      --JAL (the link part is done through the pipeline and CU)
+        npcoutfinal <= std_logic_vector(unsigned(joffsetadjusted) + unsigned(NPC_IN));
+      elsif (OPCODE = "010010") then      --JR
+        npcoutfinal <=  REG1_IN;
+      elsif (OPCODE = "010011") then      --JALR (the link part is done through the pipeline and CU)
+        npcoutfinal <= REG1_IN;
       else
         npcoutfinal <= NPC_IN;
   		end if;

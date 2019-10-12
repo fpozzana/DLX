@@ -27,12 +27,13 @@ entity DLX is
        rd_out_wb : OUT std_logic_vector(4 downto 0);
        wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        address_error : OUT std_logic;
-       --MUXA_CONTROL : OUT std_logic;
+       MUXA_CONTROL : OUT std_logic;
        MUXB_CONTROL : OUT std_logic;
        ALU_OPCODE : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
        DRAM_WE : OUT std_logic;
        DRAM_RE : OUT std_logic;
        WB_MUX_SEL : OUT std_logic;
+       JAL_SEL : OUT std_logic;
        RF_WE : OUT std_logic;
        alu_forwarding_one : OUT std_logic;
        mem_forwarding_one : OUT std_logic;
@@ -69,7 +70,8 @@ architecture dlx_rtl of DLX is
   component DRAM
   generic(NBIT : integer := NumBitMemoryWord;
           NCELL : integer := NumBitMemoryCells);
-  port(address : IN std_logic_vector(NBIT-1 downto 0);
+  port(clk : IN std_logic;
+       address : IN std_logic_vector(NBIT-1 downto 0);
        data_in : IN std_logic_vector(NBIT-1 downto 0);
        write_enable : IN std_logic;
        read_enable : IN std_logic;
@@ -84,13 +86,14 @@ architecture dlx_rtl of DLX is
   port(clk : IN std_logic;
        reset : IN std_logic;
        write_enable : IN std_logic;
-       --mux_one_control : IN std_logic;
+       mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
        --to_pc : IN std_logic_vector(numbit - 1 downto 0);
        to_ir : IN std_logic_vector(numbit - 1 downto 0);
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        wb_control : IN std_logic;
+       jal_sel : IN std_logic;
        to_iram : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_if : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_bpu : OUT std_logic_vector(numbit - 1 downto 0);
@@ -119,7 +122,7 @@ architecture dlx_rtl of DLX is
   component CU_HARDWIRED
   port (-- ID Control Signals
         -- EX Control Signal
-        --MUXA_CONTROL    : OUT std_logic;    -- MUX-A Sel
+        MUXA_CONTROL    : OUT std_logic;    -- MUX-A Sel
         MUXB_CONTROL    : OUT std_logic;    -- MUX-B Sel
         ALU_OPCODE      : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0); -- ALU Operation Code
         -- MEM Control Signals
@@ -127,6 +130,7 @@ architecture dlx_rtl of DLX is
         DRAM_RE         : OUT std_logic;    -- Data RAM Read Enable
         -- WB Control Signals
         WB_MUX_SEL      : OUT std_logic;    -- Write Back MUX Sel
+        JAL_SEL         : OUT std_logic;
         RF_WE           : OUT std_logic;    -- Register File Write Enable
         -- INPUTS
         OPCODE : IN  std_logic_vector(OP_CODE_SIZE - 1 downto 0);
@@ -159,6 +163,7 @@ architecture dlx_rtl of DLX is
   signal wbmuxselsignal : std_logic;
   signal rfwesignal : std_logic;
   signal aluopcodesignal : std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
+  signal jalsel : std_logic;
 
   --IR signal
   signal iroutsignal : std_logic_vector(RISC_BIT - 1 downto 0);
@@ -174,13 +179,14 @@ architecture dlx_rtl of DLX is
 
     address_dram <= "0000000000000000" & todramfromaluout(15 downto 0);
 
-    --MUXA_CONTROL <= muxacontrolsignal;
+    MUXA_CONTROL <= muxacontrolsignal;
     MUXB_CONTROL <= muxbcontrolsignal;
     ALU_OPCODE <= aluopcodesignal;
     DRAM_WE <= dramwesignal;
     DRAM_RE <= dramresignal;
     WB_MUX_SEL <= wbmuxselsignal;
     RF_WE <= rfwesignal;
+    JAL_SEL <= jalsel;
 
     IRAM_I : IRAM
     generic map(RAM_DEPTH,I_SIZE)
@@ -188,16 +194,17 @@ architecture dlx_rtl of DLX is
 
     DRAM_I : DRAM
     generic map(RISC_BIT, RISC_BIT)
-    port map(address_dram, todramfrombreg, dramwesignal, dramresignal, reset, tolmdfromdram, address_error);
+    port map(clk,address_dram, todramfrombreg, dramwesignal, dramresignal, reset, tolmdfromdram, address_error);
 
     CONTROL_I : CU_HARDWIRED
-    port map(--MUXA_CONTROL => muxacontrolsignal,
+    port map(MUXA_CONTROL => muxacontrolsignal,
              MUXB_CONTROL => muxbcontrolsignal,
              ALU_OPCODE => aluopcodesignal,
              DRAM_WE => dramwesignal,
              DRAM_RE => dramresignal,
              WB_MUX_SEL => wbmuxselsignal,
              RF_WE => rfwesignal,
+             JAL_SEL => jalsel,
              OPCODE => iroutsignal(31 downto 26),
              FUNC => iroutsignal(10 downto 0),
              Clk => clk,
@@ -209,13 +216,14 @@ architecture dlx_rtl of DLX is
     port map(clk =>  clk,
              reset => reset,
              write_enable =>  rfwesignal,
-             --mux_one_control => muxacontrolsignal,
+             mux_one_control => muxacontrolsignal,
              mux_two_control => muxbcontrolsignal,
              alu_control => aluopcodesignal,
              --to_pc => pc_in,
              to_ir => toirfromiram,
              to_mem_stage_reg => tolmdfromdram,
              wb_control => wbmuxselsignal,
+             jal_sel => jalsel,
              to_iram => toiramfrompc,
              npc_out_if => npc_out_if,
              npc_out_bpu => npc_out_bpu,

@@ -22,7 +22,7 @@ entity EXECUTION_STAGE is
        b_reg_in : IN std_logic_vector(numbit-1 downto 0);
        imm_reg_in : IN std_logic_vector(numbit-1 downto 0);
        rd_reg_in : IN std_logic_vector(4 downto 0);
-       --mux_one_control : IN std_logic;
+       mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
        clk : IN std_logic;
@@ -34,7 +34,7 @@ end EXECUTION_STAGE;
 
 architecture STRUCTURAL of EXECUTION_STAGE is
 
-  --signal mux_one_out_rf : std_logic_vector(numbit-1 downto 0);
+  signal mux_one_out_rf : std_logic_vector(numbit-1 downto 0);
   signal mux_one_out_mem_forwarding : std_logic_vector(numbit-1 downto 0);
   signal mux_one_out_alu_forwarding : std_logic_vector(numbit-1 downto 0);
   signal mux_two_out_rf : std_logic_vector(numbit-1 downto 0);
@@ -76,13 +76,13 @@ architecture STRUCTURAL of EXECUTION_STAGE is
 
   begin
 
-    --MUX_ONE_RF : MUX21_GENERIC
-    --generic map(numbit)
-    --port map(npc_in,a_reg_in,mux_one_control,mux_one_out_rf);
+    MUX_ONE_RF : MUX21_GENERIC
+    generic map(numbit)
+    port map(npc_in,a_reg_in,mux_one_control,mux_one_out_rf);
 
     MUX_ONE_MEM : MUX21_GENERIC
     generic map(numbit)
-    port map(a_reg_in,mem_forwarding_value,mem_forwarding_one,mux_one_out_mem_forwarding);
+    port map(mux_one_out_rf,mem_forwarding_value,mem_forwarding_one,mux_one_out_mem_forwarding);
 
     MUX_ONE_ALU : MUX21_GENERIC
     generic map(numbit)

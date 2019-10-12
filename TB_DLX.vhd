@@ -32,8 +32,7 @@ architecture TEST of tb_dlx is
     signal wb_stage_out : std_logic_vector(RISC_BIT - 1 downto 0);
     signal address_error : std_logic;
     signal npc_out_bpu : std_logic_vector(RISC_BIT - 1 downto 0);
-    --signal MUXA_CONTROL, MUXB_CONTROL, DRAM_WE, DRAM_RE, WB_MUX_SEL, RF_WE : std_logic;
-    signal MUXB_CONTROL, DRAM_WE, DRAM_RE, WB_MUX_SEL, RF_WE : std_logic;
+    signal MUXA_CONTROL, MUXB_CONTROL, DRAM_WE, DRAM_RE, WB_MUX_SEL, RF_WE , JAL_SEL: std_logic;
     signal ALU_OPCODE : std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
     signal alu_forwarding_one, alu_forwarding_two, mem_forwarding_one, mem_forwarding_two : std_logic;
     signal alu_forwarding_value, mem_forwarding_value : std_logic_vector(RISC_BIT - 1 downto 0);
@@ -62,12 +61,13 @@ architecture TEST of tb_dlx is
          rd_out_wb : OUT std_logic_vector(4 downto 0);
          wb_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          address_error : OUT std_logic;
-         --MUXA_CONTROL : OUT std_logic;
+         MUXA_CONTROL : OUT std_logic;
          MUXB_CONTROL : OUT std_logic;
          ALU_OPCODE : OUT std_logic_vector(ALU_OPC_SIZE - 1 downto 0);
          DRAM_WE : OUT std_logic;
          DRAM_RE : OUT std_logic;
          WB_MUX_SEL : OUT std_logic;
+         JAL_SEL : OUT std_logic;
          RF_WE : OUT std_logic;
          alu_forwarding_one : OUT std_logic;
          mem_forwarding_one : OUT std_logic;
@@ -110,12 +110,13 @@ begin
            rd_out_wb => rd_out_wb,
            wb_stage_out => wb_stage_out,
            address_error => address_error,
-           --MUXA_CONTROL => MUXA_CONTROL,
+           MUXA_CONTROL => MUXA_CONTROL,
            MUXB_CONTROL => MUXB_CONTROL,
            ALU_OPCODE => ALU_OPCODE,
            DRAM_WE => DRAM_WE,
            DRAM_RE => DRAM_RE,
            WB_MUX_SEL => WB_MUX_SEL,
+           JAL_SEL => JAL_SEL,
            RF_WE => RF_WE,
            alu_forwarding_one => alu_forwarding_one,
            mem_forwarding_one => mem_forwarding_one,

@@ -12,7 +12,8 @@ use WORK.globals.all;
 entity DRAM is
   generic(NBIT : integer := NumBitMemoryWord;
           NCELL : integer := NumBitMemoryCells);
-  port(address : IN std_logic_vector(NBIT-1 downto 0);
+  port(clk : IN std_logic;
+       address : IN std_logic_vector(NBIT-1 downto 0);
        data_in : IN std_logic_vector(NBIT-1 downto 0);
        write_enable : IN std_logic;
        read_enable : IN std_logic;
@@ -27,38 +28,32 @@ architecture BEHAVIORAL of DRAM is
 
   begin
 
-    memory_process : process(address, data_in, write_enable, read_enable)
-      begin
-        if (reset = '1') then
-          data_memory <= (others => (others => '0'));
-          data_out <= (others => '0');
-          address_error <= '0';
-        else
-          if((to_integer(unsigned(address))) < NCELL) then
-            if write_enable = '1' and read_enable = '1' then
-              data_out <= data_memory(to_integer(unsigned(address)));
-              data_memory(to_integer(unsigned(address))) <= data_in;
-            end if;
-            if write_enable = '1' and read_enable = '0' then
-              data_memory(to_integer(unsigned(address))) <= data_in;
-              data_out <= data_in;
-            end if;
-            if write_enable = '0' and read_enable = '1' then
-              data_out <= data_memory(to_integer(unsigned(address)));
-            end if;
-            if write_enable = '0' and read_enable = '0' then
-              data_out <= (others => '0');
-            end if;
+    read_and_write: process (clk)
+   begin
+      if rising_edge(clk) then
+         if Reset = '1' then
+            -- Synchronous reset to clear memory
+            data_memory  <= (others => (others => '0'));
+            data_out <= (others => '0');
             address_error <= '0';
-          elsif((to_integer(unsigned(address))) > NCELL - 1 and (write_enable = '1' or read_enable = '1')) then
+         elsif write_enable = '1' then
+           if (to_integer(unsigned(address))) < NCELL then
+             -- Write Memory
+             data_memory(to_integer(unsigned(address))) <= data_in;
+             address_error <= '0';
+           else
             address_error <= '1';
-            data_out <= (others => '0');
-          else
-            address_error <= '0';
-            data_out <= (others => '0');
+          end if;
+         elsif read_enable = '1' then
+           if (to_integer(unsigned(address))) < NCELL then
+             data_out <= data_memory(to_integer(unsigned(address)));
+             address_error <= '0';
+           else
+            address_error <= '1';
           end if;
         end if;
-    end process memory_process;
+      end if;
+   end process;
 
   end BEHAVIORAL;
 
