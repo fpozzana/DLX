@@ -1,4 +1,9 @@
 --test : tested OK, the component works as expected
+--clocked write, non clocked read
+--as soon as the input is ready the read process gives the value of the REGISTERS
+--if there is a conflict between read and write address the write input
+--is bypassed to the output and the right register is read during the leading
+--edge of a clock cycle
 
 library IEEE;
 use IEEE.std_logic_1164.all;

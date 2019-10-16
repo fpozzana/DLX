@@ -1,3 +1,6 @@
+--DLX structure, it taked the datapath, control unit, DRAM and IRAM and connects them
+--to achieve the final DLX design
+
 library ieee;
 use ieee.std_logic_1164.all;
 use work.myTypes.all;
@@ -8,7 +11,6 @@ entity DLX is
           PC_SIZE      : integer := 32);       -- Program Counter Size
   port(clk : IN std_logic;
        reset : IN std_logic;
-       --pc_in : IN std_logic_vector(PC_SIZE - 1 downto 0);
        npc_out_bpu : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        npc_out_if : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        ir_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
@@ -20,7 +22,6 @@ entity DLX is
        alu_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_ex : OUT std_logic_vector(4 downto 0);
        b_reg_out_ex : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-       --memory_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_mem : OUT std_logic_vector(4 downto 0);
        memory_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        alu_out_mem : OUT std_logic_vector(IR_SIZE - 1 downto 0);
@@ -44,18 +45,7 @@ entity DLX is
 end DLX;
 
 
--- This architecture is currently not complete
--- it just includes:
--- instruction register (complete)
--- program counter (complete)
--- instruction ram memory (complete)
--- control unit (UNCOMPLETE)
---
 architecture dlx_rtl of DLX is
-
- --------------------------------------------------------------------
- -- Components Declaration
- --------------------------------------------------------------------
 
   --Instruction Ram
   component IRAM
@@ -89,7 +79,6 @@ architecture dlx_rtl of DLX is
        mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
-       --to_pc : IN std_logic_vector(numbit - 1 downto 0);
        to_ir : IN std_logic_vector(numbit - 1 downto 0);
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        wb_control : IN std_logic;
@@ -175,7 +164,6 @@ architecture dlx_rtl of DLX is
 
     alu_out <= todramfromaluout;
     b_reg_out_ex <= todramfrombreg;
-    --memory_out <= tolmdfromdram;
 
     address_dram <= "0000000000000000" & todramfromaluout(15 downto 0);
 
@@ -247,78 +235,6 @@ architecture dlx_rtl of DLX is
              mem_forwarding_two => mem_forwarding_two,
              alu_forwarding_value => alu_forwarding_value,
              mem_forwarding_value => mem_forwarding_value);
-
-
-    -- This is the input to program counter: currently zero
-    -- so no uptade of PC happens
-    -- TO BE REMOVED AS SOON AS THE DATAPATH IS INSERTED!!!!!
-    -- a proper connection must be made here if more than one
-    -- instruction must be executed
-    --PC_BUS <= (others => '0');
-
-
-    -- purpose: Instruction Register Process
-    -- type   : sequential
-    -- inputs : Clk, Rst, IRam_DOut, IR_LATCH_EN_i
-    -- outputs: IR_IN_i
-    --IR_P: process (Clk, Rst)
-    --begin  -- process IR_P
-    --  if Rst = '0' then                 -- asynchronous reset (active low)
-    --    IR <= (others => '0');
-    --  elsif Clk'event and Clk = '1' then  -- rising clock edge
-    --    if (IR_LATCH_EN_i = '1') then
-    --      IR <= IRam_DOut;
-    --    end if;
-    --  end if;
-    --end process IR_P;
-
-
-    -- purpose: Program Counter Process
-    -- type   : sequential
-    -- inputs : Clk, Rst, PC_BUS
-    -- outputs: IRam_Addr
-    --PC_P: process (Clk, Rst)
-    --begin  -- process PC_P
-    --  if Rst = '0' then                 -- asynchronous reset (active low)
-    --    PC <= (others => '0');
-    --  elsif Clk'event and Clk = '1' then  -- rising clock edge
-    --    if (PC_LATCH_EN_i = '1') then
-    --      PC <= PC_BUS;
-    --    end if;
-    --  end if;
-    --end process PC_P;
-
-    -- Control Unit Instantiation
-    --CU_I: dlx_cu
-    --  port map (
-    --      Clk             => Clk,
-    --      Rst             => Rst,
-    --      IR_IN           => IR,
-    --      IR_LATCH_EN     => IR_LATCH_EN_i,
-    --      NPC_LATCH_EN    => NPC_LATCH_EN_i,
-    --      RegA_LATCH_EN   => RegA_LATCH_EN_i,
-    --      RegB_LATCH_EN   => RegB_LATCH_EN_i,
-    --      RegIMM_LATCH_EN => RegIMM_LATCH_EN_i,
-    --      MUXA_SEL        => MUXA_SEL_i,
-    --      MUXB_SEL        => MUXB_SEL_i,
-    --      ALU_OUTREG_EN   => ALU_OUTREG_EN_i,
-    --      EQ_COND         => EQ_COND_i,
-    --      ALU_OPCODE      => ALU_OPCODE_i,
-    --      DRAM_WE         => DRAM_WE_i,
-    --      LMD_LATCH_EN    => LMD_LATCH_EN_i,
-    --      JUMP_EN         => JUMP_EN_i,
-    --      PC_LATCH_EN     => PC_LATCH_EN_i,
-    --      WB_MUX_SEL      => WB_MUX_SEL_i,
-    --      RF_WE           => RF_WE_i);
-
-    -- Instruction Ram Instantiation
-    --IRAM_I: IRAM
-    --  port map (
-    --      Rst  => Rst,
-    --      Addr => PC,
-    --      Dout => IRam_DOut);
-
-
 
 end dlx_rtl;
 

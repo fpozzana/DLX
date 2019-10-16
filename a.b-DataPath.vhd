@@ -1,3 +1,6 @@
+--connect all the datapath components to achieve the final datapath structure
+--explanation for the datapth is found on the report.pdf
+
 library ieee;
 use ieee.std_logic_1164.all;
 use WORK.globals.all;
@@ -10,7 +13,6 @@ entity DATAPATH is
        mux_one_control : IN std_logic;
        mux_two_control : IN std_logic;
        alu_control : IN std_logic_vector(3 downto 0);
-       --to_pc : IN std_logic_vector(numbit - 1 downto 0);
        to_ir : IN std_logic_vector(numbit - 1 downto 0);
        to_mem_stage_reg : IN std_logic_vector(numbit - 1 downto 0);
        wb_control : IN std_logic;
@@ -182,10 +184,6 @@ architecture STRUCTURAL of DATAPATH is
     DECODE : DECODE_STAGE
     generic map(numbit)
     port map(iroutsignal, wbstageoutsignal, npcoutifsignal, rdoutwbsignal, clk, reset, write_enable, npcoutbpusignal, rdoutidsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal, aluforwardingonesignal, memforwardingonesignal, aluforwardingtwosignal, memforwardingtwosignal);
-
-    --EXECUTE : EXECUTION_STAGE
-    --generic map(numbit)
-    --port map(aluforwardingonesignal, memforwardingonesignal, aluforwardingtwosignal, memforwardingtwosignal, aluoutsignal, aluoutmemsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal, rdoutidsignal, mux_one_control, mux_two_control, alu_control, clk, reset, aluoutsignal, b_reg_out_ex, rdoutexsignal);
 
     EXECUTE : EXECUTION_STAGE
     generic map(numbit)

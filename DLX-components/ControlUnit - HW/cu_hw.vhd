@@ -1,5 +1,7 @@
 --test : tested OK, the component works as expected
 --the values in memory have to be changed to fit an actual implementation
+--looks at the values in the look up memories to change accordingly
+--the outputs (control signals for the datapath and DRAM)
 
 library ieee;
 use ieee.std_logic_1164.all;

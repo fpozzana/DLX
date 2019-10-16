@@ -1,10 +1,5 @@
---This is the sign extention module, it extend NumBitSignExtentionRegister/2
---to NumBitSignExtentionRegister using D Flip-Flop. It maps the lower half
---of the D Flip-Flop to the input D and the higher half to D Flip-Flop
---with the input stuck to '0'. The clock signal and reset signal is common
---to every D Flip-Flop. The output Q is made of NumBitSignExtentionRegister bits.
---The configuration used for the D Flip-Flops is the synchronous one
 --test : tested OK, the component works as expected
+--extend the value given as input in a signed way on 32 bits
 
 library IEEE;
 use IEEE.std_logic_1164.all;

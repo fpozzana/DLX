@@ -1,3 +1,7 @@
+--tested OK
+--outputs a different input depending on the OPCODE in
+--it is used to have the right rd depending on r-type or I-tpye operation
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use WORK.myTypes.all;

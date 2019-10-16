@@ -1,3 +1,8 @@
+--tested OK
+--samples on the falling edge the value of IR and outputs on the leading edge
+--checks if there are data hazards (RAW) for I-type and R-type operations
+--and forward the right value to the ALU
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;

@@ -1,4 +1,7 @@
---test : tested OK, the component works as expected for the values for which has been tested
+--the alu takes as input two std_logic_vector and gives as output
+--a std_logic_vector depending on the FUNC input
+--allowed operations are : SLL, SRL, ADD, SUB, AND, OR, XOR, SEQ, SNE, SLT, SGT, SLE, SGE
+--test : tested OK, the component works as expected
 
 library IEEE;
 use IEEE.std_logic_1164.all;
