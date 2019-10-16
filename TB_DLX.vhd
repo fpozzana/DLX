@@ -24,7 +24,7 @@ architecture TEST of tb_dlx is
     signal alu_out : std_logic_vector(RISC_BIT - 1 downto 0);
     signal rd_out_ex : std_logic_vector(4 downto 0);
     signal b_reg_out_ex : std_logic_vector(RISC_BIT - 1 downto 0);
-    signal memory_out : std_logic_vector(RISC_BIT - 1 downto 0);
+    --signal memory_out : std_logic_vector(RISC_BIT - 1 downto 0);
     signal memory_stage_out : std_logic_vector(RISC_BIT - 1 downto 0);
     signal rd_out_mem : std_logic_vector(4 downto 0);
     signal alu_out_mem : std_logic_vector(RISC_BIT - 1 downto 0);
@@ -54,7 +54,7 @@ architecture TEST of tb_dlx is
          alu_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          rd_out_ex : OUT std_logic_vector(4 downto 0);
          b_reg_out_ex : OUT std_logic_vector(IR_SIZE - 1 downto 0);
-         memory_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+         --memory_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          rd_out_mem : OUT std_logic_vector(4 downto 0);
          memory_stage_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          alu_out_mem : OUT std_logic_vector(IR_SIZE - 1 downto 0);
@@ -103,7 +103,7 @@ begin
            alu_out => alu_out,
            rd_out_ex => rd_out_ex,
            b_reg_out_ex => b_reg_out_ex,
-           memory_out => memory_out,
+           --memory_out => memory_out,
            rd_out_mem => rd_out_mem,
            memory_stage_out => memory_stage_out,
            alu_out_mem => alu_out_mem,

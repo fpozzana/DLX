@@ -43,7 +43,9 @@ begin
 			          "1001" after 18 ns,                   --testing SLT
                 "1010" after 20 ns,                   --testing SGT
                 "1011" after 22 ns,                   --testing SLE
-                "1100" after 24 ns;                   --testing SGE
+                "1100" after 24 ns,                   --testing SGE
+				"1101" after 26 ns,
+				"1110" after 28 ns;
 end TEST;
 
 configuration CFG_TB_ALU of TB_ALU is

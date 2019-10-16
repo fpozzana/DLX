@@ -48,7 +48,7 @@ architecture STRUCTURAL of MEMORY_STAGE is
 
     LAT : LATCH_GENERIC
     generic map(numbit)
-    port map(to_mem_stage_reg,'1',memory_stage_out);
+    port map(to_mem_stage_reg,clk,memory_stage_out);
 
     REGALU : REGISTER_GENERIC
     generic map(numbit)

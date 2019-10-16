@@ -54,11 +54,11 @@ architecture STRUCTURAL of FETCH_STAGE is
 
     NPC : LATCH_GENERIC
     generic map(numbit)
-    port map(adder_out,'1',npc_out);
+    port map(adder_out,clk,npc_out);
 
     IR : LATCH_GENERIC
     generic map(numbit)
-    port map(to_IR,'1',instruction_reg_out);
+    port map(to_IR,clk,instruction_reg_out);
 
     --IR : REGISTER_GENERIC
     --generic map(numbit)

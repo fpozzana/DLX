@@ -104,6 +104,7 @@ end component;
   begin
 
   SIGN_REG : SIGN_EXTENTION
+  generic map(numbit)
   port map(IR_IN(15 downto 0),sign_extention_signal);
 
   RF : REGISTER_FILE
@@ -124,7 +125,7 @@ end component;
 
   LATCHFOUR : LATCH_GENERIC
   generic map(numbit)
-  port map(npc_in,CLK,npc_latch_out);
+  port map(npc_in,'1',npc_latch_out);
 
   NPC_REG : REGISTER_GENERIC
   generic map(numbit)

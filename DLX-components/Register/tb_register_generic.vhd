@@ -12,7 +12,6 @@ architecture TEST of TB_REGISTER_GENERIC is
   signal CLK_IN : std_logic := '0';
   signal RESET_IN : std_logic := '1';
   signal Q_OUT_SYNC : std_logic_vector(NBIT-1 downto 0);
-  signal Q_OUT_ASYNC : std_logic_vector(NBIT-1 downto 0);
 
   component REGISTER_GENERIC
   generic (NBIT : integer := NumBitRegister);
@@ -29,9 +28,6 @@ architecture TEST of TB_REGISTER_GENERIC is
     generic map(NBIT)
     port map(D_IN,CLK_IN,RESET_IN,Q_OUT_SYNC);
 
-    DUT2 : REGISTER_GENERIC
-    generic map(NBIT)
-    port map(D_IN,CLK_IN,RESET_IN,Q_OUT_ASYNC);
 
     D_IN <= "10001000100010001000100010001000", "00010001000100010001000100010001" after 5 ns;
     RESET_IN <= '0' after 3 ns,'1' after 15 ns,'0' after 18.5 ns;
@@ -47,9 +43,6 @@ configuration CFG_TB_REGISTER_GENERIC of TB_REGISTER_GENERIC is
   for TEST
     for DUT1 : REGISTER_GENERIC
       use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
-    end for;
-    for DUT2 : REGISTER_GENERIC
-      use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_ASYNC;
     end for;
   end for;
 end CFG_TB_REGISTER_GENERIC;

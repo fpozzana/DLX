@@ -22,24 +22,9 @@ architecture SYNC of FD is 								-- flip flop D with syncronous reset
 			end process;
 end SYNC;
 
-architecture ASYNC of FD is 							-- flip flop D with asyncronous reset
-	begin
-		PASYNCH: process(CK,RESET)
-			begin
-	  		if RESET='1' then
-	    		Q <= '0';
-	  		elsif CK'event and CK='1' then 		-- positive edge triggered:
-	    		Q <= D;
-	  		end if;
-			end process;
-end ASYNC;
 
 configuration CFG_FD_SYNC of FD is
 	for SYNC
 	end for;
 end CFG_FD_SYNC;
 
-configuration CFG_FD_ASYNC of FD is
-	for ASYNC
-	end for;
-end CFG_FD_ASYNC;
