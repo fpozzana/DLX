@@ -1,0 +1,112 @@
+##############################################################
+#SCRIPT FOR SPEEDING UP and RECORDING the DLX SYNTHESIS#
+# analyzing and checking vhdl netlist#
+# here the analyze command is used for each file from bottom to top #
+##############################################################
+analyze -library WORK -format vhdl {log_pkg.vhd}
+analyze -library WORK -format vhdl {000-globals.vhd}
+analyze -library WORK -format vhdl {myTypes.vhd}
+analyze -library WORK -format vhdl {inverter.vhd}
+analyze -library WORK -format vhdl {nand2.vhd}
+analyze -library WORK -format vhdl {mux21_generic.vhd}
+analyze -library WORK -format vhdl {alu.vhd}
+analyze -library WORK -format vhdl {RDSelect.vhd}
+analyze -library WORK -format vhdl {RdMux.vhd}
+analyze -library WORK -format vhdl {Boffset.vhd}
+analyze -library WORK -format vhdl {Joffset.vhd}
+analyze -library WORK -format vhdl {BranchPredictionUnit.vhd}
+analyze -library WORK -format vhdl {RDSelect.vhd}
+analyze -library WORK -format vhdl {RdMux.vhd}
+analyze -library WORK -format vhdl {cu_hw.vhd}
+analyze -library WORK -format vhdl {R1HazardDetection.vhd}
+analyze -library WORK -format vhdl {R2HazardDetection.vhd}
+analyze -library WORK -format vhdl {hazard_detection.vhd}
+analyze -library WORK -format vhdl {latch.vhd}
+analyze -library WORK -format vhdl {latch_generic.vhd}
+analyze -library WORK -format vhdl {fd.vhd}
+analyze -library WORK -format vhdl {register_generic.vhd}
+analyze -library WORK -format vhdl {registerfile.vhd}
+analyze -library WORK -format vhdl {sign_extention_register_generic.vhd}
+analyze -library WORK -format vhdl {fetch_stage.vhd}
+analyze -library WORK -format vhdl {decode_stage.vhd}
+analyze -library WORK -format vhdl {execution_stage.vhd}
+analyze -library WORK -format vhdl {memory_stage.vhd}
+analyze -library WORK -format vhdl {write_back_stage.vhd}
+analyze -library WORK -format vhdl {a.b-DataPath.vhd}
+analyze -library WORK -format vhdl {a-DLX.vhd}
+
+link
+##############################################################
+# elaborating the top entity 
+# choose the architecture you want
+elaborate DLX -architecture dlx_rtl
+##############################################################
+link
+
+# Define a new variable Period force the value you want
+set Period 3 
+#Forces a clock of period Period connected to the input port CLK #
+create_clock -name "clk" -period $Period {"clk"}
+#forces a combinational max delay of Period ns from each of the inputs
+#to each of th output in case combinational paths are present 
+set_max_delay $Period -from [all_inputs] -to [all_outputs]
+
+#compile the design
+compile -map_effort high
+# save report
+report_timing > reports/DLX/DLX_3ns_timing.txt
+report_area > reports/DLX/DLX_3ns_area.txt
+report_power > reports/DLX/DLX_3ns_power.txt
+
+# Define a new variable Period force the value you want
+set Period 5 
+#Forces a clock of period Period connected to the input port CLK #
+create_clock -name "clk" -period $Period {"clk"}
+#forces a combinational max delay of Period ns from each of the inputs
+#to each of th output in case combinational paths are present 
+set_max_delay $Period -from [all_inputs] -to [all_outputs]
+
+#compile the design
+compile -map_effort high
+# save report
+report_timing > reports/DLX/DLX_5ns_timing.txt
+report_area > reports/DLX/DLX_5ns_area.txt
+report_power > reports/DLX/DLX_5ns_power.txt
+
+# Define a new variable Period force the value you want
+set Period 62.5 
+#Forces a clock of period Period connected to the input port CLK #
+create_clock -name "clk" -period $Period {"clk"}
+#forces a combinational max delay of Period ns from each of the inputs
+#to each of th output in case combinational paths are present 
+set_max_delay $Period -from [all_inputs] -to [all_outputs]
+set_max_dynamic_power 1 mW
+
+#compile the design
+compile -map_effort high
+# save report
+report_timing > reports/DLX/DLX_62,5ns_timing.txt
+report_area > reports/DLX/DLX_62,5ns_area.txt
+report_power > reports/DLX/DLX_62,5ns_power.txt
+
+# Define a new variable Period force the value you want
+set Period 31.25
+#Forces a clock of period Period connected to the input port CLK #
+create_clock -name "clk" -period $Period {"clk"}
+#forces a combinational max delay of Period ns from each of the inputs
+#to each of th output in case combinational paths are present 
+set_max_delay $Period -from [all_inputs] -to [all_outputs]
+set_max_dynamic_power 700 uW
+
+#compile the design
+compile -map_effort high
+# save report
+report_timing > reports/DLX/DLX_31,25ns_timing.txt
+report_area > reports/DLX/DLX_31,25ns_area.txt
+report_power > reports/DLX/DLX_31,25ns_power.txt
+
+
+# saving files
+write -hierarchy -format ddc -output DLX-structural-topt.ddc
+write -hierarchy -format vhdl -output DLX-structural-topt.vhdl
+write -hierarchy -format verilog -output DLX-structural-topt.v

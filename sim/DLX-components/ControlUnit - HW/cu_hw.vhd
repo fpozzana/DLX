@@ -165,7 +165,6 @@ signal cw_mem_itype : mem_array := ("00000000000",     --START NOT R_TYPE
   signal cw : std_logic_vector(CW_SIZE - 1 downto 0); -- full control word read from cw_mem
 
   -- control word is shifted to the correct stage
-  --signal cw1 : std_logic_vector(CW_SIZE - 1 downto 0);                        -- decode stage
   signal cw2 : std_logic_vector(CW_SIZE - 1 downto 0);                        -- execution stage
   signal cw3 : std_logic_vector(CW_SIZE - 1 - 1 - ALU_OPC_SIZE downto 0);     -- memory stage
   signal cw4 : std_logic_vector(CW_SIZE - 1 - 1 - ALU_OPC_SIZE - 2 downto 0); -- write back stage
@@ -201,15 +200,12 @@ begin
   -- process to pipeline control words
   CW_PIPE: process (Clk, Rst)
   begin  -- process Clk
-    if Rst = '1' then                   -- asynchronous reset (active low)
-      --cw1 <= (others => '0');
+    if Rst = '1' then                   -- asynchronous reset (active high)
       cw2 <= (others => '0');
       cw3 <= (others => '0');
       cw4 <= (others => '0');
     elsif Clk'event and Clk = '1' then  -- rising clock edge
-      --cw1 <= cw;
       cw2 <= cw;
-      --cw2 <= cw1(CW_SIZE - 1 downto 0);
       cw3 <= cw2(CW_SIZE - 1 - ALU_OPC_SIZE - 1 downto 0);
       cw4 <= cw3(CW_SIZE - 1 - 2 - ALU_OPC_SIZE - 1 downto 0);
     end if;

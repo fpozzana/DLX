@@ -44,13 +44,14 @@ begin  -- IRam_Bhe
   variable tmp_data_u : std_logic_vector(I_SIZE-1 downto 0);
   begin  -- process FILL_MEM_P
     if (Rst = '1') then
-      file_open(mem_fp,"/home/ms19.44/Desktop/DLX_asm/asm_files/assembler.bin/test.asm.mem",READ_MODE);
+      file_open(mem_fp,"put here the right path",READ_MODE);
       while (not endfile(mem_fp)) loop
         readline(mem_fp,file_line);
         hread(file_line,tmp_data_u);
         IRAM_mem(index) <= conv_integer(unsigned(tmp_data_u));
         index := index + 1;
       end loop;
+        IRAM_mem(index - 1) <= conv_integer(unsigned(nop));
     end if;
   end process FILL_MEM_P;
 
