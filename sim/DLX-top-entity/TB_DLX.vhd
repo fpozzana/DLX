@@ -14,6 +14,7 @@ architecture TEST of tb_dlx is
     signal clk: std_logic := '0';
     signal reset: std_logic := '1';
     signal npc_out_if : std_logic_vector(RISC_BIT - 1 downto 0);
+    signal instruction_fetched : std_logic_vector(RISC_BIT - 1 downto 0);
     signal ir_out : std_logic_vector(RISC_BIT - 1 downto 0);
     signal rd_out_id : std_logic_vector(4 downto 0);
     signal npc_out_id : std_logic_vector(RISC_BIT - 1 downto 0);
@@ -42,6 +43,7 @@ architecture TEST of tb_dlx is
          reset : IN std_logic;
          npc_out_bpu : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          npc_out_if : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+         instruction_fetched : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          ir_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
          rd_out_id : OUT std_logic_vector(4 downto 0);
          npc_out_id : OUT std_logic_vector(IR_SIZE - 1 downto 0);
@@ -82,6 +84,7 @@ begin
            reset => reset,
            npc_out_bpu => npc_out_bpu,
            npc_out_if => npc_out_if,
+           instruction_fetched => instruction_fetched,
            ir_out => ir_out,
            rd_out_id => rd_out_id,
            npc_out_id => npc_out_id,

@@ -20,6 +20,7 @@ entity DATAPATH is
        to_iram : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_if : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_bpu : OUT std_logic_vector(numbit - 1 downto 0);
+       instruction_fetched : OUT std_logic_vector(numbit - 1 downto 0);
        ir_out : OUT std_logic_vector(numbit - 1 downto 0);
        rd_out_id : OUT std_logic_vector(4 downto 0);
        npc_out_id : OUT std_logic_vector(numbit - 1 downto 0);
@@ -43,6 +44,7 @@ entity DATAPATH is
 end DATAPATH;
 
 architecture STRUCTURAL of DATAPATH is
+  signal instructionfetchedsigal : std_logic_vector(numbit - 1 downto 0);
   signal iroutsignal : std_logic_vector(numbit - 1 downto 0);
   signal npcoutifsignal : std_logic_vector(numbit - 1 downto 0);
 
@@ -77,7 +79,8 @@ architecture STRUCTURAL of DATAPATH is
        reset : IN std_logic;
        to_IRAM : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out : OUT std_logic_vector(numbit-1 downto 0);
-       instruction_reg_out : OUT std_logic_vector(numbit-1 downto 0));
+       instruction_reg_out : OUT std_logic_vector(numbit-1 downto 0);
+       instruction_fetched : OUT std_logic_vector(numbit-1 downto 0));
   end component;
 
   component DECODE_STAGE
@@ -148,6 +151,7 @@ architecture STRUCTURAL of DATAPATH is
   end component;
 
   begin
+    instruction_fetched <= instructionfetchedsigal;
     npc_out_if <= npcoutifsignal;
     ir_out <= iroutsignal;
 
@@ -179,7 +183,7 @@ architecture STRUCTURAL of DATAPATH is
 
     FETCH : FETCH_STAGE
     generic map(numbit)
-    port map(npcoutbpusignal, to_ir, clk, reset, to_iram, npcoutifsignal, iroutsignal);
+    port map(npcoutbpusignal, to_ir, clk, reset, to_iram, npcoutifsignal, iroutsignal, instructionfetchedsigal);
 
     DECODE : DECODE_STAGE
     generic map(numbit)

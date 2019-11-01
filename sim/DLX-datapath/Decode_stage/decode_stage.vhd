@@ -56,14 +56,6 @@ architecture STRUCTURAL of DECODE_STAGE is
     Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
-  component LATCH_GENERIC
-  generic (NBIT : integer := NumBitLatch);
-  port(
-    D : IN std_logic_vector(NBIT-1 downto 0);
-    ENABLE : IN std_logic;
-    Q : OUT std_logic_vector(NBIT-1 downto 0));
-  end component;
-
   component SIGN_EXTENTION
   port(D : IN std_logic_vector(15 downto 0);
        Q : OUT std_logic_vector(31 downto 0));
@@ -122,9 +114,11 @@ end component;
   generic map(numbit)
   port map(sign_extention_signal,clk,reset,IMM_REG_OUT);
 
-  LATCHFOUR : LATCH_GENERIC
-  generic map(numbit)
-  port map(npc_in,CLK,npc_latch_out);
+  --LATCHFOUR : LATCH_GENERIC
+  --generic map(numbit)
+  --port map(npc_in,CLK,npc_latch_out);
+
+  npc_latch_out <= npc_in;
 
   NPC_REG : REGISTER_GENERIC
   generic map(numbit)
@@ -149,9 +143,6 @@ configuration CFG_DECODE_STAGE_STRUCTURAL of DECODE_STAGE is
 	for STRUCTURAL
     for all : REGISTER_GENERIC
 		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
-    end for;
-    for all : LATCH_GENERIC
-      use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
     end for;
     for all : REGISTER_FILE
       use configuration WORK.CFG_REGISTER_FILE_BEHAVIORAL;

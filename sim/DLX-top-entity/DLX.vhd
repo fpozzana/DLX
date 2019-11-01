@@ -13,6 +13,7 @@ entity DLX is
        reset : IN std_logic;
        npc_out_bpu : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        npc_out_if : OUT std_logic_vector(IR_SIZE - 1 downto 0);
+       instruction_fetched : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        ir_out : OUT std_logic_vector(IR_SIZE - 1 downto 0);
        rd_out_id : OUT std_logic_vector(4 downto 0);
        npc_out_id : OUT std_logic_vector(IR_SIZE - 1 downto 0);
@@ -86,6 +87,7 @@ architecture dlx_rtl of DLX is
        to_iram : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_if : OUT std_logic_vector(numbit - 1 downto 0);
        npc_out_bpu : OUT std_logic_vector(numbit - 1 downto 0);
+       instruction_fetched : OUT std_logic_vector(numbit - 1 downto 0);
        ir_out : OUT std_logic_vector(numbit - 1 downto 0);
        rd_out_id : OUT std_logic_vector(4 downto 0);
        npc_out_id : OUT std_logic_vector(numbit - 1 downto 0);
@@ -207,7 +209,7 @@ architecture dlx_rtl of DLX is
              mux_one_control => muxacontrolsignal,
              mux_two_control => muxbcontrolsignal,
              alu_control => aluopcodesignal,
-             --to_pc => pc_in,
+             instruction_fetched => instruction_fetched,
              to_ir => toirfromiram,
              to_mem_stage_reg => tolmdfromdram,
              wb_control => wbmuxselsignal,

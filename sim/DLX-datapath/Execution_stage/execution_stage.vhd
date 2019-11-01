@@ -66,14 +66,6 @@ architecture STRUCTURAL of EXECUTION_STAGE is
            OUTALU: OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
-  component LATCH_GENERIC
-  generic (NBIT : integer := NumBitLatch);
-  port(
-    D : IN std_logic_vector(NBIT-1 downto 0);
-    ENABLE : IN std_logic;
-    Q : OUT std_logic_vector(NBIT-1 downto 0));
-  end component;
-
   begin
 
     MUX_ONE_RF : MUX21_GENERIC

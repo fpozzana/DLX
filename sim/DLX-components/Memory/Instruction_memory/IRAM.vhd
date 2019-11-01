@@ -27,7 +27,7 @@ architecture IRam_Bhe of IRAM is
   signal nop : std_logic_vector(I_SIZE - 1 downto 0) := "01010100000000000000000000000000";
 
   type RAMtype is array (0 to RAM_DEPTH - 1) of integer;
-  signal IRAM_mem : RAMtype :=  (others => conv_integer(unsigned(nop)));
+  signal IRAM_mem : RAMtype;
 
 begin  -- IRam_Bhe
 
@@ -44,14 +44,13 @@ begin  -- IRam_Bhe
   variable tmp_data_u : std_logic_vector(I_SIZE-1 downto 0);
   begin  -- process FILL_MEM_P
     if (Rst = '1') then
-      file_open(mem_fp,"put here the right path",READ_MODE);
+      file_open(mem_fp,"C:/Users/FEDERICO/Desktop/git_projects/DLX-Project/sim/DLX-components/Memory/Instruction_memory/raw.asm.mem",READ_MODE);
       while (not endfile(mem_fp)) loop
         readline(mem_fp,file_line);
         hread(file_line,tmp_data_u);
         IRAM_mem(index) <= conv_integer(unsigned(tmp_data_u));
         index := index + 1;
       end loop;
-        IRAM_mem(index - 1) <= conv_integer(unsigned(nop));
     end if;
   end process FILL_MEM_P;
 

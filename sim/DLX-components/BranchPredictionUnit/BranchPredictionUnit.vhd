@@ -35,7 +35,6 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
 
   signal npcoutfinal : std_logic_vector(31 downto 0);
 
-
   begin
 
     BOFF : BOFFSET
@@ -48,8 +47,8 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
     OUT_PROCESS : process(OPCODE, NPC_IN, joffsetadjusted, boffsetadjusted, REG1_IN, REG2_IN)
     begin
   		if (OPCODE = "000010") then         --JTYPE_J
-        npcoutfinal <= std_logic_vector(unsigned(joffsetadjusted) + unsigned(NPC_IN));
-  		elsif (OPCODE = "000100") then      --BTYPE_BEQZ
+        npcoutfinal <= std_logic_vector(unsigned(NPC_IN) + unsigned(joffsetadjusted));
+      elsif (OPCODE = "000100") then      --BTYPE_BEQZ
   			if(REG1_IN = "00000000000000000000000000000000") then
           npcoutfinal <= std_logic_vector(unsigned(NPC_IN) + unsigned(boffsetadjusted));
         else

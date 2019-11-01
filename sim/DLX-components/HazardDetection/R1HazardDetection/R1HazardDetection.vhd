@@ -91,7 +91,7 @@ architecture BEHAVIORAL of R1_HAZARD_DETECTION is
       if reset = '1' then                  -- asynchronous reset (active high)
         alu_forwarding_one <= '0';
         mem_forwarding_one <= '0';
-      elsif Clk'event and Clk = '1' then                 -- falling clock edge
+      elsif Clk'event and Clk = '1' then                 -- rising clock edge
         if(rs1_reg_one /= "00000") then
           if(rd_reg_two = rs1_reg_one) then
             alu_forwarding_one <= '1';

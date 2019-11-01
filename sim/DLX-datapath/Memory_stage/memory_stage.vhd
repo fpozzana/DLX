@@ -28,14 +28,6 @@ architecture STRUCTURAL of MEMORY_STAGE is
     Q : OUT std_logic_vector(NBIT-1 downto 0));
   end component;
 
-  component LATCH_GENERIC
-  generic (NBIT : integer := NumBitLatch);
-  port(
-    D : IN std_logic_vector(NBIT-1 downto 0);
-    ENABLE : IN std_logic;
-    Q : OUT std_logic_vector(NBIT-1 downto 0));
-  end component;
-
   begin
 
     RDREG : REGISTER_GENERIC
@@ -46,9 +38,11 @@ architecture STRUCTURAL of MEMORY_STAGE is
     --generic map(numbit)
     --port map(to_mem_stage_reg,clk,reset,memory_stage_out);
 
-    LAT : LATCH_GENERIC
-    generic map(numbit)
-    port map(to_mem_stage_reg,clk,memory_stage_out);
+    --LAT : LATCH_GENERIC
+    --generic map(numbit)
+    --port map(to_mem_stage_reg,clk,memory_stage_out);
+
+    memory_stage_out <= to_mem_stage_reg;
 
     REGALU : REGISTER_GENERIC
     generic map(numbit)
@@ -60,9 +54,6 @@ configuration CFG_MEMORY_STAGE_STRUCTURAL of MEMORY_STAGE is
 	for STRUCTURAL
     for all : REGISTER_GENERIC
 		  use configuration WORK.CFG_REGISTER_GENERIC_STRUCTURAL_SYNC;
-    end for;
-    for all : LATCH_GENERIC
-      use configuration WORK.CFG_LATCH_GENERIC_STRUCTURAL_ASYNC;
     end for;
 	end for;
 end CFG_MEMORY_STAGE_STRUCTURAL;
