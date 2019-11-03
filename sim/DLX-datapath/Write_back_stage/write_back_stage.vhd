@@ -35,19 +35,11 @@ architecture STRUCTURAL of WRITE_BACK_STAGE is
     generic map(RISC_BIT)
     port map(LMD,ALUOUT,CONTROL,mux_out);
 
-    --REGWB : LATCH_GENERIC
-    --generic map(RISC_BIT)
-    --port map(mux_out, '1', WB_OUT);
-
     WB_OUT <= mux_out;
 
     JALMUX : MUX21_GENERIC
     generic map(5)
     port map(RD_IN, (others => '1'), JAL_SEL, jal_mux_out);
-
-    --REGRD : LATCH_GENERIC
-    --generic map(5)
-    --port map(jal_mux_out, '1', RD_OUT);
 
     RD_OUT <= jal_mux_out;
 

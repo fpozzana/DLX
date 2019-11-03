@@ -8,7 +8,7 @@ use ieee.numeric_std.all;
 use WORK.globals.all;
 use work.myTypes.all;
 
-entity BRANCHPREDICTIONUNIT is
+entity BRANCHDECISIONUNIT is
   port(OPCODE : IN std_logic_vector(5 downto 0);
        JOFFSET_IN : IN std_logic_vector(25 downto 0);
        BOFFSET_IN : IN std_logic_vector(15 downto 0);
@@ -16,9 +16,9 @@ entity BRANCHPREDICTIONUNIT is
        REG1_IN : IN std_logic_vector(31 downto 0);
        REG2_IN : IN std_logic_vector(31 downto 0);
        NPC_OUT : OUT std_logic_vector(31 downto 0));
-end BRANCHPREDICTIONUNIT;
+end BRANCHDECISIONUNIT;
 
-architecture MIXED of BRANCHPREDICTIONUNIT is
+architecture MIXED of BRANCHDECISIONUNIT is
 
   component BOFFSET
   port(BOFFSET_IN : IN std_logic_vector(15 downto 0);
@@ -76,7 +76,7 @@ architecture MIXED of BRANCHPREDICTIONUNIT is
 
 end MIXED;
 
-configuration CFG_BRANCHPREDICTIONUNIT of BRANCHPREDICTIONUNIT is
+configuration CFG_BRANCHDECISIONUNIT of BRANCHDECISIONUNIT is
   for MIXED
     for all : JOFFSET
       use configuration WORK.CFG_JOFFSET;
@@ -85,4 +85,4 @@ configuration CFG_BRANCHPREDICTIONUNIT of BRANCHPREDICTIONUNIT is
       use configuration WORK.CFG_BOFFSET;
     end for;
   end for;
-end CFG_BRANCHPREDICTIONUNIT;
+end CFG_BRANCHDECISIONUNIT;

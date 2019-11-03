@@ -4,10 +4,10 @@ use ieee.std_logic_unsigned.all;
 use WORK.globals.all;
 use work.myTypes.all;
 
-entity TB_BRANCHPREDICIONUNIT is
-end TB_BRANCHPREDICIONUNIT;
+entity TB_BRANCHDECISIONUNIT is
+end TB_BRANCHDECISIONUNIT;
 
-architecture TEST of TB_BRANCHPREDICIONUNIT is
+architecture TEST of TB_BRANCHDECISIONUNIT is
 
   signal OPCODE : std_logic_vector(5 downto 0) := (others => '0');
   signal JOFFSET : std_logic_vector(25 downto 0) := (others => '0');
@@ -17,7 +17,7 @@ architecture TEST of TB_BRANCHPREDICIONUNIT is
   signal REG1_IN : std_logic_vector(31 downto 0) := (others => '0');
   signal REG2_IN : std_logic_vector(31 downto 0) := (others => '0');
 
-  component BRANCHPREDICTIONUNIT
+  component BRANCHDECISIONUNIT
   port(OPCODE : IN std_logic_vector(5 downto 0);
        JOFFSET_IN : IN std_logic_vector(25 downto 0);
        BOFFSET_IN : IN std_logic_vector(15 downto 0);
@@ -29,7 +29,7 @@ architecture TEST of TB_BRANCHPREDICIONUNIT is
 
   begin
 
-    DUT : BRANCHPREDICTIONUNIT
+    DUT : BRANCHDECISIONUNIT
     port map(OPCODE,JOFFSET,BOFFSET,NPC_IN,REG1_IN,REG2_IN,NPC_OUT);
 
     OPCODE <= "000010" after 2 ns, "000100" after 14 ns, "000101" after 18 ns, "111111" after 24 ns, "000011" after 40 ns, "010010" after 44 ns, "010011" after 48 ns;
@@ -40,10 +40,10 @@ architecture TEST of TB_BRANCHPREDICIONUNIT is
 
 end TEST;
 
-configuration CFG_TB_BRANCHPREDICTIONUNIT of TB_BRANCHPREDICIONUNIT is
+configuration CFG_TB_BRANCHDECISIONUNIT of TB_BRANCHDECISIONUNIT is
   for TEST
-    for DUT: BRANCHPREDICTIONUNIT
-      use configuration WORK.CFG_BRANCHPREDICTIONUNIT;
+    for DUT: BRANCHDECISIONUNIT
+      use configuration WORK.CFG_BRANCHDECISIONUNIT;
     end for;
   end for;
-end CFG_TB_BRANCHPREDICTIONUNIT;
+end CFG_TB_BRANCHDECISIONUNIT;

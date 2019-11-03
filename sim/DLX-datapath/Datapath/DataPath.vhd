@@ -92,6 +92,7 @@ architecture STRUCTURAL of DATAPATH is
        CLK : IN std_logic;
        RESET : IN std_logic;
        WRITE_ENABLE : IN std_logic;
+       INSTRUCTION_FETCHED : IN std_logic_vector(RISC_BIT - 1 downto 0);
        NPC_OUT_BPU : OUT std_logic_vector(numbit - 1 downto 0);
        RD_OUT : OUT std_logic_vector(4 downto 0);
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
@@ -187,7 +188,7 @@ architecture STRUCTURAL of DATAPATH is
 
     DECODE : DECODE_STAGE
     generic map(numbit)
-    port map(iroutsignal, wbstageoutsignal, npcoutifsignal, rdoutwbsignal, clk, reset, write_enable, npcoutbpusignal, rdoutidsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal, aluforwardingonesignal, memforwardingonesignal, aluforwardingtwosignal, memforwardingtwosignal);
+    port map(iroutsignal, wbstageoutsignal, npcoutifsignal, rdoutwbsignal, clk, reset, write_enable, instructionfetchedsigal, npcoutbpusignal, rdoutidsignal, npcoutidsignal, aregsignal, bregsignal, immregsignal, aluforwardingonesignal, memforwardingonesignal, aluforwardingtwosignal, memforwardingtwosignal);
 
     EXECUTE : EXECUTION_STAGE
     generic map(numbit)

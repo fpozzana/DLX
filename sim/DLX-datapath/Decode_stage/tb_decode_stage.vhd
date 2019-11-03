@@ -26,6 +26,7 @@ architecture TEST of TB_DECODE_STAGE is
   signal alu_forwarding_two : std_logic;
   signal mem_forwarding_two : std_logic;
   signal NPC_OUT_BPU : std_logic_vector(NBIT - 1 downto 0);
+  signal INSTRUCTION_FETCHED : std_logic_vector(NBIT - 1 downto 0);
 
   component DECODE_STAGE
   generic(numbit : integer := RISC_BIT);
@@ -36,6 +37,7 @@ architecture TEST of TB_DECODE_STAGE is
        CLK : IN std_logic;
        RESET : IN std_logic;
        WRITE_ENABLE : IN std_logic;
+       INSTRUCTION_FETCHED : IN std_logic_vector(RISC_BIT - 1 downto 0);
        NPC_OUT_BPU : OUT std_logic_vector(numbit - 1 downto 0);
        RD_OUT : OUT std_logic_vector(4 downto 0);
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
@@ -51,7 +53,7 @@ architecture TEST of TB_DECODE_STAGE is
   begin
     DUT : DECODE_STAGE
     generic map(NBIT)
-    port map(IR_IN,WB_STAGE_IN,NPC_IN,RD_IN,CLK,RESET,WRITE_ENABLE,NPC_OUT_BPU,RD_OUT,NPC_OUT,A_REG_OUT,B_REG_OUT,IMM_REG_OUT,alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two);
+    port map(IR_IN,WB_STAGE_IN,NPC_IN,RD_IN,CLK,RESET,WRITE_ENABLE,INSTRUCTION_FETCHED,NPC_OUT_BPU,RD_OUT,NPC_OUT,A_REG_OUT,B_REG_OUT,IMM_REG_OUT,alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two);
 
     IR_IN <= "00100000000000010000000001100100" after 3 ns, "00101000001000010000000000001010" after 5 ns, "00100000011000110000000000001010" after 7 ns, "00000000011000010010000000100000" after 9 ns, "00010100001000001111111111110000" after 11 ns, "00001011111111111111111111111100" after 13 ns;
     NPC_IN <= "00000000000000000000000000000100" after 3 ns, "00000000000000000000000000001000" after 5 ns, "00000000000000000000000000001100" after 7 ns, "00000000000000000000000000010000" after 9 ns, "00000000000000000000000000010100" after 11 ns, "00000000000000000000000000011000" after 13 ns;

@@ -12,6 +12,7 @@ entity DECODE_STAGE is
        CLK : IN std_logic;
        RESET : IN std_logic;
        WRITE_ENABLE : IN std_logic;
+       INSTRUCTION_FETCHED : IN std_logic_vector(RISC_BIT - 1 downto 0);
        NPC_OUT_BPU : OUT std_logic_vector(numbit - 1 downto 0);
        RD_OUT : OUT std_logic_vector(4 downto 0);
        NPC_OUT : OUT std_logic_vector(numbit-1 downto 0);
@@ -83,7 +84,7 @@ port(clk : IN std_logic;
      RD_OUT : OUT std_logic_vector(4 downto 0));
 end component;
 
-component BRANCHPREDICTIONUNIT
+component BRANCHDECISIONUNIT
 port(OPCODE : IN std_logic_vector(5 downto 0);
      JOFFSET_IN : IN std_logic_vector(25 downto 0);
      BOFFSET_IN : IN std_logic_vector(15 downto 0);
@@ -114,10 +115,6 @@ end component;
   generic map(numbit)
   port map(sign_extention_signal,clk,reset,IMM_REG_OUT);
 
-  --LATCHFOUR : LATCH_GENERIC
-  --generic map(numbit)
-  --port map(npc_in,CLK,npc_latch_out);
-
   npc_latch_out <= npc_in;
 
   NPC_REG : REGISTER_GENERIC
@@ -132,9 +129,9 @@ end component;
   port map(rdmux_out,CLK,RESET,RD_OUT);
 
   HAZARD : HAZARD_DETECTION
-  port map(CLK,RESET,IR_IN(31 downto 26),IR_IN(20 downto 16),IR_IN(15 downto 11),IR_IN(25 downto 21),IR_IN(20 downto 16),alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,open);
+  port map(CLK,RESET,INSTRUCTION_FETCHED(31 downto 26),INSTRUCTION_FETCHED(20 downto 16),INSTRUCTION_FETCHED(15 downto 11),INSTRUCTION_FETCHED(25 downto 21),INSTRUCTION_FETCHED(20 downto 16),alu_forwarding_one,mem_forwarding_one,alu_forwarding_two,mem_forwarding_two,open);
 
-  BRANCHUNIT : BRANCHPREDICTIONUNIT
+  BRANCHUNIT : BRANCHDECISIONUNIT
   port map(IR_IN(31 downto 26),IR_IN(25 downto 0),IR_IN(15 downto 0),npc_latch_out,RF_ONE_OUT,RF_TWO_OUT,NPC_OUT_BPU);
 
 end STRUCTURAL;
@@ -153,8 +150,8 @@ configuration CFG_DECODE_STAGE_STRUCTURAL of DECODE_STAGE is
     for all : HAZARD_DETECTION
       use configuration WORK.CFG_HAZARD_DETECTION;
     end for;
-    for all : BRANCHPREDICTIONUNIT
-      use configuration WORK.CFG_BRANCHPREDICTIONUNIT;
+    for all : BRANCHDECISIONUNIT
+      use configuration WORK.CFG_BRANCHDECISIONUNIT;
     end for;
 	end for;
 end CFG_DECODE_STAGE_STRUCTURAL;

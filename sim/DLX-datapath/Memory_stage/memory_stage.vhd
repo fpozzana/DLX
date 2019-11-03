@@ -34,14 +34,6 @@ architecture STRUCTURAL of MEMORY_STAGE is
     generic map(5)
     port map(rd_reg_in,clk,reset,rd_reg_out);
 
-    --REG : REGISTER_GENERIC
-    --generic map(numbit)
-    --port map(to_mem_stage_reg,clk,reset,memory_stage_out);
-
-    --LAT : LATCH_GENERIC
-    --generic map(numbit)
-    --port map(to_mem_stage_reg,clk,memory_stage_out);
-
     memory_stage_out <= to_mem_stage_reg;
 
     REGALU : REGISTER_GENERIC
