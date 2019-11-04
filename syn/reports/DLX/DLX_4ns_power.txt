@@ -1,4 +1,3 @@
-Loading db file '/home/mariagrazia.graziano/do/libnangate/NangateOpenCellLibrary_typical_ecsm.db'
 Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
 Warning: Design has unannotated primary inputs. (PWR-414)
 Warning: Design has unannotated sequential cell outputs. (PWR-415)
@@ -8,7 +7,7 @@ Report : power
         -analysis_effort low
 Design : DLX
 Version: F-2011.09-SP3
-Date   : Mon Nov  4 18:35:31 2019
+Date   : Mon Nov  4 18:34:34 2019
 ****************************************
 
 
@@ -34,12 +33,12 @@ Power-specific unit information :
     Leakage Power Units = 1nW
 
 
-  Cell Internal Power  =   1.9524 mW   (97%)
-  Net Switching Power  =  64.8799 uW    (3%)
+  Cell Internal Power  =   2.4424 mW   (97%)
+  Net Switching Power  =  75.5421 uW    (3%)
                          ---------
-Total Dynamic Power    =   2.0173 mW  (100%)
+Total Dynamic Power    =   2.5179 mW  (100%)
 
-Cell Leakage Power     = 302.3955 uW
+Cell Leakage Power     = 306.3108 uW
 
 
                  Internal         Switching           Leakage            Total
@@ -49,9 +48,9 @@ io_pad             0.0000            0.0000            0.0000            0.0000 
 memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
 clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
-register       1.9305e+03            4.8533        1.0702e+05        2.0424e+03  (  88.05%)
-sequential         1.1964            0.2138        4.9102e+03            6.3203  (   0.27%)
-combinational     20.6677           59.8140        1.9046e+05          270.9426  (  11.68%)
+register       2.4134e+03            5.9558        1.0702e+05        2.5264e+03  (  89.46%)
+sequential         1.4953            0.2673        4.9102e+03            6.6727  (   0.24%)
+combinational     27.4223           69.3183        1.9438e+05          291.1267  (  10.31%)
 --------------------------------------------------------------------------------------------------
-Total          1.9524e+03 uW        64.8811 uW     3.0240e+05 nW     2.3197e+03 uW
+Total          2.4424e+03 uW        75.5413 uW     3.0631e+05 nW     2.8242e+03 uW
 1

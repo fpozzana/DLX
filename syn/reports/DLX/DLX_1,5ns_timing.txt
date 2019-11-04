@@ -1,0 +1,145 @@
+Information: Updating design information... (UID-85)
+Warning: Design 'DLX' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : DLX
+Version: F-2011.09-SP3
+Date   : Mon Nov  4 18:29:37 2019
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: DATAPATH_I/FETCH/IR/UFD_25/Q_reg/CK
+              (internal path startpoint clocked by clk)
+  Endpoint: DATAPATH_I/FETCH/NPC/UFD_30/Q_reg
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  DLX                5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  input external delay                                    0.00       0.00 r
+  DATAPATH_I/FETCH/IR/UFD_25/Q_reg/CK (DFF_X1)            0.00 #     0.00 r
+  DATAPATH_I/FETCH/IR/UFD_25/Q_reg/Q (DFF_X1)             0.10       0.10 r
+  DATAPATH_I/FETCH/IR/UFD_25/Q (FD_246)                   0.00       0.10 r
+  DATAPATH_I/FETCH/IR/Q[25] (REGISTER_GENERIC_NBIT32_8)
+                                                          0.00       0.10 r
+  DATAPATH_I/FETCH/instruction_reg_out[25] (FETCH_STAGE_numbit32)
+                                                          0.00       0.10 r
+  DATAPATH_I/DECODE/IR_IN[25] (DECODE_STAGE_numbit32)     0.00       0.10 r
+  DATAPATH_I/DECODE/RF/Read_one_address[4] (REGISTER_FILE_numBit_data32_numBit_address5_numBit_registers32)
+                                                          0.00       0.10 r
+  DATAPATH_I/DECODE/RF/U4674/ZN (INV_X1)                  0.04       0.14 f
+  DATAPATH_I/DECODE/RF/U1214/Z (BUF_X2)                   0.06       0.20 f
+  DATAPATH_I/DECODE/RF/U1049/ZN (INV_X1)                  0.05       0.26 r
+  DATAPATH_I/DECODE/RF/U5517/Z (MUX2_X1)                  0.08       0.33 f
+  DATAPATH_I/DECODE/RF/U5519/Z (MUX2_X1)                  0.06       0.40 f
+  DATAPATH_I/DECODE/RF/U5523/Z (MUX2_X1)                  0.07       0.47 f
+  DATAPATH_I/DECODE/RF/U395/ZN (NAND2_X1)                 0.03       0.49 r
+  DATAPATH_I/DECODE/RF/U396/ZN (NAND2_X1)                 0.03       0.52 f
+  DATAPATH_I/DECODE/RF/U4669/ZN (NAND2_X1)                0.03       0.55 r
+  DATAPATH_I/DECODE/RF/U4670/ZN (NAND2_X1)                0.03       0.57 f
+  DATAPATH_I/DECODE/RF/U619/ZN (NAND2_X1)                 0.03       0.60 r
+  DATAPATH_I/DECODE/RF/U621/ZN (NAND2_X1)                 0.02       0.62 f
+  DATAPATH_I/DECODE/RF/Data_one_out_reg[31]/Q (DLH_X1)
+                                                          0.07       0.70 f
+  DATAPATH_I/DECODE/RF/Data_one_out[31] (REGISTER_FILE_numBit_data32_numBit_address5_numBit_registers32)
+                                                          0.00       0.70 f
+  DATAPATH_I/DECODE/BRANCHUNIT/REG1_IN[31] (BRANCHDECISIONUNIT)
+                                                          0.00       0.70 f
+  DATAPATH_I/DECODE/BRANCHUNIT/U88/ZN (INV_X1)            0.03       0.73 r
+  DATAPATH_I/DECODE/BRANCHUNIT/U22/ZN (AND4_X1)           0.06       0.79 r
+  DATAPATH_I/DECODE/BRANCHUNIT/U38/ZN (AND4_X1)           0.07       0.86 r
+  DATAPATH_I/DECODE/BRANCHUNIT/U108/ZN (NAND2_X1)         0.03       0.89 f
+  DATAPATH_I/DECODE/BRANCHUNIT/mult_add_59_aco/B[0] (BRANCHDECISIONUNIT_DW02_mult_0)
+                                                          0.00       0.89 f
+  DATAPATH_I/DECODE/BRANCHUNIT/mult_add_59_aco/U5/Z (BUF_X1)
+                                                          0.05       0.94 f
+  DATAPATH_I/DECODE/BRANCHUNIT/mult_add_59_aco/U23/ZN (AND2_X1)
+                                                          0.05       0.98 f
+  DATAPATH_I/DECODE/BRANCHUNIT/mult_add_59_aco/PRODUCT[10] (BRANCHDECISIONUNIT_DW02_mult_0)
+                                                          0.00       0.98 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/B[10] (BRANCHDECISIONUNIT_DW01_add_7)
+                                                          0.00       0.98 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U41/ZN (OR2_X1)
+                                                          0.06       1.04 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U272/ZN (NAND2_X1)
+                                                          0.03       1.07 r
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U307/ZN (NAND3_X1)
+                                                          0.03       1.10 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U136/ZN (NAND2_X1)
+                                                          0.03       1.13 r
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U264/ZN (NOR2_X1)
+                                                          0.03       1.16 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U263/ZN (AOI21_X1)
+                                                          0.05       1.21 r
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U258/ZN (NAND3_X1)
+                                                          0.04       1.25 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U67/ZN (NAND2_X1)
+                                                          0.03       1.29 r
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U53/ZN (NAND2_X1)
+                                                          0.03       1.32 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U7/ZN (NAND2_X1)
+                                                          0.03       1.35 r
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U65/ZN (AND2_X1)
+                                                          0.04       1.39 r
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U189/ZN (OAI21_X1)
+                                                          0.03       1.42 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U180/ZN (NAND2_X1)
+                                                          0.03       1.45 r
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U179/ZN (NAND2_X1)
+                                                          0.03       1.48 f
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/U12/ZN (XNOR2_X1)
+                                                          0.04       1.52 r
+  DATAPATH_I/DECODE/BRANCHUNIT/add_59_aco/SUM[27] (BRANCHDECISIONUNIT_DW01_add_7)
+                                                          0.00       1.52 r
+  DATAPATH_I/DECODE/BRANCHUNIT/U207/ZN (AOI22_X1)         0.04       1.56 f
+  DATAPATH_I/DECODE/BRANCHUNIT/U208/ZN (NAND2_X1)         0.04       1.60 r
+  DATAPATH_I/DECODE/BRANCHUNIT/NPC_OUT[27] (BRANCHDECISIONUNIT)
+                                                          0.00       1.60 r
+  DATAPATH_I/DECODE/NPC_OUT_BPU[27] (DECODE_STAGE_numbit32)
+                                                          0.00       1.60 r
+  DATAPATH_I/FETCH/program_counter[27] (FETCH_STAGE_numbit32)
+                                                          0.00       1.60 r
+  DATAPATH_I/FETCH/add_51/A[27] (FETCH_STAGE_numbit32_DW01_add_2)
+                                                          0.00       1.60 r
+  DATAPATH_I/FETCH/add_51/U48/ZN (NAND4_X1)               0.04       1.64 f
+  DATAPATH_I/FETCH/add_51/U125/ZN (NOR2_X1)               0.04       1.68 r
+  DATAPATH_I/FETCH/add_51/U72/ZN (AND2_X1)                0.04       1.73 r
+  DATAPATH_I/FETCH/add_51/U100/ZN (NAND2_X1)              0.03       1.76 f
+  DATAPATH_I/FETCH/add_51/U65/ZN (XNOR2_X1)               0.05       1.81 f
+  DATAPATH_I/FETCH/add_51/SUM[30] (FETCH_STAGE_numbit32_DW01_add_2)
+                                                          0.00       1.81 f
+  DATAPATH_I/FETCH/NPC/D[30] (REGISTER_GENERIC_NBIT32_0)
+                                                          0.00       1.81 f
+  DATAPATH_I/FETCH/NPC/UFD_30/D (FD_273)                  0.00       1.81 f
+  DATAPATH_I/FETCH/NPC/UFD_30/U4/ZN (AND2_X1)             0.04       1.84 f
+  DATAPATH_I/FETCH/NPC/UFD_30/Q_reg/D (DFF_X1)            0.01       1.85 f
+  data arrival time                                                  1.85
+
+  clock clk (rise edge)                                   1.50       1.50
+  clock network delay (ideal)                             0.00       1.50
+  DATAPATH_I/FETCH/NPC/UFD_30/Q_reg/CK (DFF_X1)           0.00       1.50 r
+  library setup time                                     -0.04       1.46
+  data required time                                                 1.46
+  --------------------------------------------------------------------------
+  data required time                                                 1.46
+  data arrival time                                                 -1.85
+  --------------------------------------------------------------------------
+  slack (VIOLATED)                                                  -0.39
+
+
+1
