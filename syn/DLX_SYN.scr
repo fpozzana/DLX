@@ -35,7 +35,7 @@ analyze -library WORK -format vhdl {DLX.vhd}
 
 link
 ##############################################################
-# elaborating the top entity 
+# elaborating the top entity
 # choose the architecture you want
 elaborate DLX -architecture dlx_rtl
 ##############################################################
@@ -46,11 +46,11 @@ set Period 1.5
 #Forces a clock of period Period connected to the input port CLK #
 create_clock -name "clk" -period $Period {"clk"}
 #forces a combinational max delay of Period ns from each of the inputs
-#to each of th output in case combinational paths are present 
+#to each of th output in case combinational paths are present
 set_max_delay $Period -from [all_inputs] -to [all_outputs]
 
 #compile the design
-compile 
+compile
 # save report
 report_timing > reports/DLX/DLX_1,5ns_timing.txt
 report_area > reports/DLX/DLX_1,5ns_area.txt
@@ -61,71 +61,71 @@ set Period 2
 #Forces a clock of period Period connected to the input port CLK #
 create_clock -name "clk" -period $Period {"clk"}
 #forces a combinational max delay of Period ns from each of the inputs
-#to each of th output in case combinational paths are present 
+#to each of th output in case combinational paths are present
 set_max_delay $Period -from [all_inputs] -to [all_outputs]
 
 #compile the design
-compile 
+compile
 # save report
 report_timing > reports/DLX/DLX_2ns_timing.txt
 report_area > reports/DLX/DLX_2ns_area.txt
 report_power > reports/DLX/DLX_2ns_power.txt
 
 # Define a new variable Period force the value you want
-set Period 3 
+set Period 3
 #Forces a clock of period Period connected to the input port CLK #
 create_clock -name "clk" -period $Period {"clk"}
 #forces a combinational max delay of Period ns from each of the inputs
-#to each of th output in case combinational paths are present 
+#to each of th output in case combinational paths are present
 set_max_delay $Period -from [all_inputs] -to [all_outputs]
 
 #compile the design
-compile 
+compile
 # save report
 report_timing > reports/DLX/DLX_3ns_timing.txt
 report_area > reports/DLX/DLX_3ns_area.txt
 report_power > reports/DLX/DLX_3ns_power.txt
 
 # Define a new variable Period force the value you want
-set Period 4 
+set Period 4
 #Forces a clock of period Period connected to the input port CLK #
 create_clock -name "clk" -period $Period {"clk"}
 #forces a combinational max delay of Period ns from each of the inputs
-#to each of th output in case combinational paths are present 
+#to each of th output in case combinational paths are present
 set_max_delay $Period -from [all_inputs] -to [all_outputs]
 
 #compile the design
-compile 
+compile
 # save report
 report_timing > reports/DLX/DLX_4ns_timing.txt
 report_area > reports/DLX/DLX_4ns_area.txt
 report_power > reports/DLX/DLX_4ns_power.txt
 
 # Define a new variable Period force the value you want
-set Period 5 
+set Period 5
 #Forces a clock of period Period connected to the input port CLK #
 create_clock -name "clk" -period $Period {"clk"}
 #forces a combinational max delay of Period ns from each of the inputs
-#to each of th output in case combinational paths are present 
+#to each of th output in case combinational paths are present
 set_max_delay $Period -from [all_inputs] -to [all_outputs]
 
 #compile the design
-compile 
+compile
 # save report
 report_timing > reports/DLX/DLX_5ns_timing.txt
 report_area > reports/DLX/DLX_5ns_area.txt
 report_power > reports/DLX/DLX_5ns_power.txt
 
 # Define a new variable Period force the value you want
-set Period 62.5 
+set Period 62.5
 #Forces a clock of period Period connected to the input port CLK #
 create_clock -name "clk" -period $Period {"clk"}
 #forces a combinational max delay of Period ns from each of the inputs
-#to each of th output in case combinational paths are present 
+#to each of th output in case combinational paths are present
 set_max_delay $Period -from [all_inputs] -to [all_outputs]
 
 #compile the design
-compile 
+compile
 # save report
 report_timing > reports/DLX/DLX_62,5ns_timing.txt
 report_area > reports/DLX/DLX_62,5ns_area.txt
@@ -136,11 +136,11 @@ set Period 31.25
 #Forces a clock of period Period connected to the input port CLK #
 create_clock -name "clk" -period $Period {"clk"}
 #forces a combinational max delay of Period ns from each of the inputs
-#to each of th output in case combinational paths are present 
+#to each of th output in case combinational paths are present
 set_max_delay $Period -from [all_inputs] -to [all_outputs]
 
 #compile the design
-compile 
+compile
 # save report
 report_timing > reports/DLX/DLX_31,25ns_timing.txt
 report_area > reports/DLX/DLX_31,25ns_area.txt
@@ -148,6 +148,5 @@ report_power > reports/DLX/DLX_31,25ns_power.txt
 
 
 # saving files
-write -hierarchy -format ddc -output DLX-structural-topt.ddc
-write -hierarchy -format vhdl -output DLX-structural-topt.vhdl
-write -hierarchy -format verilog -output DLX-structural-topt.v
+write -hierarchy -format ddc -output DLX.ddc
+write -hierarchy -format verilog -output DLX.v
