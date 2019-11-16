@@ -5,7 +5,7 @@ A DLX implementation, realized for the Microelectronics Systems course of Polite
 
 ## Tools
 
-For this porject the following tools were used
+For this project the following tools were used
 - Modelsim - Mentor graphics
 - Design compiler - Synopsys
 - Innovus - Cadence
